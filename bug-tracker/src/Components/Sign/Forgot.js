@@ -1,20 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import './Sign.css'
 import logo from "../Icons/logo.png";
 
 function SignIn() {
-  const history = useHistory();
   const [email, setEmail] = useState(null)
-  const [password, setPassword] = useState(null)
-  
-  useEffect(async () => {
-    if(false){
-        history.push("/");
-    }   
-  },[]);
 
-  console.log(password)
     return (
       <div class="background">
         <div className="sign-container">
@@ -25,7 +16,7 @@ function SignIn() {
           </div>
 
           <div class="login-form">
-          <h3 style={{color:"gray", textAlign:"center"}}>Sign In to B-Tracker</h3>
+          <h3 style={{color:"gray", textAlign:"center"}}>Send a recovery link to:</h3>
               <input
               value={email}
               onChange={e=>{
@@ -36,21 +27,11 @@ function SignIn() {
               placeholder="Enter Email"
             />
 
-            <input
-              value={password}
-              onChange={e=>{
-                setPassword(e.target.value);
-              }}
-              type="password"
-              className="Input"
-              placeholder="Enter Password"
-            />
-
-            <button>Login</button>
+            <button>Send Recovery Link</button>
 
             <hr/>
 
-            <div className="login-footer"><Link to="./forgot" ><p>Forgot Password!</p> </Link> <Link to="./signup" ><p>Create New Account!</p></Link></div>
+            <div className="login-footer"><Link to="./signin" ><p>Return to Login!</p></Link></div>
 
           </div>
         </div>

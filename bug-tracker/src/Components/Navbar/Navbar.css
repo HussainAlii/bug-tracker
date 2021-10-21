@@ -1,10 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Festive&display=swap');
-
 nav{
   display: flex;
 
-  position: fixed;
+  position: static;
   top: 0;
 
   align-items: center;
@@ -61,6 +58,7 @@ nav a{
 .logo-container{
   cursor: pointer;
   display: flex;
+  margin-right: 30px;
 }
 
 .noselect {

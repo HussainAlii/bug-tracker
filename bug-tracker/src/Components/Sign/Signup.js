@@ -25,7 +25,7 @@ function SignIn() {
           </div>
 
           <div class="login-form">
-          <h3 style={{color:"gray", textAlign:"center"}}>Sign In to B-Tracker</h3>
+          <h3 style={{color:"gray", textAlign:"center"}}>Sign Up to B-Tracker</h3>
               <input
               value={email}
               onChange={e=>{
@@ -43,14 +43,24 @@ function SignIn() {
               }}
               type="password"
               className="Input"
-              placeholder="Enter Password"
+              placeholder="Enter Password!"
             />
 
-            <button>Login</button>
+            <input
+              value={password}
+              onChange={e=>{
+                setPassword(e.target.value);
+              }}
+              type="password"
+              className="Input"
+              placeholder="Enter Password again!"
+            />
+
+            <button>Register</button>
 
             <hr/>
 
-            <div className="login-footer"><Link to="./forgot" ><p>Forgot Password!</p> </Link> <Link to="./signup" ><p>Create New Account!</p></Link></div>
+            <div className="login-footer"><Link to="./signin" ><p>Return to Login!</p></Link></div>
 
           </div>
         </div>
