@@ -7,14 +7,13 @@ import logo from "../Icons/logo.png";
 
 function SignIn() {
   const history = useHistory();
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [score, setScore] = useState(0);
   const [nomatch, setMatch] = useState(false);
 
   function handleSignUp(){
-    console.log("register")
+    console.log("change password")
   }
 
   console.log(password)
@@ -28,16 +27,7 @@ function SignIn() {
           </div>
 
           <div class="login-form">
-          <h3 style={{color:"gray", textAlign:"center"}}>Sign Up to B-Tracker</h3>
-              <input
-              value={email}
-              onChange={e=>{
-                setEmail(e.target.value);
-              }}
-              type="text"
-              className="Input"
-              placeholder="Enter Email"
-            />
+          <h3 style={{color:"gray", textAlign:"center"}}>Recover B-Tracker Account</h3>
 
             <input
               value={password}
@@ -63,11 +53,7 @@ function SignIn() {
 
             <PasswordStrengthBar password={password} onChangeScore={e=>{setScore(e)}} />
 
-            <button disabled={!nomatch || score != 4} onClick={handleSignUp}>Register</button>
-
-            <hr/>
-
-            <div className="login-footer"><Link to="./signin" ><p>Return to Login!</p></Link></div>
+            <button disabled={!nomatch || score != 4} onClick={handleSignUp}>Change Password</button>
 
           </div>
         </div>

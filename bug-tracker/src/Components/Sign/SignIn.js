@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
+
 import './Sign.css'
 import logo from "../Icons/logo.png";
 
 function SignIn() {
   const history = useHistory();
-  const [email, setEmail] = useState(null)
-  const [password, setPassword] = useState(null)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   
   useEffect(async () => {
     if(false){
@@ -14,7 +15,7 @@ function SignIn() {
     }   
   },[]);
 
-  console.log(password)
+  
     return (
       <div class="background">
         <div className="sign-container">

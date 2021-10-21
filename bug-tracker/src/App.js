@@ -2,8 +2,8 @@ import './App.css';
 import SignIn from './Components/Sign/SignIn';
 import Forgot from './Components/Sign/Forgot'
 import Signup from './Components/Sign/Signup'
+import Recover from './Components/Sign/Recover'
 import Navbar from './Components/Navbar/Navbar';
-
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from './PrivateRoute';
 
@@ -17,6 +17,7 @@ function App() {
       <Route exact path="/signin" component={SignIn}/>
       <Route exact path="/signup" component={Signup}/>
       <Route exact path="/forgot" component={Forgot}/>
+      <Route exact path="/recover" component={Recover}/>
 
       <PrivateRoute exact path="/">
             

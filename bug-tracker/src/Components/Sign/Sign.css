@@ -88,7 +88,7 @@
     cursor: pointer;
 }
 
-.login-form button:hover{
+.login-form button:hover:enabled{
     background-color: rgba(10, 173, 10, 0.767);
 }
 
@@ -108,3 +108,8 @@
     color: #6857A0;
     }
 
+    button[disabled]{
+      border: 1px solid #999999;
+      background-color: #cccccc;
+      color: #666666;
+    }
