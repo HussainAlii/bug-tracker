@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PasswordStrengthBar from 'react-password-strength-bar';
+
+import { isValidEmail } from "../../utilities";
 
 import './Sign.css'
 import logo from "../Icons/logo.png";
 
 function SignIn() {
-  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
@@ -17,7 +18,6 @@ function SignIn() {
     console.log("register")
   }
 
-  console.log(password)
     return (
       <div class="background">
         <div className="sign-container">
@@ -37,7 +37,7 @@ function SignIn() {
               type="text"
               className="Input"
               placeholder="Enter Email"
-            />
+              />
 
             <input
               value={password}
@@ -63,7 +63,7 @@ function SignIn() {
 
             <PasswordStrengthBar password={password} onChangeScore={e=>{setScore(e)}} />
 
-            <button disabled={!nomatch || score != 4} onClick={handleSignUp}>Register</button>
+            <button disabled={!nomatch || score != 4 || !isValidEmail(email) } onClick={handleSignUp}>Register</button>
 
             <hr/>
 

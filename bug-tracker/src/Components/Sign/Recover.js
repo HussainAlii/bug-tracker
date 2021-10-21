@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useHistory } from "react-router-dom";
 import PasswordStrengthBar from 'react-password-strength-bar';
 
 import './Sign.css'
 import logo from "../Icons/logo.png";
 
 function SignIn() {
-  const history = useHistory();
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [score, setScore] = useState(0);
@@ -53,7 +51,7 @@ function SignIn() {
 
             <PasswordStrengthBar password={password} onChangeScore={e=>{setScore(e)}} />
 
-            <button disabled={!nomatch || score != 4} onClick={handleSignUp}>Change Password</button>
+            <button disabled={!nomatch || score != 4 } onClick={handleSignUp}>Change Password</button>
 
           </div>
         </div>
