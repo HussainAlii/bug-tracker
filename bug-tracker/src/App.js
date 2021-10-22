@@ -6,18 +6,21 @@ import Recover from './Components/Sign/Recover'
 import Navbar from './Components/Navbar/Navbar';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from './PrivateRoute';
-
+import auth from './Components/auth/auth';
+import UserContextProvider from './Context/userContext'
 
 function App() {
   let title = " - BTracker";
+  
   return (
     <Router>
+      <UserContextProvider>
   <div className="app">
     <Switch>
       <Route exact path="/signin" component={SignIn}/>
-      <Route exact path="/signup" component={Signup}/>
-      <Route exact path="/forgot" component={Forgot}/>
-      <Route exact path="/recover" component={Recover}/>
+      <Route exact path="/signup"> <Signup title={`Sign up${title}`}/> </Route>
+      <Route exact path="/forgot"> <Forgot title={`Forgot${title}`}/> </Route>
+      <Route exact path="/recover"> <Recover title={`Recover${title}`}/> </Route>
 
       <PrivateRoute exact path="/">
             
@@ -27,6 +30,7 @@ function App() {
 
     </Switch>
   </div>
+  </UserContextProvider>
 </Router>
   );
 }

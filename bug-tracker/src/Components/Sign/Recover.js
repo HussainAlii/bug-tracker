@@ -4,17 +4,37 @@ import PasswordStrengthBar from 'react-password-strength-bar';
 import './Sign.css'
 import logo from "../Icons/logo.png";
 
-function SignIn() {
+import {useHistory } from "react-router-dom";
+import auth from "../auth/auth";
+
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+
+function SignIn({title}) {
+  const history = useHistory();
+
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [score, setScore] = useState(0);
   const [nomatch, setMatch] = useState(false);
 
+  const [showMessage, setShowMessage] = useState([false,"",""]);
+
+
   function handleSignUp(){
-    console.log("change password")
+    setShowMessage([true,'Password has been changed!', 'success'])
   }
 
   console.log(password)
+
+  useEffect(async () => {
+    document.title = title;
+    if(auth.isAuth()){
+        history.push("/");
+    }   
+  },[]);
+
+
     return (
       <div class="background">
         <div className="sign-container">
@@ -52,6 +72,13 @@ function SignIn() {
             <PasswordStrengthBar password={password} onChangeScore={e=>{setScore(e)}} />
 
             <button disabled={!nomatch || score != 4 } onClick={handleSignUp}>Change Password</button>
+
+            {showMessage[0]&&
+            <Alert severity={showMessage[2]}>
+            <AlertTitle>{showMessage[2].charAt(0).toUpperCase()+showMessage[2].slice(1)}</AlertTitle>
+            <strong>{showMessage[1]}</strong>
+          </Alert>
+          }
 
           </div>
         </div>

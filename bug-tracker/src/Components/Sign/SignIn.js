@@ -3,17 +3,28 @@ import { Link, useHistory } from "react-router-dom";
 
 import './Sign.css'
 import logo from "../Icons/logo.png";
+import auth from "../auth/auth";
+
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 function SignIn() {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [showError, setShowError] = useState(false);
   
   useEffect(async () => {
-    if(false){
+    document.title = "Sign In - BTracker";
+    if(auth.isAuth()){
         history.push("/");
     }   
   },[]);
+
+  function handleSignIn(){
+    setShowError(auth.login());
+  }
 
   
     return (
@@ -47,12 +58,17 @@ function SignIn() {
               placeholder="Enter Password"
             />
 
-            <button>Login</button>
+            <button onClick={handleSignIn}>Login</button>
 
             <hr/>
 
             <div className="login-footer"><Link to="./forgot" ><p>Forgot Password!</p> </Link> <Link to="./signup" ><p>Create New Account!</p></Link></div>
-
+            {showError&&
+            <Alert severity="error">
+            <AlertTitle>Error</AlertTitle>
+            <strong>Email or Password is incorrect. </strong>
+          </Alert>
+          }
           </div>
         </div>
       </div>

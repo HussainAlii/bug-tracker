@@ -1,22 +1,41 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import PasswordStrengthBar from 'react-password-strength-bar';
 
 import { isValidEmail } from "../../utilities";
 
 import './Sign.css'
 import logo from "../Icons/logo.png";
+import auth from "../auth/auth";
 
-function SignIn() {
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+
+function SignIn({title}) {
+  const history = useHistory();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [score, setScore] = useState(0);
   const [nomatch, setMatch] = useState(false);
 
+  const [showMessage, setShowMessage] = useState([false,"",""]);
+
+
   function handleSignUp(){
-    console.log("register")
+    setShowMessage(auth.register(email, password))
   }
+
+  console.log(password)
+  useEffect(async () => {
+    document.title = title;
+
+    if(auth.isAuth()){
+        history.push("/");
+    }   
+  },[]);
+
 
     return (
       <div class="background">
@@ -68,6 +87,13 @@ function SignIn() {
             <hr/>
 
             <div className="login-footer"><Link to="./signin" ><p>Return to Login!</p></Link></div>
+
+            {showMessage[0]&&
+            <Alert severity={showMessage[2]}>
+            <AlertTitle>{showMessage[2].charAt(0).toUpperCase()+showMessage[2].slice(1)}</AlertTitle>
+            <strong>{showMessage[1]}</strong>
+          </Alert>
+          }
 
           </div>
         </div>

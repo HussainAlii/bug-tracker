@@ -1,11 +1,26 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import './Sign.css'
 import logo from "../Icons/logo.png";
+import auth from "../auth/auth";
+import { isValidEmail } from "../../utilities";
 
-function SignIn() {
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+
+function SignIn({title}) {
+  const history = useHistory();
+  
   const [email, setEmail] = useState(null)
+  const [showMessage, setShowMessage] = useState([false,"",""]);
 
+  useEffect(async () => {
+    document.title = title;
+    if(auth.isAuth()){
+        history.push("/");
+    }   
+  },[]);
+  
     return (
       <div class="background">
         <div className="sign-container">
@@ -27,12 +42,17 @@ function SignIn() {
               placeholder="Enter Email"
             />
 
-            <button>Send Recovery Link</button>
+            <button onClick={()=>{isValidEmail(email)?setShowMessage([true,'Recovery link has been sent to your email', 'success']):setShowMessage([true,'Entered Email is incorrect.','error'])}}>Send Recovery Link</button>
 
             <hr/>
 
             <div className="login-footer"><Link to="./signin" ><p>Return to Login!</p></Link></div>
-
+            {showMessage[0]&&
+            <Alert severity={showMessage[2]}>
+            <AlertTitle>{showMessage[2].charAt(0).toUpperCase()+showMessage[2].slice(1)}</AlertTitle>
+            <strong>{showMessage[1]}</strong>
+          </Alert>
+          }
           </div>
         </div>
       </div>
