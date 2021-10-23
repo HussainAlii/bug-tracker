@@ -17,14 +17,28 @@ function SignIn({title}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
+
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+
+
   const [score, setScore] = useState(0);
   const [nomatch, setMatch] = useState(false);
 
   const [showMessage, setShowMessage] = useState([false,"",""]);
 
 
-  function handleSignUp(){
-    setShowMessage(auth.register(email, password))
+  async function handleSignUp(){
+    setShowMessage(await auth.register(email, password, fname, lname))
+    clearPasswords()
+  }
+
+  function clearPasswords(){
+    setEmail("")
+    setPassword("")
+    setRepeatedPassword("")
+    setScore(0)
+    setMatch(false);
   }
 
   console.log(password)
@@ -48,6 +62,30 @@ function SignIn({title}) {
 
           <div class="login-form">
           <h3 style={{color:"gray", textAlign:"center"}}>Sign Up to B-Tracker</h3>
+
+              <div class="name-input">
+                <input
+                value={fname}
+                onChange={e=>{
+                  setFname(e.target.value);
+                }}
+                type="text"
+                className=""
+                placeholder="First Name"
+                />
+
+                <input
+                value={lname}
+                onChange={e=>{
+                  setLname(e.target.value);
+                }}
+                type="text"
+                className=""
+                placeholder="Last Name"
+                />
+
+              </div>
+
               <input
               value={email}
               onChange={e=>{
@@ -55,7 +93,7 @@ function SignIn({title}) {
               }}
               type="text"
               className="Input"
-              placeholder="Enter Email"
+              placeholder="Email"
               />
 
             <input
@@ -66,8 +104,10 @@ function SignIn({title}) {
               }}
               type="password"
               className="Input"
-              placeholder="Enter Password!"
+              placeholder="Password!"
             />
+
+
 
             <input
               value={repeatedPassword}
@@ -77,12 +117,12 @@ function SignIn({title}) {
               }}
               type="password"
               className="Input"
-              placeholder="Enter Password again!"
+              placeholder="Confirm Password!"
             />
 
             <PasswordStrengthBar password={password} onChangeScore={e=>{setScore(e)}} />
 
-            <button disabled={!nomatch || score != 4 || !isValidEmail(email) } onClick={handleSignUp}>Register</button>
+            <button disabled={!nomatch || score != 4 || !isValidEmail(email) || !fname || !lname } onClick={handleSignUp}>Register</button>
 
             <hr/>
 

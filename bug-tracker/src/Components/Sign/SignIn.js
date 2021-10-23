@@ -13,7 +13,7 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [showError, setShowError] = useState(false);
+  const [showMessage, setShowMessage] = useState([false,"",""]);
   
   useEffect(async () => {
     document.title = "Sign In - BTracker";
@@ -23,7 +23,8 @@ function SignIn() {
   },[]);
 
   function handleSignIn(){
-    setShowError(auth.login());
+    if (email && password)
+      setShowMessage(auth.login());
   }
 
   
@@ -63,10 +64,11 @@ function SignIn() {
             <hr/>
 
             <div className="login-footer"><Link to="./forgot" ><p>Forgot Password!</p> </Link> <Link to="./signup" ><p>Create New Account!</p></Link></div>
-            {showError&&
-            <Alert severity="error">
-            <AlertTitle>Error</AlertTitle>
-            <strong>Email or Password is incorrect. </strong>
+            
+            {showMessage[0]&&
+            <Alert severity={showMessage[2]}>
+            <AlertTitle>{showMessage[2].charAt(0).toUpperCase()+showMessage[2].slice(1)}</AlertTitle>
+            <strong>{showMessage[1]}</strong>
           </Alert>
           }
           </div>

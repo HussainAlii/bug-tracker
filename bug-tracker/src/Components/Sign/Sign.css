@@ -127,3 +127,12 @@
       background-color: rgba(170, 236, 168, 0.5) !important;
 
     }
+
+    .login-form .name-input input{
+      display: inline;
+      width: auto;
+    }
+
+    .login-form .name-input > input:first-child{
+      margin-right: 5px;
+    }

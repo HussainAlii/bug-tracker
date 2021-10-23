@@ -1,4 +1,6 @@
-import { refresh } from "../../utilities";
+import django from "../../axiosRequest";
+import requestAPI from "../../requests";
+import { decodeJWT, encodeJWT, refresh } from "../../utilities";
 
 
 class Auth{
@@ -9,10 +11,11 @@ class Auth{
     login(){
 
         this.authenticated = true;
-        if(true){
+        if(false){
         refresh()
         }else{
-            return true
+            return [true,'Email or Password is incorrect.', 'error']
+            return [true,'Account has not been verified yet!', 'error']
         }
     }
 
@@ -21,10 +24,20 @@ class Auth{
         refresh()
     }
 
-    register(email, password){
-        if(false)
-            return [true,'Verification link has been sent to your email!', 'success']
-        else return [true,'Email Already Exisit!', 'Error']
+    register(email, password, fname, lname){
+        const data = {'email':email, 'password':password, 'fname':fname, 'lname':lname}
+        const encoded = encodeJWT(data)
+
+        return django
+        .post(requestAPI.register, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .then((response) => {
+            if (response) {
+                return decodeJWT(response["data"])
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     isAuth(){

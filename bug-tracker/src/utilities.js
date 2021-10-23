@@ -1,3 +1,5 @@
+var jwt = require('jsonwebtoken');
+
 export function isValidEmail(email){
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
@@ -24,4 +26,13 @@ export function timeout(fun,time){
   export function localStorageRetrieve(key){
     var retrievedObject = localStorage.getItem(key);
     return JSON.parse(retrievedObject);
+  }
+
+  export function decodeJWT(token){
+    var decoded = jwt.verify(token, process.env.REACT_APP_KEY );
+    return decoded // bar
+  }
+  export function encodeJWT(data){
+    var token = jwt.sign(data, process.env.REACT_APP_KEY );
+    return token // bar
   }
