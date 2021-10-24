@@ -145,7 +145,7 @@ function UserContextProvider({ children }) {
     function changePassword(token, password){
         const data = {token, password}
         const encoded = encodeJWT(data)
-        django.post(requestAPI.changePassword, encoded, {headers: {'Content-Type': 'text/plain'}})
+        django.post(requestAPI.changePasswordByToken, encoded, {headers: {'Content-Type': 'text/plain'}})
     }
 
       return (

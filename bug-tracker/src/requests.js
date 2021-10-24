@@ -8,7 +8,8 @@ const requestAPI = {
   isAuth: `/auth/isAuth/`, 
   verify: `/auth/verifyCode/`, 
   forgot: `/auth/forgot/`, 
-  changePassword: `/auth/changePassword/`, 
+  changePasswordByToken: `/auth/changePasswordByToken/`, 
+  changePasswordByEmail: `/auth/changePasswordByEmail/`, 
   isTokenActive: `/auth/isTokenActive/`, 
 };
 export default requestAPI;
