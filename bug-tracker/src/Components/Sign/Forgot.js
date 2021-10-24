@@ -43,7 +43,13 @@ function Forgot({title}) {
               placeholder="Enter Email"
             />
 
-            <button onClick={()=>{isValidEmail(email)?setShowMessage([true,'Recovery link has been sent to your email', 'success']):setShowMessage([true,'Entered Email is incorrect.','error'])}}>Send Recovery Link</button>
+            <button onClick={()=>{
+              if(isValidEmail(email)){
+                context.forgot(email)
+                setShowMessage([true,'Recovery link has been sent to your email', 'success'])
+              }
+              else setShowMessage([true,'Entered Email is incorrect.','error'])
+              }}>Send Recovery Link</button>
 
             <hr/>
 

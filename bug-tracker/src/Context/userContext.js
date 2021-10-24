@@ -119,8 +119,14 @@ function UserContextProvider({ children }) {
         });
     }
 
+    function forgot(email){
+        const data = {email}
+        const encoded = encodeJWT(data)
+        django.post(requestAPI.forgot, encoded, {headers: {'Content-Type': 'text/plain'}})
+    }
+
       return (
-        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, verifyCode}}>
+        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, verifyCode, forgot}}>
             { children }
         </UserContext.Provider>
     )
