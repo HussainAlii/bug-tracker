@@ -26,6 +26,7 @@ nav a{
 
 .avatar .name{
   margin-top: 8px;
+  font-weight: 600;
   color: #323743;
   font-family: 'Roboto', sans-serif;
 }

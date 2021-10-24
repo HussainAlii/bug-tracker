@@ -5,14 +5,17 @@ import './Sign.css'
 import logo from "../Icons/logo.png";
 
 import {useHistory } from "react-router-dom";
-import auth from "../auth/auth";
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-function SignIn({title,isAuth}) {
-  const history = useHistory();
+import { UserContext } from "../../Context/userContext";
+import { localStorageRetrieve } from "../../utilities";
 
+function SignIn({title}) {
+  const history = useHistory();
+  const context = useContext(UserContext)
+  
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
   const [score, setScore] = useState(0);
@@ -30,7 +33,7 @@ function SignIn({title,isAuth}) {
   useEffect(async () => {
     document.title = title;
 
-    auth.check_Authorization()
+    if(localStorageRetrieve("jwt")) history.push("/")
   },[]);
 
 

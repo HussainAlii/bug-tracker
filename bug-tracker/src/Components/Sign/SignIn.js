@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 
 import './Sign.css'
 import logo from "../Icons/logo.png";
-import auth from "../auth/auth";
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -11,8 +10,12 @@ import django from "../../axiosRequest";
 import requestAPI from "../../requests";
 import { decodeJWT, localStorageRetrieve } from "../../utilities";
 
-function SignIn({isAuth,title}) {
+import { UserContext } from "../../Context/userContext";
+
+function SignIn({title}) {
   const history = useHistory();
+  const context = useContext(UserContext)
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,14 +23,11 @@ function SignIn({isAuth,title}) {
   
   useEffect(() => {
     document.title = title;
-
-    if(isAuth) history.push("/")
-  
-    auth.check_Authorization()
+    if(localStorageRetrieve("jwt")) history.push("/")
   },[]);
 
   async function handleSignIn(){
-      setShowMessage(await auth.login(email, password));
+      setShowMessage(await context.login(email, password));
       console.log(showMessage)
   }
 
@@ -67,7 +67,7 @@ function SignIn({isAuth,title}) {
 
             <hr/>
 
-            <div className="login-footer"><Link to="./forgot" ><p>Forgot Password!</p> </Link> <Link to="./signup" ><p>Create New Account!</p></Link></div>
+            <div className="login-footer"><Link to="/forgot/" ><p>Forgot Password!</p> </Link> <Link to="/signup/" ><p>Create New Account!</p></Link></div>
             
             {showMessage[0]&&
             <Alert severity={showMessage[2]}>

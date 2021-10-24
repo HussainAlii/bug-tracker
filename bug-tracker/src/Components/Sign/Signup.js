@@ -2,17 +2,19 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import PasswordStrengthBar from 'react-password-strength-bar';
 
-import { isValidEmail } from "../../utilities";
+import { isValidEmail, localStorageRetrieve } from "../../utilities";
 
 import './Sign.css'
 import logo from "../Icons/logo.png";
-import auth from "../auth/auth";
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-function SignIn({title,isAuth}) {
+import { UserContext } from "../../Context/userContext";
+
+function SignIn({title}) {
   const history = useHistory();
+  const context = useContext(UserContext)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,7 +31,7 @@ function SignIn({title,isAuth}) {
 
 
   async function handleSignUp(){
-    setShowMessage(await auth.register(email, password, fname, lname))
+    setShowMessage(await context.register(email, password, fname, lname))
     clearPasswords()
   }
 
@@ -45,7 +47,7 @@ function SignIn({title,isAuth}) {
   useEffect(() => {
     document.title = title;
 
-    auth.check_Authorization()
+    if(localStorageRetrieve("jwt")) history.push("/")
   },[]);
 
 
@@ -124,7 +126,7 @@ function SignIn({title,isAuth}) {
 
             <hr/>
 
-            <div className="login-footer"><Link to="./signin" ><p>Return to Login!</p></Link></div>
+            <div className="login-footer"><Link to="/signin/" ><p>Return to Login!</p></Link></div>
 
             {showMessage[0]&&
             <Alert severity={showMessage[2]}>

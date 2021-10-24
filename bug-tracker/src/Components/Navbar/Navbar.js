@@ -7,6 +7,8 @@ import avatar from "../Icons/user.png";
 
 import Menu from "../Menu/Menu";
 
+import { UserContext } from "../../Context/userContext";
+
 function Navbar() {
 
   return (
@@ -23,7 +25,7 @@ function Navbar() {
 }
 
 function Account() {
-  // const context = useContext(UserContext)
+  const context = useContext(UserContext)
   
   const [anchor, setAnchor] = React.useState(false);
 
@@ -39,7 +41,7 @@ function Account() {
         src={avatar}
         alt="avatar icon"
       />
-    <div class="name">Guest Alex  {anchor?<span style={{color: 'darkgray', marginLeft:'5px'}}> &#9650;</span>:<span style={{color: 'darkgray', marginLeft:'5px'}}>&#9660;</span>}</div>   
+    <div class="name">{`${context.getUserInfo().fname} ${context.getUserInfo().lname}`}  {anchor?<span style={{color: 'darkgray', marginLeft:'5px'}}> &#9650;</span>:<span style={{color: 'darkgray', marginLeft:'5px'}}>&#9660;</span>}</div>   
       <Menu
         isOpen={Boolean(anchor)}
         handleClose={handleClick}
