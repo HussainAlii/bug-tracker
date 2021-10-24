@@ -1,38 +1,30 @@
 import django from "../../axiosRequest";
 import requestAPI from "../../requests";
-import { decodeJWT, encodeJWT, refresh } from "../../utilities";
+import { decodeJWT, encodeJWT, href, localStorageRetrieve, localStorageStore, refresh } from "../../utilities";
 
 
 class Auth{
     constructor(){
-        this.authenticated = false
+        // this.authenticated = false
     }
 
-    login(){
-
-        this.authenticated = true;
-        if(false){
-        refresh()
-        }else{
-            return [true,'Email or Password is incorrect.', 'error']
-            return [true,'Account has not been verified yet!', 'error']
-        }
-    }
-
-    logout(){
-        this.authenticated = false;
-        refresh()
-    }
-
-    register(email, password, fname, lname){
-        const data = {'email':email, 'password':password, 'fname':fname, 'lname':lname}
+    async login(email, password){
+        const data = {'email':email, 'password':password}
         const encoded = encodeJWT(data)
 
         return django
-        .post(requestAPI.register, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .post(requestAPI.login, encoded, {headers: {'Content-Type': 'text/plain'}})
         .then((response) => {
             if (response) {
-                return decodeJWT(response["data"])
+                let decoded = decodeJWT(response["data"])["code"]
+                if (decoded){
+                    localStorageStore("jwt", decoded)
+                    href('/')
+                }
+                else{
+                    localStorage.removeItem('jwt');
+                    return decodeJWT(response["data"])
+                }
             }
         })
         .catch((error) => {
@@ -40,8 +32,48 @@ class Auth{
         });
     }
 
-    isAuth(){
-        return this.authenticated
+    logout(){
+        // this.authenticated = false;
+        localStorage.removeItem("jwt")
+        refresh()
+    }
+
+    async register(email, password, fname, lname){
+        const data = {'email':email, 'password':password, 'fname':fname, 'lname':lname}
+        const encoded = encodeJWT(data)
+
+        return django
+        .post(requestAPI.register, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .then((response) => {
+            if (response) {
+                let decoded = decodeJWT(response["data"])["code"]
+                if (decoded){
+                    localStorageStore("jwt", decoded)
+                    href('/')
+                }
+                else{
+                    localStorage.removeItem('jwt');
+                    return decodeJWT(response["data"])
+                }
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+    async check_Authorization(){
+        let token = localStorageRetrieve("jwt")
+        if(token){
+            django
+            .post(requestAPI.isAuth, token, {headers: {'Content-Type': 'text/plain'}})
+            .then((response) => {
+                if (response) {
+                    if(decodeJWT(response["data"])['0'])
+                        href('/')
+                }
+            })
+          }
     }
 }
 

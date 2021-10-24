@@ -5,5 +5,6 @@ import axios from "axios";
 const requestAPI = {
   login: `/auth/login/`, 
   register: `/auth/register/`, 
+  isAuth: `/auth/isAuth/`, 
 };
 export default requestAPI;

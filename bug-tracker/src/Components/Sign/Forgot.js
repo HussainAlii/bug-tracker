@@ -8,7 +8,7 @@ import { isValidEmail } from "../../utilities";
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-function SignIn({title}) {
+function SignIn({title,isAuth}) {
   const history = useHistory();
   
   const [email, setEmail] = useState(null)
@@ -16,9 +16,8 @@ function SignIn({title}) {
 
   useEffect(async () => {
     document.title = title;
-    if(auth.isAuth()){
-        history.push("/");
-    }   
+
+    auth.check_Authorization()
   },[]);
   
     return (

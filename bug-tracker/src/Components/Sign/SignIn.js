@@ -7,24 +7,28 @@ import auth from "../auth/auth";
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import django from "../../axiosRequest";
+import requestAPI from "../../requests";
+import { decodeJWT, localStorageRetrieve } from "../../utilities";
 
-function SignIn() {
+function SignIn({isAuth,title}) {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [showMessage, setShowMessage] = useState([false,"",""]);
   
-  useEffect(async () => {
-    document.title = "Sign In - BTracker";
-    if(auth.isAuth()){
-        history.push("/");
-    }   
+  useEffect(() => {
+    document.title = title;
+
+    if(isAuth) history.push("/")
+  
+    auth.check_Authorization()
   },[]);
 
-  function handleSignIn(){
-    if (email && password)
-      setShowMessage(auth.login());
+  async function handleSignIn(){
+      setShowMessage(await auth.login(email, password));
+      console.log(showMessage)
   }
 
   
@@ -44,7 +48,7 @@ function SignIn() {
               onChange={e=>{
                 setEmail(e.target.value);
               }}
-              type="text"
+              type="email"
               className="Input"
               placeholder="Enter Email"
             />

@@ -14,6 +14,15 @@ export function refresh(time){
   );
 }
 
+export function href(href, time=0){
+  setTimeout(
+    function () {
+      window.location.href = href;
+    }.bind(this),
+    time
+  );
+}
+
 export function timeout(fun,time){
   setTimeout(fun,
     time
@@ -29,10 +38,14 @@ export function timeout(fun,time){
   }
 
   export function decodeJWT(token){
-    var decoded = jwt.verify(token, process.env.REACT_APP_KEY );
-    return decoded // bar
+    var decoded = false
+    try{
+      var decoded = jwt.verify(token, process.env.REACT_APP_KEY );
+    }catch(e){console.log(e)}
+    return decoded
   }
+  
   export function encodeJWT(data){
     var token = jwt.sign(data, process.env.REACT_APP_KEY );
-    return token // bar
+    return token;
   }

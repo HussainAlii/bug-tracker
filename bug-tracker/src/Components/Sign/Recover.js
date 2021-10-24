@@ -10,7 +10,7 @@ import auth from "../auth/auth";
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-function SignIn({title}) {
+function SignIn({title,isAuth}) {
   const history = useHistory();
 
   const [password, setPassword] = useState("");
@@ -29,9 +29,8 @@ function SignIn({title}) {
 
   useEffect(async () => {
     document.title = title;
-    if(auth.isAuth()){
-        history.push("/");
-    }   
+
+    auth.check_Authorization()
   },[]);
 
 

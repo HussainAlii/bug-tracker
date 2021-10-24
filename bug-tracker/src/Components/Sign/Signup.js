@@ -11,7 +11,7 @@ import auth from "../auth/auth";
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
-function SignIn({title}) {
+function SignIn({title,isAuth}) {
   const history = useHistory();
 
   const [email, setEmail] = useState("");
@@ -42,12 +42,10 @@ function SignIn({title}) {
   }
 
   console.log(password)
-  useEffect(async () => {
+  useEffect(() => {
     document.title = title;
 
-    if(auth.isAuth()){
-        history.push("/");
-    }   
+    auth.check_Authorization()
   },[]);
 
 
@@ -91,7 +89,7 @@ function SignIn({title}) {
               onChange={e=>{
                 setEmail(e.target.value);
               }}
-              type="text"
+              type="email"
               className="Input"
               placeholder="Email"
               />
