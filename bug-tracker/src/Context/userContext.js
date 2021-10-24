@@ -119,14 +119,37 @@ function UserContextProvider({ children }) {
         });
     }
 
+    function isTokenActive(token){
+        const data = {token}
+        const encoded = encodeJWT(data)
+
+        return django
+        .post(requestAPI.isTokenActive, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .then((response) => {
+            if (response) {
+                let decoded = decodeJWT(response["data"])
+                return decoded[0]
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
     function forgot(email){
         const data = {email}
         const encoded = encodeJWT(data)
         django.post(requestAPI.forgot, encoded, {headers: {'Content-Type': 'text/plain'}})
     }
 
+    function changePassword(token, password){
+        const data = {token, password}
+        const encoded = encodeJWT(data)
+        django.post(requestAPI.changePassword, encoded, {headers: {'Content-Type': 'text/plain'}})
+    }
+
       return (
-        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, verifyCode, forgot}}>
+        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, verifyCode, forgot, changePassword, isTokenActive}}>
             { children }
         </UserContext.Provider>
     )

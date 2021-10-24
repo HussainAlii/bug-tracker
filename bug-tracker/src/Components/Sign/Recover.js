@@ -4,7 +4,7 @@ import PasswordStrengthBar from 'react-password-strength-bar';
 import './Sign.css'
 import logo from "../Icons/logo.png";
 
-import {useHistory } from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -14,6 +14,7 @@ import { localStorageRetrieve } from "../../utilities";
 
 function Recover({title}) {
   const history = useHistory();
+  const { token } = useParams();
   const context = useContext(UserContext)
   
   const [password, setPassword] = useState("");
@@ -22,21 +23,27 @@ function Recover({title}) {
   const [nomatch, setMatch] = useState(false);
 
   const [showMessage, setShowMessage] = useState([false,"",""]);
+  const [passwordChanged, setPasswordChanged] = useState(false);
 
 
-  function handleSignUp(){
+  function handleRecover(){
     setShowMessage([true,'Password has been changed!', 'success'])
     setPassword("")
     setRepeatedPassword("")
     setScore(0)
     setScore(false)
+    setPasswordChanged(true)
+
+    context.changePassword(token, password)
   }
 
   console.log(password)
 
-  useEffect(async () => {
+  useEffect( () => {
     document.title = title;
-
+    context.isTokenActive(token).then(isActive=>{
+      if(!isActive) history.push("/")
+    })
     if(localStorageRetrieve("jwt")) history.push("/")
   },[]);
 
@@ -56,7 +63,8 @@ function Recover({title}) {
             <input
               value={password}
               onChange={e=>{
-                setPassword(e.target.value);
+                if (!passwordChanged)
+                  setPassword(e.target.value);
                 setMatch(e.target.value == repeatedPassword)
               }}
               type="password"
@@ -67,7 +75,8 @@ function Recover({title}) {
             <input
               value={repeatedPassword}
               onChange={e=>{
-                setRepeatedPassword(e.target.value);
+                if(!passwordChanged)
+                  setRepeatedPassword(e.target.value);
                 setMatch(e.target.value == password)
               }}
               type="password"
@@ -77,7 +86,7 @@ function Recover({title}) {
 
             <PasswordStrengthBar password={password} onChangeScore={e=>{setScore(e)}} />
 
-            <button disabled={!nomatch || score != 4 } onClick={handleSignUp}>Change Password</button>
+            <button disabled={!nomatch || score != 4 } onClick={handleRecover}>Change Password</button>
 
             {showMessage[0]&&
             <Alert severity={showMessage[2]}>

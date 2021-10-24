@@ -23,7 +23,7 @@ function App() {
       <Route exact path="/signin"> <SignIn title={`Sign In${title}`}/> </Route>
       <Route exact path="/signup"> <SignUp title={`Sign up${title}`}/> </Route>
       <Route exact path="/forgot"> <Forgot title={`Forgot${title}`}/> </Route>
-      <Route exact path="/recover"> <Recover title={`Recover${title}`}/> </Route>
+      <Route exact path="/recover/:token"> <Recover title={`Recover${title}`}/> </Route>
 
       <PrivateRoute exact path="/" >
             
