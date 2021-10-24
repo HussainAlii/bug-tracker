@@ -1,6 +1,7 @@
 import React, {useContext} from 'react'
 import { Redirect, Route } from 'react-router'
 import Navbar from './Components/Navbar/Navbar'
+import Verify from './Components/Sign/Verify';
 import { UserContext } from "./Context/userContext";
 import { localStorageRetrieve } from './utilities';
 
@@ -14,7 +15,7 @@ function PrivateRoute({ children, ...rest }) {
                     if(context.isActive)
                         return <><Navbar/>{children}</>                                                           
                     else 
-                        return <><Navbar/><div>verify</div></>    
+                        return <><Navbar/><Verify/></>    
                 }else{
                     return <Redirect to="/signin"/>
                 }

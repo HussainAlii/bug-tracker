@@ -6,5 +6,6 @@ const requestAPI = {
   login: `/auth/login/`, 
   register: `/auth/register/`, 
   isAuth: `/auth/isAuth/`, 
+  verify: `/auth/verifyCode/`, 
 };
 export default requestAPI;

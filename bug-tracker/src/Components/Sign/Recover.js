@@ -12,7 +12,7 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 import { UserContext } from "../../Context/userContext";
 import { localStorageRetrieve } from "../../utilities";
 
-function SignIn({title}) {
+function Recover({title}) {
   const history = useHistory();
   const context = useContext(UserContext)
   
@@ -26,6 +26,10 @@ function SignIn({title}) {
 
   function handleSignUp(){
     setShowMessage([true,'Password has been changed!', 'success'])
+    setPassword("")
+    setRepeatedPassword("")
+    setScore(0)
+    setScore(false)
   }
 
   console.log(password)
@@ -88,4 +92,4 @@ function SignIn({title}) {
     )
 }
 
-export default SignIn
+export default Recover

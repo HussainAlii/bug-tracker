@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import django from "../axiosRequest";
 
 import requestAPI from "../requests";
-import { decodeJWT, encodeJWT, localStorageRetrieve, localStorageStore } from "../utilities";
+import { decodeJWT, encodeJWT, localStorageRetrieve, localStorageStore, refresh } from "../utilities";
 export const UserContext = createContext();
 
 function UserContextProvider({ children }) {
@@ -12,7 +12,7 @@ function UserContextProvider({ children }) {
     const [fname, setFname] = useState("")  
     const [lname, setLname] = useState("")  
     const [photoUrl, setPhotoUrl] = useState("")
-    const [isActive, setIsActive] = useState(false)
+    const [isActive, setIsActive] = useState(true)
     
     function setUserInfo(data){
         setFname(data['fname'])
@@ -37,6 +37,9 @@ function UserContextProvider({ children }) {
                             logout()
                         setUserInfo(decoded['user'])
                     }
+                })
+                .catch((e)=>{
+                    logout()
                 })
         }
       },[]);
@@ -66,6 +69,26 @@ function UserContextProvider({ children }) {
         });
     }
 
+    function verifyCode(code){
+        const data = {jwt:localStorageRetrieve("jwt"),code}
+        const encoded = encodeJWT(data)
+
+        return django
+        .post(requestAPI.verify, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .then((response) => {
+            if (response) {
+                let decoded = decodeJWT(response["data"])
+                if(decoded['0'])
+                    refresh()
+                else
+                    return [true,'Invalid code!','error']
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
     function logout(){
         // this.authenticated = false;
         localStorage.removeItem("jwt")
@@ -83,7 +106,7 @@ function UserContextProvider({ children }) {
                 let decoded = decodeJWT(response["data"])["code"]
                 if (decoded){
                     localStorageStore("jwt", decoded)
-                    history.push('/')
+                    refresh()
                 }
                 else{
                     localStorage.removeItem('jwt');
@@ -97,7 +120,7 @@ function UserContextProvider({ children }) {
     }
 
       return (
-        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive}}>
+        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, verifyCode}}>
             { children }
         </UserContext.Provider>
     )

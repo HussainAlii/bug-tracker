@@ -27,8 +27,10 @@ function SignIn({title}) {
   },[]);
 
   async function handleSignIn(){
-      setShowMessage(await context.login(email, password));
-      console.log(showMessage)
+      if(!email || !password)
+      setShowMessage([true, "Please, write your email and password in the correct input!", "Error"])
+      else
+        setShowMessage(await context.login(email, password));
   }
 
   

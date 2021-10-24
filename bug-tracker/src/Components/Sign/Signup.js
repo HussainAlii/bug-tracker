@@ -12,7 +12,7 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import { UserContext } from "../../Context/userContext";
 
-function SignIn({title}) {
+function SignUp({title}) {
   const history = useHistory();
   const context = useContext(UserContext)
 
@@ -141,4 +141,4 @@ function SignIn({title}) {
     )
 }
 
-export default SignIn
+export default SignUp

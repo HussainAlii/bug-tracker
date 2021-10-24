@@ -136,3 +136,8 @@
     .login-form .name-input > input:first-child{
       margin-right: 5px;
     }
+
+    .login-form .code{
+      text-align: center;
+      font-size: 25px !important;
+    }
