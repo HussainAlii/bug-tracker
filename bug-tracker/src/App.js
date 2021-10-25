@@ -13,7 +13,7 @@ import requestAPI from './requests';
 import { decodeJWT, localStorageRetrieve } from './utilities';
 import django from './axiosRequest';
 
-import Home from './Components/Home/Home';
+import Projects from './Components/Projects/Projects';
 import Dashboard from './Components/Dashboard/Dashboard';
 
 function App() {
@@ -29,11 +29,11 @@ function App() {
       <Route exact path="/recover/:token"> <Recover title={`Recover${title}`}/> </Route>
 
       <PrivateRoute exact path="/" >
-            <Home title={`Home${title}`} />
+            <Dashboard title={`Dashboard${title}`} />
         </PrivateRoute>
 
-        <PrivateRoute exact path="/dashboard" >
-            <Dashboard title={`Dashboard${title}`} />
+        <PrivateRoute exact path="/projects" >
+            <Projects title={`My Projects${title}`} />
         </PrivateRoute>
 
       <Route exact={true}> <SignIn title={`Sign In${title}`}/> </Route>

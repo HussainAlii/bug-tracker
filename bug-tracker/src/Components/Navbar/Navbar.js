@@ -6,7 +6,7 @@ import Menu from "../Menu/Menu";
 
 import logo from "../Icons/logo.png";
 import avatar from "../Icons/user.png";
-import homeIcon from "../Icons/home.svg"
+import projectIcon from "../Icons/project.svg"
 import dashboardIcon from "../Icons/dashboard.svg"
 
 import { UserContext } from "../../Context/userContext";
@@ -30,8 +30,8 @@ export function Sidebar(){
 
   return (
     <div className="sidebar">
-      <SidebarItem icon={homeIcon} title={"Home"} className="n"/>
-      <SidebarItem icon={dashboardIcon} title={"Dashboard"} to={'/dashboard'} className="n"/>
+      <SidebarItem icon={dashboardIcon} title={"Dashboard"} className="n"/>
+      <SidebarItem icon={projectIcon} title={"My Projects"} to={'/projects'} className="n"/>
     </div>
   );
 }
