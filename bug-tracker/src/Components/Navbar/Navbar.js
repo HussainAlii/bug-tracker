@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext  } from "react";
 import "./Navbar.css";
 import { NavLink, Link, useHistory } from "react-router-dom";
 
+import Menu from "../Menu/Menu";
+
 import logo from "../Icons/logo.png";
 import avatar from "../Icons/user.png";
-
-import Menu from "../Menu/Menu";
+import homeIcon from "../Icons/home.svg"
+import dashboardIcon from "../Icons/dashboard.svg"
 
 import { UserContext } from "../../Context/userContext";
 
@@ -24,7 +26,33 @@ function Navbar() {
   );
 }
 
-function Account() {
+export function Sidebar(){
+
+  return (
+    <div className="sidebar">
+      <SidebarItem icon={homeIcon} title={"Home"} className="n"/>
+      <SidebarItem icon={dashboardIcon} title={"Dashboard"} to={'/dashboard'} className="n"/>
+    </div>
+  );
+}
+
+export function SidebarItem({title, icon, to='/' }) {
+  return (
+      <NavLink
+      exact
+      activeClassName="active-sidebar-item"
+      onlyActiveOnIndex
+      to={to}
+    >
+      <div className="sidebar-item">
+          <img src={icon} />  <p>{title}</p>
+      </div>
+      </NavLink>
+  )
+}
+
+
+export function Account() {
   const context = useContext(UserContext)
   
   const [anchor, setAnchor] = React.useState(false);

@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import { Redirect, Route } from 'react-router'
-import Navbar from './Components/Navbar/Navbar'
+import Navbar, { Sidebar } from './Components/Navbar/Navbar'
 import Verify from './Components/Sign/Verify';
 import { UserContext } from "./Context/userContext";
 import { localStorageRetrieve } from './utilities';
@@ -13,7 +13,10 @@ function PrivateRoute({ children, ...rest }) {
         render = {() =>{
                 if(localStorageRetrieve("jwt")){
                     if(context.isActive)
-                        return <><Navbar/>{children}</>                                                           
+                        return <><Navbar/>
+                        <div className="container">
+                            <Sidebar/><div className="children">{children}</div>
+                            </div></>                                                           
                     else 
                         return <><Navbar/><Verify/></>    
                 }else{

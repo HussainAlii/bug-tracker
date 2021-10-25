@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
-import './Home.css'
+import './Dashboard.css'
 
-function Home({title}) {
+function Dashboard({title}) {
 
     useEffect(() => {
         document.title = title;
@@ -9,9 +9,9 @@ function Home({title}) {
 
     return (
         <div>
-                home
+                Dashboard
         </div>
     )
 }
 
-export default Home
+export default Dashboard

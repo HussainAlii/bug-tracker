@@ -15,4 +15,13 @@ border-radius: 100px;
 background: #555; 
 }
 
+.container{
+  display: flex;  
+  height: calc( 100vh - 80px);
+}
 
+.children{
+  flex-grow: 1;
+  margin-left: 40px;
+  margin-top: 25px;
+}

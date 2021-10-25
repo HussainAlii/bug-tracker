@@ -12,7 +12,9 @@ import UserContextProvider from './Context/userContext'
 import requestAPI from './requests';
 import { decodeJWT, localStorageRetrieve } from './utilities';
 import django from './axiosRequest';
+
 import Home from './Components/Home/Home';
+import Dashboard from './Components/Dashboard/Dashboard';
 
 function App() {
   let title = " - BTracker";
@@ -27,7 +29,11 @@ function App() {
       <Route exact path="/recover/:token"> <Recover title={`Recover${title}`}/> </Route>
 
       <PrivateRoute exact path="/" >
-            <Home/>
+            <Home title={`Home${title}`} />
+        </PrivateRoute>
+
+        <PrivateRoute exact path="/dashboard" >
+            <Dashboard title={`Dashboard${title}`} />
         </PrivateRoute>
 
       <Route exact={true}> <SignIn title={`Sign In${title}`}/> </Route>
