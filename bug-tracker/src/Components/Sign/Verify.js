@@ -1,4 +1,4 @@
-import React , {useState,useContext} from 'react'
+import React , {useState,useContext, useRef} from 'react'
 import './Sign.css'
 
 import Alert from '@material-ui/lab/Alert';
@@ -7,11 +7,13 @@ import { UserContext } from "../../Context/userContext";
 
 function Verify() {
     const context = useContext(UserContext)
+    const inputRef = useRef()
     const [code, setCode] = useState("");
     const [showMessage, setShowMessage] = useState([true,"Verification code has been sent to your email!","success"]);
 
-    async function handleVerify(){
+    async function handleVerify(code){
         setShowMessage(await context.verifyCode(code));
+        setCode("")
     }
 
     return (
@@ -19,18 +21,24 @@ function Verify() {
             <div class="login-form">
             <h3 style={{color:"gray", textAlign:"center"}}>Verification</h3>
                 <input
+                ref={inputRef}
                 value={code}
                 onChange={e=>{
-                    if (e.target.value.length<5)
+                    console.log(inputRef.current.value)
+                    if(inputRef.current.value.length==4){
+                        handleVerify(inputRef.current.value)
+                    }
+
+                    if (inputRef.current.value.length<5)
                         setCode(e.target.value);
+
+                    
                 }}
                 type="text"
                 className="Input code"
                 placeholder="Enter 4 digit Code"
                 />
 
-
-                <button disabled={code.length != 4} onClick={handleVerify}>Verify Code</button>
                 
                 {showMessage[0]&&
                 <Alert severity={showMessage[2]}>
