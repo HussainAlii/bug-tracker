@@ -1,0 +1,121 @@
+.card-model{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(13deg, rgb(250, 192, 217) 0%, rgba(148,187,233,1) 100%);
+    border-radius: 5px;
+    width: 200px;
+    height: 165px;
+    padding: 10px 10px;
+    box-shadow: 0px 0px 7px 1px rgba(238, 18, 18, 0.27);
+  }
+
+  .card-footer{
+    display: flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    
+  }
+
+  .card-footer p{
+    height: 8px;
+    padding-bottom: 3px;
+
+  }
+
+  .card-footer img{
+    width: 30px;
+    border-radius: 100%;
+    padding-bottom: 3px;
+    margin-right: 2px;
+
+  }
+
+  .card-model h3{
+    height: 10px;
+    padding: 0px;
+    margin: 0px;
+    color: #323743;
+  }
+
+  .card-desc {
+    margin-top: 15px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: auto;
+    height: 100px;
+  }
+
+  .card-desc p{
+    padding: 0px;
+    margin: 0px;
+  }
+
+
+/* Optional: show position indicator in red */
+.card-desc::-webkit-scrollbar-thumb {
+    background: #f0c4c4;
+    width: 1px;
+}
+
+.card-desc::-webkit-scrollbar{
+  width: 2px;
+}
+
+.card-footer .users{
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  
+  .card-model .card-header input{
+    width: 200px;
+    outline: none;
+    border: none;
+    font-size: 17px;
+    background-color: transparent;
+    color: #6857A0;
+  }
+  
+  .card-model .card-header .card-desc textarea{
+    height: 90px;
+    width: 192px;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    overflow-x: hidden;
+    font-size: 17px;
+    outline: 0;
+  }
+
+  .card-model .card-footer button{
+    height: 30px;
+    font-weight: 750;
+
+    background-color: #A781D2;
+    border-radius: 4px;
+    color: #F8FCF8;
+
+
+    margin-bottom: 30px;
+    border: none;
+
+    border-radius: 100px;
+
+    padding-left: 10px;
+
+    font-size: 15px;
+
+    transition: all 250ms;
+
+    cursor: pointer;
+  }
+
+  textarea::-webkit-scrollbar-thumb {
+    background: #f0c4c4;
+    width: 1px;
+}
+
+textarea::-webkit-scrollbar{
+  width: 2px;
+}

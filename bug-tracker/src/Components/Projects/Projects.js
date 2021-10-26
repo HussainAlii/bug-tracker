@@ -5,25 +5,23 @@ import searchIcon from '../Icons/search.svg'
 import addIcon from '../Icons/add.svg'
 import userIcon from '../Icons/user.png'
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import CardActionArea from '@material-ui/core/CardActionArea';
+import Card from '../Card/Card'
+import {RegisterCard} from '../Card/ActionCard'
 
 function Projects({title}) {
     const [search, setSearch] = useState("")
+    const [isCreateActive, setIsCreateActive] = useState(true)
+
     useEffect(() => {
         document.title = title;
       },[]);
 
       function createProject(){
-        alert("c")
-
+        setIsCreateActive(true)
       }
 
 return (
-<div>
+<div style={{paddingBottom:"1px"}}>
     <div class="bar">
         <div className="search-model">
             <img className="searchIcon" src={searchIcon} alt="searchbar" />
@@ -38,107 +36,18 @@ return (
     </div>
 
     <div class="project-model">
-        <div class="card">
-            <div class="create-project-card noselect" onClick={createProject}>
+
+        {isCreateActive?<RegisterCard cancel={setIsCreateActive} /> : 
+        <div class="card" onClick={createProject}>
+            <div class="create-project-card noselect">
                 <p>Create New Project</p>
                 <img src={addIcon} />
             </div>
         </div>
+    }
 
-        <div class="card">
-            <div class="card-model noselect" onClick={createProject}>
-                <div class="card-header">
-                    <h3>Card title</h3>
-                    <div class="card-desc">
-                        <p>bla bla bla lala la bla la.
-                        bla bla bla lala la bla la.bla bla bla lala la bla la.
-                        bla bla bla lala la bla la.bla bla bla lala la bla la.
-                        bla bla bla lala la bla la.bla bla bla lala la bla la.
-                        bla bla bla lala la bla la.bla bla bla lala la bla la.
-                        bla bla bla lala la bla la.bla bla bla lala la bla la.
-                        bla bla bla lala la bla la.bla bla bla lala la bla la.
-                        </p>
-                    </div>
-                </div>
+    <Card title={"the killer of the of thD"} desc={"my-project-is-about-the-livingg"} action={createProject} users={[userIcon,userIcon]} />
 
-                <div class="card-footer">
-                    <div class="users">
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                    </div>
-                    <p>3</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-model noselect" onClick={createProject}>
-                <div class="card-header">
-                    <h3>Card title</h3>
-                    <div class="card-desc">
-                        <p>bla bla bla lala la bla la.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card-footer">
-                    <div class="users">
-                        <img src={userIcon} />
-                    </div>
-                    <p>1</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-model noselect" onClick={createProject}>
-                <div class="card-header">
-                    <h3>Card title</h3>
-                    <div class="card-desc">
-                        <p>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card-footer">
-                    <div class="users">
-                        <img src={userIcon} />
-                    </div>
-                    <p>1</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-model noselect" onClick={createProject}>
-                <div class="card-header">
-                    <h3>Card title</h3>
-                    <div class="card-desc">
-                        <p>bla bla bla lala la bla la.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="card-footer">
-                    <div class="users">
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                        <img src={userIcon} />
-                    </div>
-                    <p>10</p>
-                </div>
-            </div>
-        </div>
 
     </div>
 </div>

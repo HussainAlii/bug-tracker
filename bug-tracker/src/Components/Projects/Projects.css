@@ -1,6 +1,6 @@
 .bar{
     display: flex;
-    
+    margin-bottom: 100px;
 }
 
 .search-model{
@@ -51,6 +51,8 @@
     background: radial-gradient(circle, rgba(167,129,210,1) 0%, rgba(104,87,160,1) 100%);
     min-height: 120px;
     border-radius: 20px;
+    box-shadow: 0px 0px 7px 1px rgba(114, 12, 248, 0.507);
+
   }
 
 
@@ -64,70 +66,4 @@
     font-weight: 600;
     height: 0px;
     color: #F8FCF8;    
-  }
-
-  .card-model{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: linear-gradient(13deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
-    border-radius: 5px;
-    width: 200px;
-    height: 165px;
-    padding: 10px 10px;
-  }
-
-  .card-footer{
-    display: flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    
-  }
-
-  .card-footer p{
-    height: 8px;
-    padding-bottom: 3px;
-
-  }
-
-  .card-footer img{
-    width: 30px;
-    border-radius: 100%;
-    padding-bottom: 3px;
-    margin-right: 2px;
-
-  }
-
-  .card-model h3{
-    height: 10px;
-    padding: 0px;
-    margin: 0px;
-    color: #323743;
-  }
-
-  .card-desc {
-    margin-top: 15px;
-    overflow-y: scroll;
-    height: 100px;
-  }
-
-  .card-desc p{
-    padding: 0px;
-    margin: 0px;
-  }
-
-
-/* Optional: show position indicator in red */
-.card-desc::-webkit-scrollbar-thumb {
-    background: #f0c4c4;
-    width: 1px;
-}
-
-.card-desc::-webkit-scrollbar{
-  width: 2px;
-}
-
-.card-footer .users{
-    display: flex;
-    overflow-x: hidden;
   }
