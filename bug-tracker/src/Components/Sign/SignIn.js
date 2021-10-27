@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 
 import './Sign.css'
 import logo from "../Icons/logo.png";
+import loadingIcon from "../Icons/loading.gif"
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -20,6 +21,7 @@ function SignIn({title}) {
   const [password, setPassword] = useState("");
 
   const [showMessage, setShowMessage] = useState([false,"",""]);
+  const [isLoading , setIsLoading] = useState(false);
   
   useEffect(() => {
     document.title = title;
@@ -27,10 +29,13 @@ function SignIn({title}) {
   },[]);
 
   async function handleSignIn(){
-      if(!email || !password)
+    if(!email || !password)
       setShowMessage([true, "Please, write your email and password in the correct input!", "Error"])
-      else
-        setShowMessage(await context.login(email, password));
+    else{
+      setIsLoading(true)
+      setShowMessage(await context.login(email, password));
+      setIsLoading(false)
+    }
   }
 
   
@@ -66,7 +71,7 @@ function SignIn({title}) {
             />
 
             <button onClick={handleSignIn}>Login</button>
-
+            <div style={ isLoading ? {display:"block", marginLeft:"38%"} : {display:"none"}} ><img style={{width:"100px"}} src={loadingIcon} /> </div>
             <hr/>
 
             <div className="login-footer"><Link to="/forgot/" ><p>Forgot Password!</p> </Link> <Link to="/signup/" ><p>Create New Account!</p></Link></div>

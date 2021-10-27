@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext  } from "react";
 import "./Navbar.css";
 import { NavLink, Link, useHistory } from "react-router-dom";
-
-import Menu from "../Menu/Menu";
+import logoutIcon from '../Icons/logout.svg'
+import settingIcon from '../Icons/setting.svg'
+import Menu, {MenuItem} from "../Menu/Menu";
 
 import logo from "../Icons/logo.png";
 import avatar from "../Icons/user.png";
@@ -73,7 +74,10 @@ export function Account() {
       <Menu
         isOpen={Boolean(anchor)}
         handleClose={handleClick}
-      />
+      >
+        <MenuItem title='Setting' icon={settingIcon} action={()=>{alert("Not implemented yet!")}} />
+        <MenuItem title='Logout' icon={logoutIcon} action={()=>{context.logout()}} />
+      </Menu>
     </div>
     </>
   );

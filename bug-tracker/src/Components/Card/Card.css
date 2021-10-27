@@ -4,7 +4,7 @@
     justify-content: space-between;
     background: linear-gradient(13deg, rgb(250, 192, 217) 0%, rgba(148,187,233,1) 100%);
     border-radius: 5px;
-    width: 200px;
+    width: 220px;
     height: 165px;
     padding: 10px 10px;
     box-shadow: 0px 0px 7px 1px rgba(238, 18, 18, 0.27);
@@ -14,21 +14,19 @@
     display: flex;
     justify-content:space-between;
     align-items:flex-end;
-    
+    position: relative;
   }
 
   .card-footer p{
-    height: 8px;
+    height: 13px;
     padding-bottom: 3px;
 
   }
 
   .card-footer img{
-    width: 30px;
+    width: 20px;
     border-radius: 100%;
-    padding-bottom: 3px;
     margin-right: 2px;
-
   }
 
   .card-model h3{
@@ -65,6 +63,17 @@
 .card-footer .users{
     display: flex;
     overflow-x: hidden;
+    padding-bottom: 10px;
+
+  }
+
+  .card .card-header{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .card .card-header img{
+    width: 18px;
   }
 
   
@@ -96,19 +105,21 @@
     border-radius: 4px;
     color: #F8FCF8;
 
-
-    margin-bottom: 30px;
     border: none;
 
     border-radius: 100px;
-
-    padding-left: 10px;
 
     font-size: 15px;
 
     transition: all 250ms;
 
     cursor: pointer;
+  }
+
+  .card-model .card-footer button[disabled]{
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
   }
 
   textarea::-webkit-scrollbar-thumb {

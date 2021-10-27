@@ -6,19 +6,54 @@ import addIcon from '../Icons/add.svg'
 import userIcon from '../Icons/user.png'
 
 import Card from '../Card/Card'
-import {RegisterCard} from '../Card/ActionCard'
+import {CreateCard} from '../Card/ActionCard'
+import django from '../../axiosRequest'
+import requestAPI from '../../requests'
+import { decodeJWT, encodeJWT, localStorageRetrieve } from '../../utilities'
 
 function Projects({title}) {
     const [search, setSearch] = useState("")
-    const [isCreateActive, setIsCreateActive] = useState(true)
+    const [isCreateActive, setIsCreateActive] = useState(false)
+    const [projects, setProjects] = useState([])
 
     useEffect(() => {
         document.title = title;
+
+        const data = {jwt:localStorageRetrieve("jwt")}
+        const encoded = encodeJWT(data)
+
+        django
+        .post(requestAPI.getProjects, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .then((response) => {
+            let decoded = decodeJWT(response["data"])["projects"]
+            console.log(decoded)
+
+                if (decoded){
+                    setProjects(decoded)
+                }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
       },[]);
 
       function createProject(){
         setIsCreateActive(true)
       }
+
+      for(let i = 0; i <search.length; i++) {
+        console.log()
+        
+    }
+
+    // var searchElement = []
+
+    // for(let i = 0; i <projects.length; i++) {
+    //     console.log()
+        
+    // }
+ 
 
 return (
 <div style={{paddingBottom:"1px"}}>
@@ -37,7 +72,7 @@ return (
 
     <div class="project-model">
 
-        {isCreateActive?<RegisterCard cancel={setIsCreateActive} /> : 
+        {isCreateActive?<CreateCard cancel={setIsCreateActive} /> : 
         <div class="card" onClick={createProject}>
             <div class="create-project-card noselect">
                 <p>Create New Project</p>
@@ -46,8 +81,25 @@ return (
         </div>
     }
 
-    <Card title={"the killer of the of thD"} desc={"my-project-is-about-the-livingg"} action={createProject} users={[userIcon,userIcon]} />
+    {!search && projects && 
+     projects.map(project=>{
+        var users = JSON.parse(project.users_photo)
+        console.log(users)
+        return <Card title={project.title} desc={project.description} access={project.access} action={()=>console.log(project.id)} users={users} />
+        })}
+    
+    {search && 
+        projects.map(project=>{
+            if (project.title.substring(0, search.length) == search)
+            {
+                var users = JSON.parse(project.users_photo)
+                console.log(users)
+                return <Card title={project.title} desc={project.description} access={project.access} action={()=>console.log(project.id)} users={users} />
+            }
+            return
+         })}
 
+    
 
     </div>
 </div>

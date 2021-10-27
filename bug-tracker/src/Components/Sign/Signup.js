@@ -6,6 +6,7 @@ import { isValidEmail, localStorageRetrieve } from "../../utilities";
 
 import './Sign.css'
 import logo from "../Icons/logo.png";
+import loadingIcon from "../Icons/loading.gif"
 
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
@@ -28,11 +29,14 @@ function SignUp({title}) {
   const [nomatch, setMatch] = useState(false);
 
   const [showMessage, setShowMessage] = useState([false,"",""]);
+  const [isLoading , setIsLoading] = useState(false);
 
 
   async function handleSignUp(){
+    setIsLoading(true)
     setShowMessage(await context.register(email, password, fname, lname))
     clearPasswords()
+    setIsLoading(false)
   }
 
   function clearPasswords(){
@@ -123,6 +127,7 @@ function SignUp({title}) {
             <PasswordStrengthBar password={password} onChangeScore={e=>{setScore(e)}} />
 
             <button disabled={!nomatch || score != 4 || !isValidEmail(email) || !fname || !lname } onClick={handleSignUp}>Register</button>
+            <div style={ isLoading ? {display:"block", marginLeft:"38%"} : {display:"none"}} ><img style={{width:"100px"}} src={loadingIcon} /> </div>
 
             <hr/>
 

@@ -39,10 +39,23 @@
     display: inline-block;
     width: 200px;
     cursor: pointer;
-
-    margin: 50px 50px 0px 0px;
-    
+    margin: 50px 58px 0px 0px;
+    transition: all 400ms;
   }
+
+  .project-model .register-card{
+    display: inline-block;
+    width: 200px;
+    margin: 50px 50px 0px 0px;
+  }
+  
+  .project-model .card:hover {
+    transform: scale(1.08);
+  }
+
+
+
+
 
   .create-project-card{
     display: flex;
@@ -66,4 +79,15 @@
     font-weight: 600;
     height: 0px;
     color: #F8FCF8;    
+  }
+
+  .card-menu{
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #323743;
+    border-radius: 5px;
+    padding: 0px 5px 0px 7px;
+    display: inline-block;
+    height: 30px;
+    font-weight: 600;
+    position: relative;
   }

@@ -1,20 +1,24 @@
-import React, {useContext} from 'react'
+import React, {Children, useContext} from 'react'
 import './Menu.css'
-import MenuItem from './MenuItem'
-import logoutIcon from '../Icons/logout.svg'
-import settingIcon from '../Icons/setting.svg'
-import { UserContext } from "../../Context/userContext";
 
-function Menu({isOpen, handleClick}) {
-        const context = useContext(UserContext)
+function Menu({isOpen, handleClose, children}) {
         return( 
             <>
                 <div className={`menu ${isOpen? 'active': 'inactive'}`}>
-                    <MenuItem title='Setting' icon={settingIcon} action={()=>{alert("Setting")}} />
-                    <MenuItem title='Logout' icon={logoutIcon} action={()=>{context.logout()}} />
+                    {children}
                 </div>
-                {isOpen&&<div className="back" />}
+                {isOpen&&<div onClick={handleClose} className="back" />}
             </>
         )}
 
 export default Menu
+
+export function MenuItem({icon, title, action}) {
+    
+    return (
+        <dev class="menu-item" onClick={()=>{action();}} >
+            <img src={icon} />
+            <p>{title}</p>
+        </dev>
+    )
+}
