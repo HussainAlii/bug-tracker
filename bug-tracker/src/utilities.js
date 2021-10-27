@@ -49,3 +49,7 @@ export function timeout(fun,time){
     var token = jwt.sign(data, process.env.REACT_APP_KEY );
     return token;
   }
+
+  export function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }

@@ -26,7 +26,6 @@ function Projects({title}) {
         .post(requestAPI.getProjects, encoded, {headers: {'Content-Type': 'text/plain'}})
         .then((response) => {
             let decoded = decodeJWT(response["data"])["projects"]
-            console.log(decoded)
 
                 if (decoded){
                     setProjects(decoded)
@@ -41,19 +40,6 @@ function Projects({title}) {
       function createProject(){
         setIsCreateActive(true)
       }
-
-      for(let i = 0; i <search.length; i++) {
-        console.log()
-        
-    }
-
-    // var searchElement = []
-
-    // for(let i = 0; i <projects.length; i++) {
-    //     console.log()
-        
-    // }
- 
 
 return (
 <div style={{paddingBottom:"1px"}}>
@@ -84,7 +70,6 @@ return (
     {!search && projects && 
      projects.map(project=>{
         var users = JSON.parse(project.users_photo)
-        console.log(users)
         return <Card title={project.title} desc={project.description} access={project.access} action={()=>console.log(project.id)} users={users} />
         })}
     
@@ -93,7 +78,6 @@ return (
             if (project.title.substring(0, search.length) == search)
             {
                 var users = JSON.parse(project.users_photo)
-                console.log(users)
                 return <Card title={project.title} desc={project.description} access={project.access} action={()=>console.log(project.id)} users={users} />
             }
             return

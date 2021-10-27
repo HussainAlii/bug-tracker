@@ -11,6 +11,7 @@ import projectIcon from "../Icons/project.svg"
 import dashboardIcon from "../Icons/dashboard.svg"
 
 import { UserContext } from "../../Context/userContext";
+import { getRandomInt } from "../../utilities";
 
 function Navbar() {
 
@@ -65,11 +66,7 @@ export function Account() {
   return (
     <>
     <div className="avatar noselect" onClick={handleClick}>
-    <img
-        // src={context.userInfo.userInfo?.photoURL? context.userInfo.userInfo?.photoURL : avatar}
-        src={avatar}
-        alt="avatar icon"
-      />
+    <div class="img" style={{backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} ><div class="chars">{context.getUserInfo().fname[0]?.toUpperCase()}{context.getUserInfo().lname[0]?.toUpperCase()}</div></div>
     <div class="name">{`${context.getUserInfo().fname} ${context.getUserInfo().lname}`}  {anchor?<span style={{color: 'darkgray', marginLeft:'5px'}}> &#9650;</span>:<span style={{color: 'darkgray', marginLeft:'5px'}}>&#9660;</span>}</div>   
       <Menu
         isOpen={Boolean(anchor)}
