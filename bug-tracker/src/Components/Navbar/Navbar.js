@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext  } from "react";
 import "./Navbar.css";
 import { NavLink, Link, useHistory } from "react-router-dom";
 import logoutIcon from '../Icons/logout.svg'
-import settingIcon from '../Icons/setting.svg'
+import settingIcon from '../Icons/settings1.svg'
 import Menu, {MenuItem} from "../Menu/Menu";
 
 import logo from "../Icons/logo.png";
@@ -34,11 +34,13 @@ function Navbar() {
 
 export function Sidebar(){
   const history = useHistory()
+
   function exitProject(){
     localStorage.removeItem("project")
     localStorage.removeItem("project_title")
     history.push("/projects")
   }
+  
   return (
     <div className="sidebar">
       <SidebarItem icon={dashboardIcon} title={"Dashboard"}/>
@@ -48,11 +50,9 @@ export function Sidebar(){
       <hr/>
       <div className='project-title'>{localStorageRetrieve('project_title')}<img src={cancelIcon} title={"Exit Project"} onClick={()=>exitProject()} /> </div> 
       <hr/>
-      
-      
-        
           <SidebarItem icon={homeIcon} title={"Home"} to={'/'+localStorageRetrieve('project')+'/home'} />
           <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />
+          <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />
           
          </>}
     </div>

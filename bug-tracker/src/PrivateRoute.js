@@ -1,12 +1,16 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import { Redirect, Route } from 'react-router'
 import Navbar, { Sidebar } from './Components/Navbar/Navbar'
 import Verify from './Components/Sign/Verify';
 import { UserContext } from "./Context/userContext";
 import { localStorageRetrieve } from './utilities';
 
-function PrivateRoute({ children, ...rest }) {
+function PrivateRoute({title, children, ...rest }) {
     const context = useContext(UserContext)
+    useEffect( () => {
+        document.title = title;
+      },[]);
+
     return (
         <Route
         {...rest}

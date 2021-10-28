@@ -85,3 +85,166 @@
     font-weight: 600;
     position: relative;
   }
+
+  .setting-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .setting-form button{
+    width: 120px;
+    height: 30px;
+    color: white;
+    border-radius: 12px;
+    background-color: #A781D2;
+    
+    box-shadow: rgba(213, 105, 255, 0.705) 0 -25px 18px -14px inset,rgb(228, 204, 238) 0 1px 2px,rgba(238, 214, 248, 0.705) 0 16px 32px;
+    cursor: pointer;
+    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+    text-align: center;
+    
+    transition: all 250ms;
+    border: 0;
+    font-size: 16px;
+
+    display: inline-block;
+  }
+
+  .setting-form button:hover {
+    box-shadow: rgba(197, 62, 250, 0.959) 0 -25px 18px -14px inset,rgb(235, 179, 255) 0 1px 2px,rgba(246, 222, 255, 0.959) 0 2px 4px,rgba(231, 169, 255, 0.959) 0 4px 8px,rgba(235, 184, 255, 0.959) 0 8px 16px,rgba(250, 236, 255, 0.959) 0 16px 32px;
+    transform: scale(1.01);
+  }
+  
+  
+
+  .setting-form button[disabled]{
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    box-shadow: rgba(135, 132, 136, 0.705) 0 -25px 18px -14px inset,rgb(228, 204, 238) 0 1px 2px,rgba(238, 214, 248, 0.705) 0 16px 32px;
+
+    color: #666666;
+  }
+
+  .setting-form button[disabled]:hover {
+    box-shadow: rgba(56, 59, 57, 0.959) 0 -25px 18px -14px inset,rgb(46, 43, 48) 0 1px 2px,rgbrgba(15, 11, 17, 0.959)2px 4px,rgba(85, 84, 85, 0.959) 0 4px 8px,rgba(86, 85, 87, 0.959) 0 8px 16px,rgba(250, 236, 255, 0.959) 0 16px 32px;
+    transform: scale(1.01);
+  }
+  
+
+  .setting-form .form-item{
+    /* display: flex;
+    align-items: center;
+    margin-bottom: 30px; */
+
+    position:relative;
+    margin-bottom:40px;
+    
+  }
+  
+  .setting-form .form-item label{
+    position:absolute;
+	top:0px;
+	left:5px;
+	font-size:16px;
+  color:rgb(0, 0, 0);
+
+    pointer-event:none;
+	transition: all 0.5s ease-in-out;
+  pointer-events: none;
+
+  }
+
+  .setting-form .form-item input{
+    border:0;
+    border-bottom:1px solid #555;  
+    background:transparent;
+    width:100%;
+    padding:8px 0 5px 0;
+    font-size:16px;
+  }
+
+  .setting-form .form-item input:focus{ 
+    border:none;	
+    outline:none;
+    border-bottom:1px solid #A781D2;
+  }
+
+
+  .form-item input:focus ~ label{
+	top:-12px;
+	font-size:12px;
+  color: #6857A0;
+}
+
+.form-item .vaild{
+	top:-12px !important;
+	font-size:12px !important;
+  color: #6857A0 !important;
+}
+
+
+.form-item textarea:focus ~ label{
+	top:-20px;
+	font-size:12px;
+  color: #6857A0;
+}
+
+.form-item .vaild-textarea{
+	top:-20px !important;
+	font-size:12px !important;
+  color: #6857A0 !important;
+}
+
+
+
+.form-item textarea{
+  height: 100px;
+  width: 192px;
+  background-color: transparent;
+  resize: none;
+  overflow-x: hidden;
+  font-size: 17px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #f0c4c4;
+  width: 1px;
+}
+
+textarea::-webkit-scrollbar{
+width: 2px;
+}
+
+.form-menu{
+  width: 200px;
+  position: relative;
+  margin-bottom: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(112, 110, 110, 0.445);
+  padding-top: 6px;
+  border-radius: 10px;
+}
+
+#form-delete {
+  width: 120px;
+  height: 30px;
+  color: white;
+  border-radius: 12px;
+  background-color: #b31702;
+  
+  box-shadow: rgba(238, 39, 13, 0.705) 0 -25px 18px -14px inset,rgb(245, 3, 3) 0 1px 2px,rgba(248, 222, 214, 0.705) 0 16px 32px;
+  cursor: pointer;
+  font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+  text-align: center;
+  
+  transition: all 250ms;
+  border: 0;
+  font-size: 16px;
+
+  display: inline-block;
+}
+

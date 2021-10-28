@@ -41,8 +41,7 @@ export function CreateCard({cancel}) {
             </div>
             <div class="card-footer">
                 <button style={{cursor: 'pointer'}} disabled={!title} onClick={handleCreateProject}>Confirm</button>
-                <div onClick={handleClick} class="card-menu">{access}  {anchor?<span style={{color: 'darkgray'}}> &#9650;</span>:<span style={{color: 'darkgray'}}>&#9660;</span>}
-                </div>                
+                <div onClick={handleClick} class="card-menu">{access}  {anchor?<span style={{color: 'darkgray'}}> &#9650;</span>:<span style={{color: 'darkgray'}}>&#9660;</span>}</div>                
                 <Menu
                     isOpen={Boolean(anchor)}
                     handleClose={handleClick}
