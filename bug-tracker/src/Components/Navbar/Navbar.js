@@ -9,9 +9,13 @@ import logo from "../Icons/logo.png";
 import avatar from "../Icons/user.png";
 import projectIcon from "../Icons/project.svg"
 import dashboardIcon from "../Icons/dashboard.svg"
+import shareIcon from "../Icons/share.svg"
+import homeIcon from "../Icons/home.svg"
+import cancelIcon from "../Icons/cancel.svg"
 
 import { UserContext } from "../../Context/userContext";
-import { getRandomInt } from "../../utilities";
+import { getRandomInt, localStorageRetrieve } from "../../utilities";
+import Projects from "../Projects/Projects";
 
 function Navbar() {
 
@@ -29,11 +33,28 @@ function Navbar() {
 }
 
 export function Sidebar(){
-
+  const history = useHistory()
+  function exitProject(){
+    localStorage.removeItem("project")
+    localStorage.removeItem("project_title")
+    history.push("/projects")
+  }
   return (
     <div className="sidebar">
-      <SidebarItem icon={dashboardIcon} title={"Dashboard"} className="n"/>
-      <SidebarItem icon={projectIcon} title={"My Projects"} to={'/projects'} className="n"/>
+      <SidebarItem icon={dashboardIcon} title={"Dashboard"}/>
+      <SidebarItem icon={projectIcon} title={"My Projects"} to={'/projects'}/>
+      {
+        localStorageRetrieve('project') && <>
+      <hr/>
+      <div className='project-title'>{localStorageRetrieve('project_title')}<img src={cancelIcon} title={"Exit Project"} onClick={()=>exitProject()} /> </div> 
+      <hr/>
+      
+      
+        
+          <SidebarItem icon={homeIcon} title={"Home"} to={'/'+localStorageRetrieve('project')+'/home'} />
+          <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />
+          
+         </>}
     </div>
   );
 }

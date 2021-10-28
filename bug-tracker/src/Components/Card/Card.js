@@ -8,6 +8,7 @@ import { UserContext } from '../../Context/userContext'
 
 function Card({title, desc="", users=[], action, access}) {
     const context = useContext(UserContext)
+
     return (
         <div class="card">
         <div class="card-model noselect" onClick={action}>
@@ -23,15 +24,16 @@ function Card({title, desc="", users=[], action, access}) {
             <div class="card-footer">
                 <div class="users">
                     <div class="avatar">
+                        {/* super admin profile pic */}
                         <div class="img" style={{width: '28px', height:'28px', fontSize:'13px', marginRight:'1px',backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} >
                             <div class="chars">{context.getUserInfo().fname[0]?.toUpperCase()}{context.getUserInfo().lname[0]?.toUpperCase()}</div>
                         </div>
 
+                        {/* members profile pic */}
                         {users.map(user=>{
-                            console.log(user)
                         return (
                             <div class="img" style={{width: '28px', height:'28px', fontSize:'13px', marginRight:'1px',backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} >
-                                <div class="chars">{user.fields.fname[0]?.toUpperCase()}{user.fields.lname[0]?.toUpperCase()}</div>
+                                <div class="chars">{user}</div>
                             </div>
                         );
                         })}

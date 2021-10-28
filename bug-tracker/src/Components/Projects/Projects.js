@@ -3,15 +3,16 @@ import './Projects.css'
 
 import searchIcon from '../Icons/search.svg'
 import addIcon from '../Icons/add.svg'
-import userIcon from '../Icons/user.png'
 
 import Card from '../Card/Card'
 import {CreateCard} from '../Card/ActionCard'
 import django from '../../axiosRequest'
 import requestAPI from '../../requests'
-import { decodeJWT, encodeJWT, localStorageRetrieve } from '../../utilities'
+import { decodeJWT, encodeJWT, href, localStorageRetrieve, localStorageStore } from '../../utilities'
+import { useHistory } from 'react-router'
 
 function Projects({title}) {
+    const history = useHistory()
     const [search, setSearch] = useState("")
     const [isCreateActive, setIsCreateActive] = useState(false)
     const [projects, setProjects] = useState([])
@@ -41,6 +42,12 @@ function Projects({title}) {
         setIsCreateActive(true)
       }
 
+      function openProject(id, name){
+          localStorageStore("project", id)
+          localStorageStore("project_title", name)
+          history.push(`/${id}/Home`)
+      }
+
 return (
 <div style={{paddingBottom:"1px"}}>
     <div class="bar">
@@ -67,18 +74,16 @@ return (
         </div>
     }
 
-    {!search && projects && 
-     projects.map(project=>{
-        var users = JSON.parse(project.users_photo)
-        return <Card title={project.title} desc={project.description} access={project.access} action={()=>console.log(project.id)} users={users} />
+        {!search && projects && 
+        projects.map(project=>{
+                return <Card title={project.title} desc={project.description} access={project.access} action={()=>openProject(project.id, project.title)} users={project.users} />
         })}
     
-    {search && 
-        projects.map(project=>{
-            if (project.title.substring(0, search.length) == search)
+        {search && 
+            projects.map(project=>{
+            if (project.title.substring(0, search.length).toLowerCase() == search.toLowerCase())
             {
-                var users = JSON.parse(project.users_photo)
-                return <Card title={project.title} desc={project.description} access={project.access} action={()=>console.log(project.id)} users={users} />
+                return <Card title={project.title} desc={project.description} access={project.access} action={()=>openProject(project.id, project.title)} users={project.users}  />
             }
             return
          })}

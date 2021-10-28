@@ -15,6 +15,8 @@ import django from './axiosRequest';
 
 import Projects from './Components/Projects/Projects';
 import Dashboard from './Components/Dashboard/Dashboard';
+import Home from './Components/Home/Home';
+import Share from './Components/Share/Share';
 
 function App() {
   let title = " - BTracker";
@@ -34,6 +36,14 @@ function App() {
 
         <PrivateRoute exact path="/projects" >
             <Projects title={`My Projects${title}`} />
+        </PrivateRoute>
+
+        <PrivateRoute exact path="/:id/home" >
+            <Home title={`Home${title}`} />
+        </PrivateRoute>
+
+        <PrivateRoute exact path="/:id/share" >
+            <Share title={`Share${title}`} />
         </PrivateRoute>
 
       <Route exact={true}> <SignIn title={`Sign In${title}`}/> </Route>
