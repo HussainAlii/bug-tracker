@@ -34,10 +34,8 @@ function Recover({title}) {
     setScore(false)
     setPasswordChanged(true)
 
-    context.changePassword(token, password)
+    context.changePasswordByToken(token, password)
   }
-
-  console.log(password)
 
   useEffect( () => {
     document.title = title;
@@ -102,3 +100,4 @@ function Recover({title}) {
 }
 
 export default Recover
+

@@ -86,11 +86,18 @@
     position: relative;
   }
 
-  .setting-form{
+  .project-setting{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+  }
+
+  .setting-form{
+    padding: 20px 18%;
+    margin-top: 40px;
+    box-shadow: 0px 0px 7px 1px rgba(0,0,0,0.27);
+    margin-bottom: 90px;
   }
 
   .setting-form button{
@@ -201,7 +208,7 @@
 
 .form-item textarea{
   height: 100px;
-  width: 192px;
+  width: 100%;
   background-color: transparent;
   resize: none;
   overflow-x: hidden;
@@ -218,7 +225,7 @@ width: 2px;
 }
 
 .form-menu{
-  width: 200px;
+  width: 100%;
   position: relative;
   margin-bottom: 70px;
   display: flex;

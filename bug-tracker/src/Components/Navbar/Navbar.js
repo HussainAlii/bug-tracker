@@ -14,7 +14,7 @@ import homeIcon from "../Icons/home.svg"
 import cancelIcon from "../Icons/cancel.svg"
 
 import { UserContext } from "../../Context/userContext";
-import { getRandomInt, localStorageRetrieve } from "../../utilities";
+import { getRandomInt, href, localStorageRetrieve } from "../../utilities";
 import Projects from "../Projects/Projects";
 
 function Navbar() {
@@ -93,7 +93,7 @@ export function Account() {
         isOpen={Boolean(anchor)}
         handleClose={handleClick}
       >
-        <MenuItem title='Setting' icon={settingIcon} action={()=>{alert("Not implemented yet!")}} />
+        <MenuItem title='Setting' icon={settingIcon} action={()=>{href("/setting")}} />
         <MenuItem title='Logout' icon={logoutIcon} action={()=>{context.logout()}} />
       </Menu>
     </div>

@@ -109,9 +109,10 @@ return (
 
 export default Projects
 
+
 export function ProjectSetting({title}) {
     const project_name = localStorageRetrieve("project_title")
-    const [projectTitle, setProjectTitle] = useState(project_name)
+    const [projectTitle, setProjectTitle] = useState("")
     const [desc, setDesc] = useState("")
     const [access, setAccess] = useState("Public")
     const [anchor, setAnchor] = useState(false);
@@ -132,6 +133,7 @@ export function ProjectSetting({title}) {
                 if (decoded){
                     setDesc(decoded['description'])
                     setAccess(decoded['access'])
+                    setProjectTitle(project_name)
                 }
             }
         })
@@ -166,39 +168,43 @@ export function ProjectSetting({title}) {
     return (
         <>
         {isAlertOpen&&<AlertDialog action={deleteProject} open={isAlertOpen} handleClose={handleCloseAlert} message={"Are you sure you want to delete \'"+ project_name + "\' project?\nYou will lose all the work progress in this project!"} title={"Warning!"}/>}
-        <div className="setting">
-            <h2 style={{color:"#323743", font: '30px sans-serif'}}>Project Setting</h2>
-            <div class="setting-form">
-                <div className="form-item">
-                    <input value={projectTitle} onChange={(e)=>{
-                        if (projectTitle.length <=23 || projectTitle.length > e.target.value.length)
-                            setProjectTitle(e.target.value)
-                        }} />
-                    <label className={projectTitle&&'vaild'}>Project Title:</label>
-                </div>
+        <div style={{paddingBottom:"1px"}}>
+          <div className="project-setting">
 
-                <div className="form-item">
-                    <textarea value={desc} onChange={(e)=>{setDesc(e.target.value)}} />
-                    <label className={desc&&'vaild-textarea'}>Project Description:</label>
-                </div>
+              <div class="setting-form">
+            <h3 style={{color:"gray", textAlign:"center", paddingRight:'33px'}}>Project Setting</h3>
 
-                <div onClick={handleClick} className="form-menu">
-                <div class="card-menu">{access}  {anchor?<span style={{color: 'darkgray'}}> &#9650;</span>:<span style={{color: 'darkgray'}}>&#9660;</span>}</div>                
-                    <Menu
-                        isOpen={Boolean(anchor)}
-                        handleClose={handleClick}
-                    >
-                        <MenuItem title={'Public: Everyone can access'} icon={publicIcon}  action={()=>{setAccess("Public"); handleClick()}} />
-                        <MenuItem title={'Private: Only Invited member'} icon={privateIcon}  action={()=>{setAccess("Private"); handleClick()}} />
-                    </Menu>
-                </div>
-                
-                <div className="form-item">
-                <button disabled={!projectTitle} onClick={handleConfirm}>Confirm</button>
-                <button id="form-delete" style={{marginLeft:"20px"}} onClick={handleDeleteProject}>Delete Project</button>
-                </div>
-            </div>
-            
+                  <div style={{marginTop:"50px"}} className="form-item">
+                      <input value={projectTitle} onChange={(e)=>{
+                          if (projectTitle.length <=23 || projectTitle.length > e.target.value.length)
+                              setProjectTitle(e.target.value)
+                          }} />
+                      <label className={projectTitle&&'vaild'}>Project Title:</label>
+                  </div>
+
+                  <div className="form-item">
+                      <textarea value={desc} onChange={(e)=>{setDesc(e.target.value)}} />
+                      <label className={desc&&'vaild-textarea'}>Project Description:</label>
+                  </div>
+
+                  <div onClick={handleClick} className="form-menu">
+                  <div class="card-menu">{access}  {anchor?<span style={{color: 'darkgray'}}> &#9650;</span>:<span style={{color: 'darkgray'}}>&#9660;</span>}</div>                
+                      <Menu
+                          isOpen={Boolean(anchor)}
+                          handleClose={handleClick}
+                      >
+                          <MenuItem title={'Public: Everyone can access'} icon={publicIcon}  action={()=>{setAccess("Public"); handleClick()}} />
+                          <MenuItem title={'Private: Only Invited member'} icon={privateIcon}  action={()=>{setAccess("Private"); handleClick()}} />
+                      </Menu>
+                  </div>
+                  
+                  <div className="form-item">
+                  <button disabled={!projectTitle} onClick={handleConfirm}>Confirm</button>
+                  <button id="form-delete" style={{marginLeft:"20px"}} onClick={handleDeleteProject}>Delete Project</button>
+                  </div>
+              </div>
+              
+          </div>
         </div>
         </>
     )
@@ -221,7 +227,7 @@ export function AlertDialog({action=null, open, handleClose, message, title}) {
             </DialogContentText>
           </DialogContent>
           <DialogActions style={{backgroundColor:"#334"}}>
-            <Button onClick={action?action:handleClose} style={{color:"white"}} autoFocus>
+            <Button onClick={action?action:handleClose} style={{color:"red"}}>
               Ok
             </Button>
             <Button onClick={handleClose} style={{color:"white"}} autoFocus>

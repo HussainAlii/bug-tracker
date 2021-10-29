@@ -41,7 +41,7 @@ export function timeout(fun,time){
     var decoded = false
     try{
       var decoded = jwt.verify(token, process.env.REACT_APP_KEY );
-    }catch(e){console.log(e)}
+    }catch(error){console.log(error)}
     return decoded
   }
   

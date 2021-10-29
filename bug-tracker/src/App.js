@@ -17,6 +17,7 @@ import Projects, { ProjectSetting } from './Components/Projects/Projects';
 import Dashboard from './Components/Dashboard/Dashboard';
 import Home from './Components/Home/Home';
 import Share from './Components/Share/Share';
+import UserSetting from './Components/Sign/UserSetting';
 
 function App() {
   let title = " - BTracker";
@@ -33,6 +34,10 @@ function App() {
       <PrivateRoute exact path="/" >
             <Dashboard title={`Dashboard${title}`} />
         </PrivateRoute>
+        
+      <PrivateRoute exact path="/setting" >
+        <UserSetting title={`Setting${title}`}/>
+      </PrivateRoute>
 
         <PrivateRoute exact path="/projects" >
             <Projects title={`My Projects${title}`} />

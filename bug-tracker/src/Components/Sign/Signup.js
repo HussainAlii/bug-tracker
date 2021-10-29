@@ -47,7 +47,6 @@ function SignUp({title}) {
     setMatch(false);
   }
 
-  console.log(password)
   useEffect(() => {
     document.title = title;
 

@@ -143,13 +143,28 @@ function UserContextProvider({ children }) {
     }
 
     function changePassword(token, password){
+        const data = {jwt:token, password}
+        const encoded = encodeJWT(data)
+        django.post(requestAPI.changePassword, encoded, {headers: {'Content-Type': 'text/plain'}})
+        logout()
+    }
+
+    function changePasswordByToken(token, password){
         const data = {token, password}
         const encoded = encodeJWT(data)
         django.post(requestAPI.changePasswordByToken, encoded, {headers: {'Content-Type': 'text/plain'}})
+        logout()
+    }
+
+    function changeUsername(jwt, fname, lname){
+        const data = {jwt, fname, lname}
+        const encoded = encodeJWT(data)
+        django.post(requestAPI.changeUsername, encoded, {headers: {'Content-Type': 'text/plain'}})
+        refresh()
     }
 
       return (
-        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, verifyCode, forgot, changePassword, isTokenActive}}>
+        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, verifyCode, forgot, changePassword, changePasswordByToken, isTokenActive, changeUsername}}>
             { children }
         </UserContext.Provider>
     )
