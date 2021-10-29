@@ -5,11 +5,8 @@ import Verify from './Components/Sign/Verify';
 import { UserContext } from "./Context/userContext";
 import { localStorageRetrieve } from './utilities';
 
-function PrivateRoute({title, children, ...rest }) {
+function PrivateRoute({children, ...rest }) {
     const context = useContext(UserContext)
-    useEffect( () => {
-        document.title = title;
-      },[]);
 
     return (
         <Route

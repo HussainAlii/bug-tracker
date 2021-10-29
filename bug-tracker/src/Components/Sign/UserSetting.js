@@ -7,7 +7,7 @@ import { getRandomInt, isValidEmail, localStorageRetrieve, localStorageStore, re
 import './Sign.css'
 import { UserContext } from "../../Context/userContext";
 
-function UserSetting({title}) {
+function UserSetting({title=""}) {
     const history = useHistory();
     const context = useContext(UserContext)
 
@@ -29,8 +29,6 @@ function UserSetting({title}) {
         context.changeUsername(localStorageRetrieve("jwt"), fname, lname)
     }
 
-        
-
     useEffect(() => {
       document.title = title;
       if(context.getUserInfo().fname)
@@ -41,12 +39,6 @@ function UserSetting({title}) {
       // if(localStorageRetrieve("jwt")) history.push("/")
     },[context.getUserInfo().fname, context.getUserInfo().lname]);
 
-    useEffect(() => {
-        document.title = title;
-    
-        // if(localStorageRetrieve("jwt")) history.push("/")
-      },[]);
-    
 
     return (
       <div style={{paddingBottom:"1px"}}>
