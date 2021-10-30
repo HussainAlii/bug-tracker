@@ -18,11 +18,9 @@ import {CreateCard} from '../Card/ActionCard'
 import django from '../../axiosRequest'
 import requestAPI, { deleteProject, updateProject } from '../../requests'
 import { decodeJWT, encodeJWT, href, localStorageRetrieve, localStorageStore } from '../../utilities'
-import { useHistory } from 'react-router'
+import { useHistory, useParams } from 'react-router'
 
 import Menu, {MenuItem} from '../Menu/Menu'
-import { Checkbox, FormControlLabel } from '@material-ui/core'
-
 
 function Projects({title}) {
     const history = useHistory()
@@ -58,7 +56,7 @@ function Projects({title}) {
       function openProject(id, name){
           localStorageStore("project", id)
           localStorageStore("project_title", name)
-          history.push(`/${id}/Home`)
+          history.push(`/${id}/Board`)
       }
 
 return (
@@ -112,11 +110,10 @@ export default Projects
 
 
 export function ProjectSetting({title}) {
-    const project_name = localStorageRetrieve("project_title")
-    let project_desc = ""
-    let project_access = ""
-    let project_invitationLink = ""
-    
+    const project_name = localStorageRetrieve("project_title")    
+    const {id} = useParams();
+    const history = useHistory()
+
     const [projectTitle, setProjectTitle] = useState("")
     const [desc, setDesc] = useState("")
     const [access, setAccess] = useState("Public")
@@ -127,7 +124,7 @@ export function ProjectSetting({title}) {
   
     useEffect( async () => {
         document.title = title;
-        
+        !localStorageRetrieve("project") || localStorageRetrieve("project") != id && history.push("/")
         const data = {jwt:localStorageRetrieve("jwt"),project_id:localStorageRetrieve("project")}
         const encoded = encodeJWT(data)
         
@@ -137,7 +134,7 @@ export function ProjectSetting({title}) {
             if (response) {
                 let decoded = decodeJWT(response["data"])["project"]
                 if (decoded){
-                    project_invitationLink = decoded['invitation']? true : false
+                    let project_invitationLink = decoded['invitation']? true : false
                     setProjectTitle(project_name)
                     setDesc(decoded['description'])
                     setAccess(decoded['access'])

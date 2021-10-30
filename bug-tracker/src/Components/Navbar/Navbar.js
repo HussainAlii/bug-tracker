@@ -6,11 +6,10 @@ import settingIcon from '../Icons/settings1.svg'
 import Menu, {MenuItem} from "../Menu/Menu";
 
 import logo from "../Icons/logo.png";
-import avatar from "../Icons/user.png";
 import projectIcon from "../Icons/project.svg"
 import dashboardIcon from "../Icons/dashboard.svg"
 import shareIcon from "../Icons/share.svg"
-import homeIcon from "../Icons/home.svg"
+import boardIcon from "../Icons/board.svg"
 import cancelIcon from "../Icons/cancel.svg"
 
 import { UserContext } from "../../Context/userContext";
@@ -50,7 +49,7 @@ export function Sidebar(){
       <hr/>
       <div className='project-title'>{localStorageRetrieve('project_title')}<img src={cancelIcon} title={"Exit Project"} onClick={()=>exitProject()} /> </div> 
       <hr/>
-          <SidebarItem icon={homeIcon} title={"Home"} to={'/'+localStorageRetrieve('project')+'/home'} />
+          <SidebarItem icon={boardIcon} title={"Board"} to={'/'+localStorageRetrieve('project')+'/board'} />
           <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />
           <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />
           

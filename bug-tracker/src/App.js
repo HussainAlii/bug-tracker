@@ -15,7 +15,7 @@ import django from './axiosRequest';
 
 import Projects, { ProjectSetting } from './Components/Projects/Projects';
 import Dashboard from './Components/Dashboard/Dashboard';
-import Home from './Components/Home/Home';
+import Board from './Components/Board/Board';
 import Share from './Components/Share/Share';
 import UserSetting from './Components/Sign/UserSetting';
 
@@ -43,8 +43,8 @@ function App() {
             <Projects title={`My Projects${title}`} />
         </PrivateRoute>
 
-        <PrivateRoute exact path="/:id/home" >
-            <Home title={`Home${title}`} />
+        <PrivateRoute exact path="/:id/board" >
+            <Board title={`Board${title}`} />
         </PrivateRoute>
 
         <PrivateRoute exact path="/:id/share" >

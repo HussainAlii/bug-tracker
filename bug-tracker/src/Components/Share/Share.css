@@ -1,0 +1,10 @@
+.table-share{
+    width: 100%;
+    margin-top: 40px;
+    margin-left: 5%;
+}
+
+.table-share th, .table-share td{
+    text-align: center;
+    border-color: black;
+}

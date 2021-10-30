@@ -2,7 +2,6 @@ import React, {useContext} from 'react'
 import './Card.css'
 import privateIcon from "../Icons/private.svg"
 import publicIcon from "../Icons/public.svg"
-import userIcon from "../Icons/user.png"
 import { getRandomInt } from '../../utilities'
 import { UserContext } from '../../Context/userContext'
 
