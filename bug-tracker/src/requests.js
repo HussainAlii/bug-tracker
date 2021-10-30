@@ -18,6 +18,10 @@ const requestAPI = {
   updateProject: '/bugtracker/updateProject/',
   deleteProject: '/bugtracker/deleteProject/',
   getProjectMember:'/bugtracker/getProjectMember/',
+  inviteMember:'/bugtracker/inviteMember/',
+  removeMember:'/bugtracker/removeMember/',
+  setUserPermission:'/bugtracker/setUserPermission/',
+  setUserRank:'/bugtracker/setUserRank/',
 };
 export default requestAPI;
 
@@ -49,6 +53,71 @@ export function getProjectMember(project_id){
           if (decoded){
             return decoded
           }
+        }
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function setUserPermission(project_id, user_id, value){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id, user_id, value}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.setUserPermission, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then((response) => {
+        
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function setUserRank(project_id, user_id, value){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id, user_id, value}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.setUserRank, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then((response) => {
+        
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function inviteMember(project_id, user_id){
+  const data = {jwt:localStorageRetrieve("jwt"),user_id, project_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.inviteMember, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then((response) => {
+        if (response) {
+          let decoded = decodeJWT(response["data"])
+          if (decoded){
+            return decoded
+          }else{
+            refresh()
+          }
+        }
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function removeMember(project_id, user_id){
+  const data = {jwt:localStorageRetrieve("jwt"),user_id, project_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.removeMember, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then((response) => {
+        if (response) {
+          refresh()
         }
   })
   .catch((error) => {

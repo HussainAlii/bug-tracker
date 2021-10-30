@@ -6,5 +6,32 @@
 
 .table-share th, .table-share td{
     text-align: center;
+    vertical-align: middle;
     border-color: black;
+    height: 50px;
+}
+
+.table-share td label{
+    margin-right: 0px;
+}
+
+.alert-message{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.share-link{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.share-link p{
+    height: 11px;
+}
+
+.share-link img{
+    height: 20px;
+    margin-top: 10px;
 }
