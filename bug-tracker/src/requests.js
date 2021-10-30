@@ -36,8 +36,8 @@ export function createProject(title, description, access){
   });
 }
 
-export function updateProject(title, description, access){
-  const data = {jwt:localStorageRetrieve("jwt"),project_id:localStorageRetrieve('project'), access, title, description}
+export function updateProject(title, description, access, allow_invitationLink){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id:localStorageRetrieve('project'), access, title, description, allow_invitationLink}
   const encoded = encodeJWT(data)
 
   return django

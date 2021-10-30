@@ -21,6 +21,7 @@ import { decodeJWT, encodeJWT, href, localStorageRetrieve, localStorageStore } f
 import { useHistory } from 'react-router'
 
 import Menu, {MenuItem} from '../Menu/Menu'
+import { Checkbox, FormControlLabel } from '@material-ui/core'
 
 
 function Projects({title}) {
@@ -112,13 +113,18 @@ export default Projects
 
 export function ProjectSetting({title}) {
     const project_name = localStorageRetrieve("project_title")
+    let project_desc = ""
+    let project_access = ""
+    let project_invitationLink = ""
+    
     const [projectTitle, setProjectTitle] = useState("")
     const [desc, setDesc] = useState("")
     const [access, setAccess] = useState("Public")
+    const [invitationLink, setInvitationLink] = useState(true)
     const [anchor, setAnchor] = useState(false);
     
     const [isAlertOpen, setAlert] = useState(false);
-
+  
     useEffect( async () => {
         document.title = title;
         
@@ -131,9 +137,11 @@ export function ProjectSetting({title}) {
             if (response) {
                 let decoded = decodeJWT(response["data"])["project"]
                 if (decoded){
+                    project_invitationLink = decoded['invitation']? true : false
+                    setProjectTitle(project_name)
                     setDesc(decoded['description'])
                     setAccess(decoded['access'])
-                    setProjectTitle(project_name)
+                    setInvitationLink(project_invitationLink)
                 }
             }
         })
@@ -148,13 +156,7 @@ export function ProjectSetting({title}) {
 
       function handleConfirm(){
         localStorageStore("project_title", projectTitle)
-        updateProject(projectTitle, desc, access)
-      }
-
-      function handleConfirm(){
-          
-        localStorageStore("project_title", projectTitle)
-        updateProject(projectTitle, desc, access)
+        updateProject(projectTitle, desc, access, invitationLink)
       }
 
       function handleDeleteProject(){
@@ -198,6 +200,14 @@ export function ProjectSetting({title}) {
                       </Menu>
                   </div>
                   
+                  <div class="form-item noselect" style={{cursor:"pointer"}} onClick={()=>setInvitationLink(!invitationLink)}>
+                  <label class="switch">
+                    <input checked={invitationLink} type="checkbox"/>
+                    <span class="slider round"></span>
+                  </label>
+                  <p className={`switch-label ${invitationLink&& 'switch-label-selected'}` }>Allow invitation Link!</p>
+                  </div>
+
                   <div className="form-item">
                   <button disabled={!projectTitle} onClick={handleConfirm}>Confirm</button>
                   <button id="form-delete" style={{marginLeft:"20px"}} onClick={handleDeleteProject}>Delete Project</button>
