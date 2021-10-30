@@ -1,4 +1,4 @@
-import { localStorageStore,  localStorageRetrieve, refresh, encodeJWT, href} from "./utilities";
+import { localStorageStore,  localStorageRetrieve, refresh, encodeJWT, href, decodeJWT} from "./utilities";
 import {django} from "./axiosRequest"
 import axios from "axios";
 
@@ -17,6 +17,7 @@ const requestAPI = {
   getProject: '/bugtracker/getProject/',
   updateProject: '/bugtracker/updateProject/',
   deleteProject: '/bugtracker/deleteProject/',
+  getProjectMember:'/bugtracker/getProjectMember/',
 };
 export default requestAPI;
 
@@ -30,6 +31,25 @@ export function createProject(title, description, access){
       if (response) {
           refresh()
       }
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function getProjectMember(project_id){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.getProjectMember, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then((response) => {
+        if (response) {
+          let decoded = decodeJWT(response["data"])
+          if (decoded){
+            return decoded
+          }
+        }
   })
   .catch((error) => {
       console.log(error);

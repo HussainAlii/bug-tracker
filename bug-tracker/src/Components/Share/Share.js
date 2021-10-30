@@ -2,12 +2,14 @@ import React, {useEffect, useState} from 'react'
 import { useHistory, useParams } from 'react-router';
 import { localStorageRetrieve } from '../../utilities';
 
-import cancelIcon from "../Icons/cancel.svg"
+import removeIcon from "../Icons/remove.svg"
 
 import './Share.css'
 
 import Menu, {MenuItem} from '../Menu/Menu'
 import { Button, Checkbox, FormControlLabel, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import django from '../../axiosRequest';
+import { getProjectMember } from '../../requests';
 
 function Share({title}) {
     const history = useHistory()
@@ -21,11 +23,17 @@ function Share({title}) {
     function removeMember(user_id){
         console.log(user_id)
     }
+
+    function handleInvite(){
+        console.log(email)
+    }
     
     useEffect( () => {
         document.title = title;
         !localStorageRetrieve("project") || localStorageRetrieve("project") != id &&history.push("/")
-      },[]);
+        
+        getProjectMember(id).then(res =>{setMembers(res['members']); setInviteLink(res["invite_id"])})
+    },[]);
 
     return (
         <div style={{paddingBottom:"1px"}}>
@@ -34,18 +42,21 @@ function Share({title}) {
                 <div class="setting-form">
                     <h3 style={{color:"gray", textAlign:"center", paddingRight:'33px'}}>Invite To The Project</h3>
                     
-                    {inviteLink && <div style={{marginTop:"50px"}} className="form-item">
+                    <div style={{marginTop:"50px"}} className="form-item">
                         <p>Invite with link:</p>
-                        <p>{window.location.hostname}/invite/{id}/{inviteLink}/ </p>
+                        {inviteLink?
+                        <p>{window.location.hostname}/invite/{id}/{inviteLink}/ </p>:
+                        <p style={{color:'#f50057'}}>Turned off from Project Setting</p>
+                        }
                         <hr/>
-                    </div>}
+                    </div>
 
                     <div style={{marginTop:"50px", display:"flex"}} className="form-item">
                         <input style={{marginRight:"30px"}} value={email} onChange={(e)=>{
                                 setEmail(e.target.value)
                             }} />
-                        <label className={email&&'vaild'}>User Email:</label>
-                        <button>Invite</button>
+                        <label className={email&&'vaild'}>Enter User Email...</label>
+                        <button onClick={handleInvite}>Invite</button>
                     </div>
 
                     {members.length != 0 && <div class='table-share'><TableHead>
@@ -67,6 +78,7 @@ function Share({title}) {
                     </TableHead>
                     <TableBody>
                         {members.map(member =>{
+                            return <>
                         <TableRow>
                             <TableCell>
                             <FormControlLabel
@@ -83,10 +95,10 @@ function Share({title}) {
                             </TableCell>
 
                             <TableCell>
-                            <img style={{cursor: 'pointer'}} src={cancelIcon} title={"Exit Project"} onClick={()=>removeMember(member.id)} />
+                            <img style={{cursor: 'pointer'}} src={removeIcon} title={"Exit Project"} onClick={()=>removeMember(member.id)} />
                             </TableCell>
                         </TableRow>
-                        })}
+                        </>})}
 
                     </TableBody></div>}
 
