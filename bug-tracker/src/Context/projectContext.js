@@ -49,22 +49,6 @@ function ProjectContextProvider({ children }) {
                     closeProject()
                 })
     }
-
-    // function isProjectPublic(project_id){
-    //         const data = {project_id:project_id}
-    //         const encoded = encodeJWT(data)
-    //             return django
-    //             .post(requestAPI.isProjectPublic, encoded, {headers: {'Content-Type': 'text/plain'}})
-    //             .then((response) => {
-    //                 if (response) {
-    //                     let decoded = decodeJWT(response["data"])
-    //                     return decoded
-    //                 }
-    //             })
-    //             .catch(e=>{
-    //                 closeProject()
-    //             })
-    // }
     
     useEffect(() => {
         localStorageRetrieve("project") && isAccessAllowed(localStorageRetrieve("project"))

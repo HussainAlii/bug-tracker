@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext  } from "react";
 import "./Navbar.css";
 import { NavLink, Link, useHistory } from "react-router-dom";
 import logoutIcon from '../Icons/logout.svg'
+import leaveIcon from '../Icons/leaveIcon.svg'
 import settingIcon from '../Icons/settings1.svg'
 import Menu, {MenuItem} from "../Menu/Menu";
 
@@ -16,6 +17,7 @@ import { UserContext } from "../../Context/userContext";
 import { ProjectContext } from "../../Context/projectContext";
 import { getRandomInt, href, localStorageRetrieve } from "../../utilities";
 import Projects from "../Projects/Projects";
+import { leaveProject } from "../../requests";
 
 function Navbar() {
 
@@ -43,12 +45,17 @@ export function Sidebar(){
         localStorageRetrieve('project') && context.getProjectInfo().projectRank !='guest' ? <>
       <hr/>
       <div className='project-title'>{context.getProjectInfo().projectTitle}<img src={cancelIcon} title={"Exit Project"} onClick={context.closeProject} /> </div> 
-      <hr/>
+      <hr style={{height:'2px'}} />
           <SidebarItem icon={boardIcon} title={"Board"} to={'/'+localStorageRetrieve('project')+'/board'} />
-          {context.getProjectInfo().projectRank =='superAdmin' || context.getProjectInfo().projectRank =='admin' &&<SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />}
+          {(context.getProjectInfo().projectRank =='superAdmin' || context.getProjectInfo().projectRank =='admin') && <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />}
           {context.getProjectInfo().projectRank =='superAdmin' && <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />}
           
          </>: localStorage.removeItem('project')}
+         <hr style={{height:'5px'}} />
+         {context.getProjectInfo().projectRank !='superAdmin' && localStorageRetrieve('project') &&
+         <div  onClick={()=>{leaveProject(localStorageRetrieve('project'))}} className="sidebar-item">
+         <img src={leaveIcon} style={{verticalAlign:'middle', marginTop:'4px'}} />  <span style={{color:"#f50057", fontWeight:"600"}}>Leave Project</span>
+        </div>}
     </div>
   );
 }

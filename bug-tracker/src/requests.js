@@ -25,6 +25,7 @@ const requestAPI = {
   joinInvite:'/bugtracker/joinInvite/',
   isAccessAllowed:'/bugtracker/isAccessAllowed/',
   isProjectPublic:'/bugtracker/isProjectPublic/',
+  leaveProject:'/bugtracker/leaveProject/',
 };
 export default requestAPI;
 
@@ -51,6 +52,21 @@ export function joinInvite(project_id, invite_id, user_id){
   return django
   .post(requestAPI.joinInvite, encoded, {headers: {'Content-Type': 'text/plain'}})
   .then( res => {
+          href('/projects')
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function leaveProject(project_id){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.leaveProject, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then( res => {
+          localStorage.removeItem('project')
           href('/projects')
   })
   .catch((error) => {

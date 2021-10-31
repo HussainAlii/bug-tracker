@@ -36,7 +36,8 @@ function Share({title}) {
     useEffect( () => {
         document.title = title;
         context.isAccessAllowed(id)
-        context.getProjectInfo().projectRank !='superAdmin' || context.getProjectInfo().projectRank !='admin' && history.push("/")
+        let rank = context.getProjectInfo().projectRank
+        if (rank =='guest' || rank =='member') history.push("/")
 
         !localStorageRetrieve("project") && localStorageRetrieve("project") != id && history.push("/")
 
