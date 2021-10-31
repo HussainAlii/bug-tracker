@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import './Dashboard.css'
-
+import coming_soon from '../Icons/coming_soon.png'
 function Dashboard({title}) {
 
     useEffect(() => {
@@ -8,8 +8,8 @@ function Dashboard({title}) {
       },[]);
 
     return (
-        <div>
-                Dashboard
+        <div style={{display:'flex', justifyContent:'center', alignItems:'flex-start'}}>
+                <img src={coming_soon}/>
         </div>
     )
 }
