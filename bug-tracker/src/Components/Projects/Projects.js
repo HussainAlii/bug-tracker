@@ -58,7 +58,7 @@ function Projects({title}) {
       
 
 return (
-<div style={{paddingBottom:"1px"}}>
+<div style={{paddingBottom:"11px", marginLeft:'40px', marginTop:'55px', overflow: 'scroll'}}>
     <div class="bar">
         <div className="search-model">
             <img className="searchIcon" src={searchIcon} alt="searchbar" />
@@ -168,7 +168,7 @@ export function ProjectSetting({title}) {
     return (
         <>
         {isAlertOpen&&<AlertDialog action={deleteProject} open={isAlertOpen} handleClose={handleCloseAlert} message={"Are you sure you want to delete \'"+ projectTitle + "\' project?\nYou will lose all the work progress in this project!"} title={"Warning!"}/>}
-        <div style={{paddingBottom:"1px"}}>
+        <div style={{paddingBottom:"11px", marginLeft:'40px', marginTop:'55px', overflow: 'scroll'}}>
           <div className="project-setting">
 
               <div class="setting-form">

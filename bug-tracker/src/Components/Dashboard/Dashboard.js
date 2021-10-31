@@ -8,8 +8,8 @@ function Dashboard({title}) {
       },[]);
 
     return (
-        <div style={{display:'flex', justifyContent:'center', alignItems:'flex-start'}}>
-                <img src={coming_soon}/>
+        <div class="content " >
+            <img style={{display: 'inline-block'}} src={coming_soon}/>
         </div>
     )
 }

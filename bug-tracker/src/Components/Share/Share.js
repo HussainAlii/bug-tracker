@@ -45,7 +45,7 @@ function Share({title}) {
     },[]);
 
     return (
-        <div style={{paddingBottom:"1px"}}>
+        <div style={{paddingBottom:"11px", marginLeft:'40px', marginTop:'55px', overflow: 'scroll'}}>
             <div class="alert-message">
             {showMessage[0]&&
             <Alert style={{width:'90%'}} severity={showMessage[2]}>
