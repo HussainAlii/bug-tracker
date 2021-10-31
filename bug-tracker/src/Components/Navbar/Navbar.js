@@ -13,6 +13,7 @@ import boardIcon from "../Icons/board.svg"
 import cancelIcon from "../Icons/cancel.svg"
 
 import { UserContext } from "../../Context/userContext";
+import { ProjectContext } from "../../Context/projectContext";
 import { getRandomInt, href, localStorageRetrieve } from "../../utilities";
 import Projects from "../Projects/Projects";
 
@@ -33,27 +34,21 @@ function Navbar() {
 
 export function Sidebar(){
   const history = useHistory()
-
-  function exitProject(){
-    localStorage.removeItem("project")
-    localStorage.removeItem("project_title")
-    history.push("/projects")
-  }
-  
+  const context = useContext(ProjectContext)
   return (
     <div className="sidebar">
       <SidebarItem icon={dashboardIcon} title={"Dashboard"}/>
       <SidebarItem icon={projectIcon} title={"My Projects"} to={'/projects'}/>
       {
-        localStorageRetrieve('project') && <>
+        localStorageRetrieve('project') && context.getProjectInfo().projectRank !='guest' ? <>
       <hr/>
-      <div className='project-title'>{localStorageRetrieve('project_title')}<img src={cancelIcon} title={"Exit Project"} onClick={()=>exitProject()} /> </div> 
+      <div className='project-title'>{context.getProjectInfo().projectTitle}<img src={cancelIcon} title={"Exit Project"} onClick={context.closeProject} /> </div> 
       <hr/>
           <SidebarItem icon={boardIcon} title={"Board"} to={'/'+localStorageRetrieve('project')+'/board'} />
-          <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />
-          <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />
+          {context.getProjectInfo().projectRank =='superAdmin' || context.getProjectInfo().projectRank =='admin' &&<SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />}
+          {context.getProjectInfo().projectRank =='superAdmin' && <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />}
           
-         </>}
+         </>: localStorage.removeItem('project')}
     </div>
   );
 }

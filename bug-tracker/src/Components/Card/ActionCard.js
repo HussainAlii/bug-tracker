@@ -45,6 +45,7 @@ export function CreateCard({cancel}) {
                 <Menu
                     isOpen={Boolean(anchor)}
                     handleClose={handleClick}
+                    height = '100px'
                 >
                     <MenuItem title={'Public: Everyone can access'} icon={publicIcon}  action={()=>{setAccess("Public"); handleClick()}} />
                     <MenuItem title={'Private: Only Invited member'} icon={privateIcon}  action={()=>{setAccess("Private"); handleClick()}} />

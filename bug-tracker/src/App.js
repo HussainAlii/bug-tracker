@@ -8,7 +8,10 @@ import Recover from './Components/Sign/Recover'
 import Navbar from './Components/Navbar/Navbar';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from './PrivateRoute';
+
 import UserContextProvider from './Context/userContext'
+import ProjectContextProvider from './Context/projectContext';
+
 import requestAPI from './requests';
 import { decodeJWT, localStorageRetrieve } from './utilities';
 import django from './axiosRequest';
@@ -25,6 +28,7 @@ function App() {
   return (
     <Router>
       <UserContextProvider>
+      <ProjectContextProvider>
   <div className="app">
     <Switch>
       <Route exact path="/signin"> <SignIn title={`Sign In${title}`}/> </Route>
@@ -65,6 +69,7 @@ function App() {
 
     </Switch>
   </div>
+  </ProjectContextProvider>
   </UserContextProvider>
 </Router>
   );

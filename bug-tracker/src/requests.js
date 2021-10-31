@@ -23,6 +23,8 @@ const requestAPI = {
   setUserPermission:'/bugtracker/setUserPermission/',
   setUserRank:'/bugtracker/setUserRank/',
   joinInvite:'/bugtracker/joinInvite/',
+  isAccessAllowed:'/bugtracker/isAccessAllowed/',
+  isProjectPublic:'/bugtracker/isProjectPublic/',
 };
 export default requestAPI;
 
@@ -167,7 +169,6 @@ export function deleteProject(){
   .then((response) => {
       if (response) {
         localStorage.removeItem("project")
-        localStorage.removeItem("project_title")
           href("/projects")
       }
   })

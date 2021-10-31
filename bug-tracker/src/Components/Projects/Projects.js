@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import './Projects.css'
 
 import searchIcon from '../Icons/search.svg'
@@ -22,8 +22,10 @@ import { useHistory, useParams } from 'react-router'
 
 import Menu, {MenuItem} from '../Menu/Menu'
 
+import {ProjectContext} from "../../Context/projectContext";
+
 function Projects({title}) {
-    const history = useHistory()
+    const context = useContext(ProjectContext)
     const [search, setSearch] = useState("")
     const [isCreateActive, setIsCreateActive] = useState(false)
     const [projects, setProjects] = useState([])
@@ -53,11 +55,7 @@ function Projects({title}) {
         setIsCreateActive(true)
       }
 
-      function openProject(id, name){
-          localStorageStore("project", id)
-          localStorageStore("project_title", name)
-          history.push(`/${id}/Board`)
-      }
+      
 
 return (
 <div style={{paddingBottom:"1px"}}>
@@ -87,14 +85,14 @@ return (
 
         {!search && projects && 
         projects.map(project=>{
-                return <Card title={project.title} desc={project.description} access={project.access} action={()=>openProject(project.id, project.title)} users={project.users} />
+                return <Card title={project.title} desc={project.description} access={project.access} action={()=>context.openProject(project.id)} users={project.users} />
         })}
     
         {search && 
             projects.map(project=>{
             if (project.title.substring(0, search.length).toLowerCase() == search.toLowerCase())
             {
-                return <Card title={project.title} desc={project.description} access={project.access} action={()=>openProject(project.id, project.title)} users={project.users}  />
+                return <Card title={project.title} desc={project.description} access={project.access} action={()=>context.openProject(project.id)} users={project.users}  />
             }
             return
          })}
@@ -110,7 +108,8 @@ export default Projects
 
 
 export function ProjectSetting({title}) {
-    const project_name = localStorageRetrieve("project_title")    
+  const context = useContext(ProjectContext)
+
     const {id} = useParams();
     const history = useHistory()
 
@@ -124,7 +123,10 @@ export function ProjectSetting({title}) {
   
     useEffect( async () => {
         document.title = title;
-        !localStorageRetrieve("project") || localStorageRetrieve("project") != id && history.push("/")
+        context.isAccessAllowed(id)
+        context.getProjectInfo().projectRank !='superAdmin' && history.push("/")
+        !localStorageRetrieve("project") && localStorageRetrieve("project") != id && history.push("/")
+
         const data = {jwt:localStorageRetrieve("jwt"),project_id:localStorageRetrieve("project")}
         const encoded = encodeJWT(data)
         
@@ -135,7 +137,7 @@ export function ProjectSetting({title}) {
                 let decoded = decodeJWT(response["data"])["project"]
                 if (decoded){
                     let project_invitationLink = decoded['invitation']? true : false
-                    setProjectTitle(project_name)
+                    setProjectTitle(decoded['project_title'])
                     setDesc(decoded['description'])
                     setAccess(decoded['access'])
                     setInvitationLink(project_invitationLink)
@@ -152,7 +154,6 @@ export function ProjectSetting({title}) {
       };
 
       function handleConfirm(){
-        localStorageStore("project_title", projectTitle)
         updateProject(projectTitle, desc, access, invitationLink)
       }
 
@@ -166,7 +167,7 @@ export function ProjectSetting({title}) {
 
     return (
         <>
-        {isAlertOpen&&<AlertDialog action={deleteProject} open={isAlertOpen} handleClose={handleCloseAlert} message={"Are you sure you want to delete \'"+ project_name + "\' project?\nYou will lose all the work progress in this project!"} title={"Warning!"}/>}
+        {isAlertOpen&&<AlertDialog action={deleteProject} open={isAlertOpen} handleClose={handleCloseAlert} message={"Are you sure you want to delete \'"+ projectTitle + "\' project?\nYou will lose all the work progress in this project!"} title={"Warning!"}/>}
         <div style={{paddingBottom:"1px"}}>
           <div className="project-setting">
 

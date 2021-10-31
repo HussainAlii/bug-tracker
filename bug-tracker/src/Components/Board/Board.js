@@ -1,20 +1,24 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useContext} from 'react'
 import { useHistory, useParams } from 'react-router';
 import { localStorageRetrieve } from '../../utilities';
 import './Board.css'
 
+import {ProjectContext} from "../../Context/projectContext";
+
 function Board({title}) {
+    const context = useContext(ProjectContext)
+
     const history = useHistory()
     const {id} = useParams();
     
     useEffect( () => {
         document.title = title;
-        !localStorageRetrieve("project") || localStorageRetrieve("project") != id &&history.push("/")
-      },[]);
+        context.isAccessAllowed(id)
+    },[]);
 
     return (
         <div>
-            Board
+            Board {id}
         </div>
     )
 }

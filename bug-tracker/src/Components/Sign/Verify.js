@@ -24,7 +24,6 @@ function Verify() {
                 ref={inputRef}
                 value={code}
                 onChange={e=>{
-                    console.log(inputRef.current.value)
                     if(inputRef.current.value.length==4){
                         handleVerify(inputRef.current.value)
                     }

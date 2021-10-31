@@ -33,7 +33,7 @@ function Card({title, desc="", users=[], action, access}) {
                         })}
                     </div>
                 </div>
-                <p>{(users.length) + 1}</p>
+                <p>{(users.length)}</p>
             </div>
         </div>
     </div>

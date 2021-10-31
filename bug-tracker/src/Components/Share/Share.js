@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import { useHistory, useParams } from 'react-router';
-import { getRandomInt, isValidEmail, localStorageRetrieve } from '../../utilities';
+import { decodeJWT, getRandomInt, isValidEmail, localStorageRetrieve } from '../../utilities';
 
 import removeIcon from "../Icons/remove.svg"
+import disabledRemove from "../Icons/disabledRemove.svg"
 import linkIcon from "../Icons/link.svg"
 import './Share.css'
 
@@ -14,7 +15,11 @@ import { getProjectMember, inviteMember, removeMember, setUserPermission, setUse
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 
+import {ProjectContext} from "../../Context/projectContext";
+
 function Share({title}) {
+    const context = useContext(ProjectContext)
+
     const history = useHistory()
     const {id} = useParams();
 
@@ -30,8 +35,11 @@ function Share({title}) {
     
     useEffect( () => {
         document.title = title;
-        !localStorageRetrieve("project") || localStorageRetrieve("project") != id &&history.push("/")
-        
+        context.isAccessAllowed(id)
+        context.getProjectInfo().projectRank !='superAdmin' || context.getProjectInfo().projectRank !='admin' && history.push("/")
+
+        !localStorageRetrieve("project") && localStorageRetrieve("project") != id && history.push("/")
+
         getProjectMember(id).then(res =>{setMembers(res['members']); setInviteLink(res["invite_id"])})
     },[]);
 
@@ -94,10 +102,12 @@ function Share({title}) {
                     </TableHead>
                     <TableBody>
                         {members.map((member, i) =>{
+                            let user_id = decodeJWT(localStorageRetrieve("jwt"))["email"];
+
                             return <>
                         <TableRow key={member.id}>
                             <TableCell>
-                            <div class="avatar"><div class="img" style={{backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} ><div class="chars">{member.name[0]?.toUpperCase()}{member.name[member.name.indexOf(' ')+1]?.toUpperCase()}</div></div></div>
+                            <div class="avatar noselect"><div class="img" style={{backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} ><div class="chars">{member.name[0]?.toUpperCase()}{member.name[member.name.indexOf(' ')+1]?.toUpperCase()}</div></div></div>
                             </TableCell>
 
                             <TableCell>
@@ -109,6 +119,7 @@ function Share({title}) {
                                 control={
                                     
                                     <Checkbox
+                                        disabled = {member.id == user_id}
                                         checked={members[i].can_modify}
                                         onChange={(e)=>{
                                            let checked =  e.target.checked;
@@ -126,10 +137,11 @@ function Share({title}) {
                                 control={
                                     
                                     <Checkbox
+                                        disabled = {member.id == user_id}
                                         checked={members[i].rank == 'admin'}
                                         onChange={(e)=>{
                                            let checked =  e.target.checked;
-                                           let value = checked? 'admin': ''
+                                           let value = checked? 'admin': 'member'
                                            let members_arr = [...members]
                                            members_arr[i] = {...member,rank:value}
                                            setMembers(members_arr);
@@ -140,7 +152,7 @@ function Share({title}) {
                             </TableCell>
 
                             <TableCell>
-                            <img style={{cursor: 'pointer'}} src={removeIcon} title={"Remove User"} onClick={()=>{removeMember(id, member.id);}} />
+                            {member.id != user_id ? <img style={{cursor: 'pointer'}} src={removeIcon} title={"Remove User"} onClick={()=>{ removeMember(id, member.id);}} />:<img style={{cursor: 'not-allowed'}} src={disabledRemove} />}
                             </TableCell>
                         </TableRow>
                         </>})}

@@ -1,10 +1,10 @@
 import React, {Children, useContext} from 'react'
 import './Menu.css'
 
-function Menu({isOpen, handleClose, children}) {
+function Menu({isOpen, handleClose, children, height='auto'}) {
         return( 
             <>
-                <div className={`menu ${isOpen? 'active': 'inactive'}`}>
+                <div style={{height:height}} className={`menu ${isOpen? 'active': 'inactive'}`}>
                     {children}
                 </div>
                 {isOpen&&<div onClick={handleClose} className="back" />}
