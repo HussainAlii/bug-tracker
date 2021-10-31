@@ -54,7 +54,7 @@ function Share({title}) {
                         <p>Invite with link:</p>
                         {inviteLink?
                         <><img title="Copy To Clipboard" onClick={()=>{navigator.clipboard.writeText(`${window.location.hostname}/invite/${id}/${inviteLink}/`)}} src={linkIcon} style={{width:"18px", marginRight:'3px', verticalAlign:"middle", cursor: 'pointer', }} /> <span>{window.location.hostname}/invite/{id}/{inviteLink}/ </span></> :
-                        <p style={{color:'#f50057'}}>Turned off from Project Setting</p>
+                        <p style={{color:'#f50057'}}>This Feature Is Turned off from Project Setting!</p>
                         }
                         <hr/>
                     </div>

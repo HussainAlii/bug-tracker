@@ -22,6 +22,7 @@ const requestAPI = {
   removeMember:'/bugtracker/removeMember/',
   setUserPermission:'/bugtracker/setUserPermission/',
   setUserRank:'/bugtracker/setUserRank/',
+  joinInvite:'/bugtracker/joinInvite/',
 };
 export default requestAPI;
 
@@ -35,6 +36,20 @@ export function createProject(title, description, access){
       if (response) {
           refresh()
       }
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function joinInvite(project_id, invite_id, user_id){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id, invite_id, user_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.joinInvite, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then( res => {
+          href('/projects')
   })
   .catch((error) => {
       console.log(error);

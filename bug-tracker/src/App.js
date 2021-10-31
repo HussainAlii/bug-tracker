@@ -18,6 +18,7 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import Board from './Components/Board/Board';
 import Share from './Components/Share/Share';
 import UserSetting from './Components/Sign/UserSetting';
+import Invite from './Components/Sign/Invite';
 
 function App() {
   let title = " - BTracker";
@@ -53,6 +54,10 @@ function App() {
 
         <PrivateRoute exact path="/:id/setting" >
             <ProjectSetting title={`Setting${title}`} />
+        </PrivateRoute>
+
+        <PrivateRoute exact path="/invite/:id/:invite_id" >
+            <Invite title={`Invite${title}`} />
         </PrivateRoute>
 
       <Route exact={true}> <SignIn title={`Sign In${title}`}/> </Route>

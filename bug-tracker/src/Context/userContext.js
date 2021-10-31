@@ -92,6 +92,8 @@ function UserContextProvider({ children }) {
     function logout(){
         // this.authenticated = false;
         localStorage.removeItem("jwt")
+        localStorage.removeItem("project_title")
+        localStorage.removeItem("project")
         history.push('/signin/')
     }
 
