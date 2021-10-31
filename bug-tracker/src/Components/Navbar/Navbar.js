@@ -50,12 +50,13 @@ export function Sidebar(){
           {(context.getProjectInfo().projectRank =='superAdmin' || context.getProjectInfo().projectRank =='admin') && <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />}
           {context.getProjectInfo().projectRank =='superAdmin' && <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />}
           
-         </>: localStorage.removeItem('project')}
          <hr style={{height:'5px'}} />
-         {context.getProjectInfo().projectRank !='superAdmin' && localStorageRetrieve('project') &&
+         {context.getProjectInfo().projectRank !='superAdmin' &&
          <div  onClick={()=>{leaveProject(localStorageRetrieve('project'))}} className="sidebar-item">
          <img src={leaveIcon} style={{verticalAlign:'middle', marginTop:'4px'}} />  <span style={{color:"#f50057", fontWeight:"600"}}>Leave Project</span>
         </div>}
+        
+         </>: localStorage.removeItem('project')}
     </div>
   );
 }
