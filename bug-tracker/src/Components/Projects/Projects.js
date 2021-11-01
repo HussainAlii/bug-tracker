@@ -6,13 +6,6 @@ import addIcon from '../Icons/add.svg'
 import publicIcon from '../Icons/public.svg'
 import privateIcon from '../Icons/private.svg'
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
 import Card from '../Card/Card'
 import {CreateCard} from '../Card/ActionCard'
 import django from '../../axiosRequest'
@@ -23,6 +16,7 @@ import { useHistory, useParams } from 'react-router'
 import Menu, {MenuItem} from '../Menu/Menu'
 
 import {ProjectContext} from "../../Context/projectContext";
+import { AlertDialog } from '../Alert/Alert'
 
 function Projects({title}) {
     const context = useContext(ProjectContext)
@@ -58,7 +52,7 @@ function Projects({title}) {
       
 
 return (
-<div style={{paddingBottom:"11px", marginLeft:'40px', marginTop:'55px', overflow: 'scroll'}}>
+<div style={{paddingBottom:"11px", marginLeft:'40px', marginTop:'55px'}}>
     <div class="bar">
         <div className="search-model">
             <img className="searchIcon" src={searchIcon} alt="searchbar" />
@@ -217,32 +211,3 @@ export function ProjectSetting({title}) {
         </>
     )
 }
-
-export function AlertDialog({action=null, open, handleClose, message, title}) {
-    return (
-      <div>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle style={{backgroundColor:"#334",color:"lightgray"}} id="alert-dialog-title">{title}</DialogTitle>
-          <DialogContent style={{backgroundColor:"#334"}}>
-            <DialogContentText style={{color:"darkgray"}} id="alert-dialog-description">
-              <div dangerouslySetInnerHTML={{__html: message}}></div>
-  
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions style={{backgroundColor:"#334"}}>
-            <Button onClick={action?action:handleClose} style={{color:"red"}}>
-              Ok
-            </Button>
-            <Button onClick={handleClose} style={{color:"white"}} autoFocus>
-              Cancel
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  }

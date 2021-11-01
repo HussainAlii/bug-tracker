@@ -59,8 +59,8 @@ export function joinInvite(project_id, invite_id, user_id){
   });
 }
 
-export function leaveProject(project_id){
-  const data = {jwt:localStorageRetrieve("jwt"),project_id}
+export function leaveProject(){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id:localStorageRetrieve('project')}
   const encoded = encodeJWT(data)
 
   return django

@@ -12,23 +12,29 @@ import dashboardIcon from "../Icons/dashboard.svg"
 import shareIcon from "../Icons/share.svg"
 import boardIcon from "../Icons/board.svg"
 import cancelIcon from "../Icons/cancel.svg"
+import burgerIcon from "../Icons/burger.svg"
 
 import { UserContext } from "../../Context/userContext";
 import { ProjectContext } from "../../Context/projectContext";
 import { getRandomInt, href, localStorageRetrieve } from "../../utilities";
 import Projects from "../Projects/Projects";
 import { leaveProject } from "../../requests";
+import { AlertDialog } from "../Alert/Alert";
 
 function Navbar() {
 
   return (
     <nav>
-      <Link to="/">
+      
         <div class="logo-container">
-          <img className="logo" src={logo} alt="BTracker logo" />
-          <h2 className="logo">Bug-Tracker</h2>
+            <img id="burger-icon" src={burgerIcon} />
+          <Link to="/">
+            <div class="logo-container">
+                <img className="logo" src={logo} alt="BTracker logo" />
+                <h2 className="logo">Bug-Tracker</h2>
+              </div>
+            </Link>
         </div>
-      </Link>
       <Account />
     </nav>
   );
@@ -37,7 +43,14 @@ function Navbar() {
 export function Sidebar(){
   const history = useHistory()
   const context = useContext(ProjectContext)
+  const [isAlertOpen, setAlert] = useState(false);
+  const handleCloseAlert = () => {
+    setAlert(false);
+  };
   return (
+    <>
+    {isAlertOpen&&<AlertDialog action={leaveProject} open={isAlertOpen} handleClose={handleCloseAlert} message={"Are you sure you want to leave \'"+ context.getProjectInfo().projectTitle + "\' project?\n"} title={"Warning!"}/>}
+
     <div className="sidebar">
       <SidebarItem icon={dashboardIcon} title={"Dashboard"}/>
       <SidebarItem icon={projectIcon} title={"My Projects"} to={'/projects'}/>
@@ -50,14 +63,17 @@ export function Sidebar(){
           {(context.getProjectInfo().projectRank =='superAdmin' || context.getProjectInfo().projectRank =='admin') && <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />}
           {context.getProjectInfo().projectRank =='superAdmin' && <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />}
           
-         <hr style={{height:'5px'}} />
          {context.getProjectInfo().projectRank !='superAdmin' &&
-         <div  onClick={()=>{leaveProject(localStorageRetrieve('project'))}} className="sidebar-item">
-         <img src={leaveIcon} style={{verticalAlign:'middle', marginTop:'4px'}} />  <span style={{color:"#f50057", fontWeight:"600"}}>Leave Project</span>
-        </div>}
+         <>
+          <hr style={{height:'5px'}} />
+          <div onClick={()=>setAlert(true)} className="sidebar-item">
+            <img src={leaveIcon} style={{verticalAlign:'middle', marginTop:'4px'}} />  <span style={{color:"#f50057", fontWeight:"600"}}>Leave Project</span>
+          </div>
+        </>}
         
          </>: localStorage.removeItem('project')}
     </div>
+    </>
   );
 }
 

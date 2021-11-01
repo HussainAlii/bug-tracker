@@ -22,6 +22,7 @@ import Board from './Components/Board/Board';
 import Share from './Components/Share/Share';
 import UserSetting from './Components/Sign/UserSetting';
 import Invite from './Components/Sign/Invite';
+import Test from './Components/Test/Test';
 
 function App() {
   let title = " - BTracker";
@@ -35,6 +36,8 @@ function App() {
       <Route exact path="/signup"> <SignUp title={`Sign up${title}`}/> </Route>
       <Route exact path="/forgot"> <Forgot title={`Forgot${title}`}/> </Route>
       <Route exact path="/recover/:token"> <Recover title={`Recover${title}`}/> </Route>
+
+      <Route exact path="/test"> <Test/> </Route>
 
       <PrivateRoute exact path="/" >
             <Dashboard title={`Dashboard${title}`} />
