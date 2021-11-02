@@ -9,7 +9,40 @@
 .board-nav{
     position: static;
     height: auto;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
 }
+
+.board-button{
+    width: auto;
+    height: 30px;
+    color: white;
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.5);
+    
+    cursor: pointer;
+    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+    text-align: center;
+    
+    transition: all 250ms;
+    border: 0;
+    font-size: 16px;
+    font-weight: 450;
+
+    display: inline-block;
+
+    padding: 0px 10px 2px 10px;
+
+    margin-left: 10px;
+    margin-bottom: 10px;
+    
+}
+
+.board-button:hover{
+    background-color: rgba(0, 0, 0, 0.65);
+}
+
 
 .board-canvas{
     position: relative;
@@ -39,31 +72,159 @@
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.board-list{
-    display: inline-block;
 
-    width: 350px;
+.board-list-wrapper{
+    box-sizing: border-box;
+    display: inline-block;
     height: 100%;
-    
-    margin: 0 4px;
+    margin: 4px 27px;
+
     vertical-align: top;
     white-space: nowrap;
+    width: 320px;
 }
 
-.board-list-item::-webkit-scrollbar{
-    width: 7px;
-}
+.board-list{
+    background-color: #ebecf0;
+    /* background-color: crimson; */
+    box-sizing: border-box;
 
-.board-list-item::-webkit-scrollbar-thumb{
-    background-color: rgba(0, 0, 0, 0.2);
-}
-
-
-
-.board-list-item{
     display: flex;
     flex-direction: column;
 
+
+    /* width: 320px; */
+    border-radius: 8px;
+
     max-height: 100%;
-    overflow-y: scroll;
+    position: relative;
+    white-space: normal;
+}
+
+.board-list-header{
+    background-color: rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    padding: 5px 0px;
+}
+
+.board-header-title{
+    margin: 0px 0px;
+    padding: 6px 11px;
+
+    color: #323743;
+    font-size: 18px;
+    font-weight: 500;    
+}
+
+.more-board-header{
+    position: absolute;
+    right: 4px;
+    top: 7px;
+    cursor: pointer;
+}
+
+.board-list-content{
+    flex: 1 1 auto;
+    margin: 4px 4px;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 0 4px;
+    z-index: 1;
+}
+
+.board-list-content::-webkit-scrollbar{
+    width: 8px;
+}
+
+.board-list-content::-webkit-scrollbar-thumb{
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.board-list-card{
+    border-radius: 3px;
+    cursor: pointer;
+    display: block;
+    margin-bottom: 8px;
+    /* max-width: 300px;*/
+    min-height: 0px; 
+    position: relative;
+    background-color: #f9f8f6;
+    color: #323743;
+    border-bottom: 4px solid #323743;
+}
+
+.board-list-card-create{
+    color: #3237439c;
+}
+
+.board-list-card-create p{
+    display: inline-block;
+    font-size: 15px;
+}
+
+.board-list-card-create textarea{
+    font-size: 18px;
+    width: 299px;
+
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    
+    resize: none;
+    overflow: hidden;
+    min-height: 60px;
+
+    border: none;
+    outline: 0;
+}
+
+.board-list-card-create button{
+    margin: 10px;
+    margin-bottom: 10px;
+    width: 120px !important;
+}
+
+.border-button-cancel{
+    background-color: rgba(255, 6, 6, 0.5);
+}
+
+.border-button-cancel:hover{
+    background-color: rgba(255, 6, 6, 0.65);
+
+}
+
+.create-board-controls{
+    display: flex;
+    border-bottom: 1px solid #32374381;
+}
+
+.board-tag-item{
+    border-radius: 5px;
+    min-width: 30px;
+    display: inline-block;
+    width: auto;
+    height: 20px;
+    padding: 0px 20px 0px 20px;
+    vertical-align: middle;
+    margin: 3px;
+    color: white;
+}
+
+.board-tag-item p {  padding: 0; margin: 0px; margin-top: -2px; }
+
+.border-title p{
+    color: #323743;
+    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+    border: 0;
+    font-size: 16.5px;
+    font-weight: 450;
+    padding-left: 3px;
+    padding-right: 2px;
+}
+
+.border-footer{
+    color: white;
+    margin-left: 2px;
+    margin-bottom: 3px;
 }
