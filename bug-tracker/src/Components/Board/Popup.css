@@ -1,0 +1,108 @@
+.popup-back{
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.popup{
+      position: absolute;
+      transform: translate(-60%, -50%);
+      border: 1px solid rgb(255, 255, 255);
+      border-radius: 3px;
+      z-index: 111;
+      background-color: #ffffff;
+    
+      top: 45%;
+      left: 50%;
+
+      max-width: 80%;
+      min-width: 400px;
+      width: 900px;
+
+      min-height: auto;
+      max-height: 90%;
+
+      overflow-y: scroll;
+      overflow-x:hidden;
+
+}
+
+.popup::-webkit-scrollbar{
+    display: none;
+}
+.popup-wrapper{
+    margin: 9px;
+}
+
+.popup-wrapper{
+    display: flex;
+}
+
+.popup-wrapper h4{
+  margin-top: 0px;
+  font-weight: 600;
+  color: #323743;
+  font-family: 'Roboto', sans-serif;
+  font-size: 17px;
+  margin-left: 0px;
+}
+
+.popup-wrapper textarea{
+    font-size: 15px;
+    width: 100%;
+
+    background-color: transparent;
+    
+    resize: none;
+    overflow: hidden;
+    min-height: 20px;
+
+    border: none;
+    outline: 0;
+}
+
+.popup-controls{
+    flex-shrink: 0;
+    width: 180px;
+}
+.popup-details{
+    /* min-width: 200px; */
+    flex-grow: 1;
+}
+
+.sub-header{
+    margin-top: 50px;
+
+    display: flex;
+    align-items: flex-start;
+}
+
+.sub-header img{
+    margin-right: 10px;
+}
+.cancel-tag .cancel-icon{
+    display: none;
+}
+
+.cancel-tag:hover .cancel-icon{
+    display: inline;
+}
+
+.sendto-button{
+    color: white;
+    border-radius: 2px;
+    background-color: rgba(231, 231, 231, 0.438);
+    
+    cursor: pointer;
+    font-family: CerebriSans-Regular,-apple-system,system-ui,Roboto,sans-serif;
+    text-align: center;
+    
+    transition: all 250ms;
+    border: 0;
+    display: inline-block;
+
+    margin-left: 2px;
+    margin-bottom: 2px;
+}
+
+.sendto-button:hover{
+    background-color: rgba(126, 126, 126, 0.557);
+}

@@ -13,10 +13,10 @@ function Menu({isOpen, handleClose, children, height='auto'}) {
 
 export default Menu
 
-export function MenuItem({icon, title, action}) {
+export function MenuItem({icon, title, action, events={}}) {
     
     return (
-        <dev class="menu-item" onClick={()=>{action();}} >
+        <dev events class="menu-item" onClick={()=>{action();}} >
             <img src={icon} />
             <p>{title}</p>
         </dev>
