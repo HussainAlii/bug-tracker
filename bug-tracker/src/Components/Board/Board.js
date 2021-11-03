@@ -172,10 +172,10 @@ export function Card({title, desc, tags, users}) {
     )
 }
 
-export function Tag({background, tag_title, showCancel=false}) {
+export function Tag({background, tag_title, showCancel=false, showAdd=false}) {
     return (
-        <div style={{backgroundColor:background, boxShadow:`0px 0px 3px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${showCancel &&'cancel-tag'}`} >
-            <p>{tag_title} {showCancel && <div class='cancel-icon' style={{fontSize:'16px'}}>&#215;</div> }</p>
+        <div style={{backgroundColor:background, boxShadow:`0px 0px 3px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${(showCancel || showAdd) && 'cancel-tag'}`} >
+            <p>{tag_title} {(showCancel || showAdd) && <div class='cancel-icon' style={{fontSize:'16px'}}>{showCancel? <span>&#215;</span> : <span>&#43;</span> }</div> }</p>
             
         </div>
     )

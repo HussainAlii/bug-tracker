@@ -204,7 +204,10 @@
     min-width: 30px;
     display: inline-block;
     width: auto;
-    height: 20px;
+
+    height: auto;
+    min-height: 22px;
+
     padding: 0px 20px 0px 20px;
     vertical-align: middle;
     margin: 3px;

@@ -15,10 +15,10 @@
 
       max-width: 80%;
       min-width: 400px;
-      width: 900px;
+      width: 1000px;
 
       min-height: auto;
-      max-height: 90%;
+      max-height: 100%;
 
       overflow-y: scroll;
       overflow-x:hidden;
@@ -30,6 +30,7 @@
 }
 .popup-wrapper{
     margin: 9px;
+    padding: 30px;
 }
 
 .popup-wrapper{
@@ -37,12 +38,11 @@
 }
 
 .popup-wrapper h4{
-  margin-top: 0px;
   font-weight: 600;
   color: #323743;
   font-family: 'Roboto', sans-serif;
   font-size: 17px;
-  margin-left: 0px;
+  margin: 0px ;
 }
 
 .popup-wrapper textarea{
@@ -61,7 +61,7 @@
 
 .popup-controls{
     flex-shrink: 0;
-    width: 180px;
+    width: 250px;
 }
 .popup-details{
     /* min-width: 200px; */
@@ -70,7 +70,7 @@
 
 .sub-header{
     margin-top: 50px;
-
+    margin-bottom: 10px;
     display: flex;
     align-items: flex-start;
 }
@@ -86,7 +86,11 @@
     display: inline;
 }
 
-.sendto-button{
+.scale-tag:hover{
+    transform: scale(1.1); 
+}
+
+.control-button{
     color: white;
     border-radius: 2px;
     background-color: rgba(231, 231, 231, 0.438);
@@ -103,6 +107,30 @@
     margin-bottom: 2px;
 }
 
-.sendto-button:hover{
+.control-button:hover{
     background-color: rgba(126, 126, 126, 0.557);
 }
+
+.control-delete-button:hover{
+    background-color: rgba(180, 90, 90, 0.557);
+}
+
+.tag-input{
+    width: 230px;
+    border: none;
+    outline: 0;
+
+    font-size: 17px;
+    background-color: transparent;
+    color: #6857A0;
+    margin-bottom: 15px;
+}
+
+.tag-input:focus{
+    outline: 1px dashed #6857A0;
+}
+
+
+.donotcross {
+    border: 1px solid rgb(209, 209, 209);  
+  }
