@@ -1,0 +1,13 @@
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+ <title>keyboard_double_arrow_up</title>
+
+ <g>
+  <title>Layer 1</title>
+  <g transform="rotate(180 12 15.705)" id="svg_1" class="nc-icon-wrapper" fill="none">
+   <path id="svg_2" fill="#a781d2" d="m7.41,12l4.59,4.58l4.59,-4.58l1.41,1.41l-6,6l-6,-6l1.41,-1.41z"/>
+  </g>
+  <g transform="rotate(180 12 9.37167)" id="svg_6" class="nc-icon-wrapper" fill="none">
+   <path id="svg_5" fill="#a781d2" d="m7.41,5.66667l4.59,4.58l4.59,-4.58l1.41,1.41l-6,6l-6,-6l1.41,-1.41z"/>
+  </g>
+ </g>
+</svg>

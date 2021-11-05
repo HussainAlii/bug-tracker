@@ -117,17 +117,22 @@
 
 .tag-input{
     width: 230px;
+    height: 26px;
     border: none;
     outline: 0;
 
     font-size: 17px;
     background-color: transparent;
-    color: #6857A0;
-    margin-bottom: 15px;
+    color: white;
+    padding-left: 10px;
 }
 
 .tag-input:focus{
     outline: 1px dashed #6857A0;
+}
+
+.tag-input::placeholder{
+    color: white;
 }
 
 

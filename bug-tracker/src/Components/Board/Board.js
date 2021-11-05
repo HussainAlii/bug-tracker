@@ -33,18 +33,18 @@ function Board({title}) {
         {list_id:'1', title:'To DO', background_color:'ebecf0', font_color:'323743', cards:[
             {card_id:'1', title:"this is a title", description:"this is a description", start_date:Date.now(),
              tags:[
-                 {tag_id:1,background:'dodgerblue', title:'tag'}],
+                {tag_id:3,background:'black', title:'tag5'}, {tag_id:2,background:'red', title:'tag2'}],
             users:[
                 {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"}],}] },
         {list_id:'2', title:'Progress', background_color:'ebecf0', font_color:'323743', cards:[
             {card_id:'2', title:" title 2", description:"this is a description 2", start_date:Date.now(),
                 tags:[
-                    {tag_id:2,background:'dodgerblue', title:'tag3'},{tag_id:3,background:'red', title:'tag2'}],
+                    {tag_id:1,background:'dodgerblue', title:'tag3'},{tag_id:2,background:'red', title:'tag2'}],
             users:[
-                {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"},{name:'AA', fullName:"ALI A"}],},
+                {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"},],},
             {card_id:'3', title:" title 3", description:"this is a description 3", start_date:Date.now(),
                 tags:[
-                    {tag_id:4,background:'pink', title:'tag4'},{tag_id:5,background:'black', title:'tag5'}],
+                    {tag_id:3,background:'black', title:'tag5'}],
             users:[
                 {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"},{email:'a@gmail.com',name:'AA', fullName:"ALI A"}],}] },
         {list_id:'3', title:'Insert Title Here', background_color:'ebecf0', font_color:'323743', cards:[] }
@@ -60,17 +60,108 @@ function Board({title}) {
         setLists(copy)
     }
 
+    function sendCardTo(list_id, list_index, position, card_position){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        let curr_cards = curr_list.cards
+        switch(position){
+            case 'l': case 'r':
+                let to_list = (position == 'l'? list_index - 1 : list_index + 1)
+                if (to_list < 0 || to_list >= lists.length)
+                    return
+                let temp_card = curr_cards[card_position]
+                curr_cards.splice(card_position, 1)
+                // go to l/r list
+                curr_list = copy[to_list]  
+                curr_cards = curr_list.cards
+                curr_cards.unshift(temp_card)
+
+                setLists(copy)
+                setSelectedCard({...temp_card, list_index:to_list, list_id:copy[to_list].list_id, position:0})
+
+                break
+            default:
+                let to = null;
+                if(position == 'u' || position == 'd')
+                    to = (position == 'u'? card_position - 1 : card_position + 1)
+                else
+                    to = (position == 'du'? 0 : curr_cards.length-1)
+
+                if (to < 0 || to >= curr_cards.length)
+                    return   
+        
+                swap(curr_cards, card_position, to)
+                setLists(copy)
+                setSelectedCard({...curr_list.cards[to], list_index, list_id, position:to})
+        }
+        // setLists(copy)
+    }
+
+
+
     function createNewList(){
         // createNewListReq()
         //{list_id:'3', title:'Insert Title Here', background_color:'ebecf0', font_color:'323743', cards:[] }
     }
 
     function handleChangeListTitle(list_index, new_title){
+        if(!new_title)
+            return
+
         const copy = [...lists]
         let curr_list = copy[list_index]  
         copy[list_index] = {...curr_list, title:new_title}
         setLists(copy)
+    }
 
+    function handleChangeTextArea(type, list_id, list_index, card_position, text){
+        if(!text && type=='title')
+            return
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        let curr_cards = curr_list.cards
+
+        if(type == 'title')
+            curr_cards[card_position] = {...curr_cards[card_position], title:text}
+        else if(type == 'description')
+            curr_cards[card_position] = {...curr_cards[card_position], description:text}
+        setLists(copy)
+    }
+
+    function removeTag(tag_id, tag_index, list_id, list_index, card_position){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        let curr_card = curr_list.cards[card_position]
+        let tags = curr_card.tags
+        tags.splice(tag_index, 1)
+        setLists(copy)
+    }
+
+    function addTag(tag, list_id, list_index, card_position){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        let curr_card = curr_list.cards[card_position]
+        let tags = curr_card.tags
+        tags.push(tag)
+        setLists(copy)
+    }
+
+    function removeUser(user_id, user_index, list_id, list_index, card_position){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        let curr_card = curr_list.cards[card_position]
+        let users = curr_card.users
+        users.splice(user_index, 1)
+        setLists(copy)
+    }
+
+    function addUser(user, list_id, list_index, card_position){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        let curr_card = curr_list.cards[card_position]
+        let users = curr_card.users
+        users.push(user)
+        setLists(copy)
     }
 
     function changeColor(type, list_index, list_id, color){  
@@ -107,6 +198,14 @@ function Board({title}) {
         
     }
 
+    function deleteCard(list_id, list_index, card_position){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        curr_list.cards.splice(card_position, 1)
+        setLists(copy)
+
+    }
+
     
     // let tags_ex = [{background:'dodgerblue', title:'tag'},]
     // let users_ex = [{name:'HU', fullName:"Hussain Ali"},]
@@ -116,7 +215,7 @@ function Board({title}) {
     return (
         <>
             {isPopupActive&&<>
-            <Popup card = {selectedCard} handleClose={setIsPopupActive} />
+            <Popup addUser={addUser} addTag={addTag} removeTag={removeTag} removeUser={removeUser} handleChangeTextArea={handleChangeTextArea} sendCardTo={sendCardTo} deleteCard={deleteCard} selectedCard = {selectedCard} handleClose={setIsPopupActive} />
             </>}
             <div class="board">
                 <div class="board-nav noselect">
@@ -223,8 +322,8 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                 <div class="board-list-content">
                     <CreateCard createNewCard={createNewCard} list_id={list_id} list_index={list_index} handleClose={setIsCreateActive} active={isCreateActive} />
                     
-                    {cards.map(card=>{
-                     return <div onClick={()=>{setSelectedCard(card); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} /></div>
+                    {cards.map((card, position)=>{
+                     return <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} /></div>
                     })}
 
                     
@@ -265,9 +364,9 @@ export function Card({title, desc, tags, users}) {
     )
 }
 
-export function Tag({background, tag_title, showCancel=false, showAdd=false,}) {
+export function Tag({background, tag_title, showCancel=false, showAdd=false}) {
     return (
-        <div style={{backgroundColor:background, boxShadow:`0px 0px 3px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${(showCancel || showAdd) && 'cancel-tag'}`} >
+        <div width="100px" style={{backgroundColor:background, boxShadow:`0px 0px 3px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${(showCancel || showAdd) && 'cancel-tag'}`} >
             <p>{tag_title} {(showCancel || showAdd) && <div class='cancel-icon' style={{fontSize:'16px'}}>{showCancel? <span>&#215;</span> : <span>&#43;</span> }</div> }</p>
             
         </div>
