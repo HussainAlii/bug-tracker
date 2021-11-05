@@ -115,6 +115,12 @@
     color: #323743;
     font-size: 18px;
     font-weight: 500;    
+
+    background-color: transparent;
+    border: none;
+    outline: none;
+
+    width: 274px;
 }
 
 .more-board-header{

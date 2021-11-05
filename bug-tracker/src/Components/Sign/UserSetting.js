@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import PasswordStrengthBar from 'react-password-strength-bar';
 
-import { getRandomInt, isValidEmail, localStorageRetrieve, localStorageStore, refresh } from "../../utilities";
+import { decodeJWT, getRandomInt, isValidEmail, localStorageRetrieve, localStorageStore, refresh } from "../../utilities";
 
 import './Sign.css'
 import { UserContext } from "../../Context/userContext";
@@ -45,13 +45,16 @@ function UserSetting({title=""}) {
         <div class="user-setting">
 
           <div class="update-form">
-            <h3 style={{color:"gray", textAlign:"center", paddingRight:'33px'}}>Update Profile</h3>
+            <h3 style={{color:"gray", textAlign:"center",}}>Update Profile</h3>
 
-          <div style={{marginTop:'30px'}} class="group-input">
-          <div class="avatar">
-            <div class="img" style={{width:"120px", height:"120px", fontSize:"70px", backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} ><div class="chars">{fname&&fname[0]?.toUpperCase()}{lname&&lname[0]?.toUpperCase()}</div></div>
-          </div> 
+          <div style={{marginTop:'30px', paddingLeft:'30px'}} class="group-input">
+            <div class="avatar">
+              <div class="img" style={{width:"120px", height:"120px", fontSize:"70px", backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} ><div class="chars">{fname&&fname[0]?.toUpperCase()}{lname&&lname[0]?.toUpperCase()}</div></div>
+            </div> 
           </div>
+
+          <p style={{marginTop:'6px', textAlign:'center'}}>{decodeJWT(localStorageRetrieve('jwt'))['email']}</p>
+
               
                 <div class="group-input">
                   <input

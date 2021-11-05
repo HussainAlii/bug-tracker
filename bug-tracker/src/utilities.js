@@ -53,3 +53,9 @@ export function timeout(fun,time){
   export function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
+
+  export function swap(arr, index, to){
+    let temp = arr[index]
+    arr[index] = arr[to]
+    arr[to] = temp
+}

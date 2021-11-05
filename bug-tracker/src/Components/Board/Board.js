@@ -2,7 +2,7 @@ import React, {useEffect, useContext, useState} from 'react'
 import { useHistory, useParams } from 'react-router';
 import { SketchPicker } from 'react-color';
 
-import { getRandomInt, localStorageRetrieve } from '../../utilities';
+import { getRandomInt, localStorageRetrieve, swap } from '../../utilities';
 import './Board.css'
 
 import moreIcon from '../Icons/more.svg'
@@ -19,22 +19,99 @@ import Popup from './Popup';
 
 function Board({title}) {
     const context = useContext(ProjectContext)
-
-    const history = useHistory()
     const {id} = useParams();
 
-    const [selectedCard, setSelectedCard] = useState({})
-    const [isPopupActive, setIsPopupActive] = useState(true)
-    
     useEffect( () => {
         document.title = title;
         context.isAccessAllowed(id)
     },[]);
+
+    const [selectedCard, setSelectedCard] = useState({})
+    const [isPopupActive, setIsPopupActive] = useState(false)
+
+    const [lists, setLists] = useState([
+        {list_id:'1', title:'To DO', background_color:'ebecf0', font_color:'323743', cards:[
+            {card_id:'1', title:"this is a title", description:"this is a description", start_date:Date.now(),
+             tags:[
+                 {tag_id:1,background:'dodgerblue', title:'tag'}],
+            users:[
+                {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"}],}] },
+        {list_id:'2', title:'Progress', background_color:'ebecf0', font_color:'323743', cards:[
+            {card_id:'2', title:" title 2", description:"this is a description 2", start_date:Date.now(),
+                tags:[
+                    {tag_id:2,background:'dodgerblue', title:'tag3'},{tag_id:3,background:'red', title:'tag2'}],
+            users:[
+                {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"},{name:'AA', fullName:"ALI A"}],},
+            {card_id:'3', title:" title 3", description:"this is a description 3", start_date:Date.now(),
+                tags:[
+                    {tag_id:4,background:'pink', title:'tag4'},{tag_id:5,background:'black', title:'tag5'}],
+            users:[
+                {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"},{email:'a@gmail.com',name:'AA', fullName:"ALI A"}],}] },
+        {list_id:'3', title:'Insert Title Here', background_color:'ebecf0', font_color:'323743', cards:[] }
+                    ])
+
+    function sendListTo(position, list_index){
+        let to = (position == 'l'? list_index - 1 : list_index + 1)
+        if (to < 0 || to >= lists.length)
+            return   
+
+        const copy = [...lists];
+        swap(copy, list_index, to)
+        setLists(copy)
+    }
+
+    function createNewList(){
+        // createNewListReq()
+        //{list_id:'3', title:'Insert Title Here', background_color:'ebecf0', font_color:'323743', cards:[] }
+    }
+
+    function handleChangeListTitle(list_index, new_title){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        copy[list_index] = {...curr_list, title:new_title}
+        setLists(copy)
+
+    }
+
+    function changeColor(type, list_index, list_id, color){  
+        if(!color) return
+        if(color[0] == '#'){
+            color = color.slice(1,color.length)
+        }    
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        switch(type){
+            case 'font':
+                copy[list_index] = {...curr_list, font_color:color}
+                break
+            case 'background':
+                copy[list_index] = {...curr_list, background_color:color}
+                break
+        }
+        
+        setLists(copy)
+    }
+
+    function deleteList(list_id, list_index){
+        const copy = [...lists]
+        copy.splice(list_index, 1)
+        setLists(copy)
+    }
+
+    function createNewCard(list_id, list_index, title, ){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        let curr_cards = curr_list.cards
+        
+        // copy[list_index] = {...curr_list, cards:curr_cards}
+        
+    }
+
     
-    let tags_ex = [{background:'dodgerblue', title:'tag'},]
-    let users_ex = [{name:'HU', fullName:"Hussain Ali"},]
-    let cards=[{card_id:'1', title:"this is a title", description:"this is a description", start_date:Date.now(), tags:tags_ex, users:users_ex},]
-    let lists=[{list_id:'1', title:'To DO', background_color:'ebecf0', font_color:'323743', cards:cards }]
+    // let tags_ex = [{background:'dodgerblue', title:'tag'},]
+    // let users_ex = [{name:'HU', fullName:"Hussain Ali"},]
+    // let cards=[{card_id:'1', title:"this is a title", description:"this is a description", start_date:Date.now(), tags:tags_ex, users:users_ex},]
+    // let lists=[{list_id:'1', title:'To DO', background_color:'ebecf0', font_color:'323743', cards:cards }]
     
     return (
         <>
@@ -43,13 +120,13 @@ function Board({title}) {
             </>}
             <div class="board">
                 <div class="board-nav noselect">
-                    <button class="board-button"> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
+                    <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
                 </div>
                 <div class="board-canvas">
                     <div class="board-content noselect">
         
                     {lists.map((list, list_index)=>{
-                        return <List  list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
+                        return <List setIsPopupActive={setIsPopupActive} setSelectedCard={setSelectedCard} createNewCard={createNewCard} deleteList={deleteList} changeColor={changeColor} handleChangeListTitle={handleChangeListTitle} sendListTo={sendListTo} list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
                     })}
                     </div>
                 </div>
@@ -60,19 +137,33 @@ function Board({title}) {
 
 export default Board
 
-export function List({title, cards, background='ebecf0' , color='323743', list_id, list_index}) {
+export function List({title, cards, background='ebecf0' , color='323743', list_id, list_index, sendListTo, handleChangeListTitle, changeColor, deleteList, createNewCard, setIsPopupActive, setSelectedCard}) {
+    const [list_title, setList_title] = useState(title)
     const [isCreateActive, setIsCreateActive] = useState(false)
     const [isMoreActive, setIsMoreActive] = useState(false)
 
     const [fontColor, setFontColor] = useState({enabled:false, color:`#${color}`})
     const [backgroundColor, setBackgroundColor] = useState({enabled:false, color:`#${background}`})
 
+    useEffect(() => {
+        setList_title(title)
+    }, [title])
+
+    useEffect(() => {
+        setBackgroundColor({enabled:false, color:`#${background}`})
+    }, [background])
+
+    useEffect(() => {
+        setFontColor({enabled:false, color:`#${color}`})
+    }, [color])
+
     const handleChangeComplete = (color, event) => {
-        handleChangeComplete.setter({enabled:true, color:color.hex})
+        handleChangeComplete.setter({enabled:true, color:color.hex})            
       };
 
     const onLongPress = () => {
-        console.log("long")
+        setIsMoreActive(false)
+        deleteList(list_id, list_index)
       };
 
       const onClickMore = () => {}
@@ -95,10 +186,12 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
             <div style={{display:'flex'}}>
                 <SketchPicker
                     color={ fontColor.enabled?fontColor.color:backgroundColor.color }
-                    onChangeComplete={ handleChangeComplete.setter = fontColor.enabled?setFontColor:setBackgroundColor,  handleChangeComplete}
+                    onChangeComplete={ handleChangeComplete.setter = fontColor.enabled?setFontColor:setBackgroundColor, handleChangeComplete.typeOfSetter = fontColor.enabled?'font':'background',  handleChangeComplete}
                 />
                 <span onClick={()=>{
                     fontColor.enabled? setFontColor({...fontColor, enabled:false}): setBackgroundColor({...backgroundColor, enabled:false})  
+                    fontColor.enabled? changeColor('font', list_index, list_id, fontColor.color) : changeColor('background', list_index, list_id, backgroundColor.color) 
+                    
                 }} style={{fontSize:"30px", fontWeight:"600", verticalAlign:'sub', paddingLeft:'10px', cursor: 'pointer' }}>&#215;</span>
 
 
@@ -110,8 +203,8 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                     handleClose={handleClick}
                 >
                     <div style={{display:'flex'}} class="test">
-                        <MenuItem title={'To The Left'} icon={leftIcon}  action={()=>{ handleClick()}} />
-                        <MenuItem title={'To The Right'} icon={rightIcon}  action={()=>{ handleClick()}} />
+                        <MenuItem title={'To The Left'} icon={leftIcon}  action={()=>{sendListTo('l',list_index); handleClick()}} />
+                        <MenuItem title={'To The Right'} icon={rightIcon}  action={()=>{sendListTo('r',list_index); handleClick()}} />
                     </div>
                     <div style={{display:'flex'}} class="test">
                         <MenuItem title={'Background Color'} icon={fillIcon}   action={()=>{ setBackgroundColor({...backgroundColor,enabled:true}); handleClick()}} />
@@ -124,14 +217,14 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
 
                 </Menu>
                 <div class="board-list-header">
-                    <p style={{color:fontColor.color}} class="board-header-title">{title}</p>
+                    <input style={{color:fontColor.color}} class="board-header-title" value={list_title} onChange={e =>{setList_title(e.target.value);}} onBlur={()=>handleChangeListTitle(list_index, list_title)} />
                     <img onClick={()=>{setIsMoreActive(true)}} class="more-board-header" width='30px' src={moreIcon}/>
                 </div>
                 <div class="board-list-content">
-                    <CreateCard list_id={list_id} list_index={list_index} handleClose={setIsCreateActive} active={isCreateActive} />
+                    <CreateCard createNewCard={createNewCard} list_id={list_id} list_index={list_index} handleClose={setIsCreateActive} active={isCreateActive} />
                     
                     {cards.map(card=>{
-                     return <Card title={card.title} tags={card.tags} users={card.users} />
+                     return <div onClick={()=>{setSelectedCard(card); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} /></div>
                     })}
 
                     
@@ -172,7 +265,7 @@ export function Card({title, desc, tags, users}) {
     )
 }
 
-export function Tag({background, tag_title, showCancel=false, showAdd=false}) {
+export function Tag({background, tag_title, showCancel=false, showAdd=false,}) {
     return (
         <div style={{backgroundColor:background, boxShadow:`0px 0px 3px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${(showCancel || showAdd) && 'cancel-tag'}`} >
             <p>{tag_title} {(showCancel || showAdd) && <div class='cancel-icon' style={{fontSize:'16px'}}>{showCancel? <span>&#215;</span> : <span>&#43;</span> }</div> }</p>
@@ -181,7 +274,7 @@ export function Tag({background, tag_title, showCancel=false, showAdd=false}) {
     )
 }
 
-export function CreateCard({active=false, handleClose, list_id, list_index}) {
+export function CreateCard({active=false, handleClose, list_id, list_index, createNewCard}) {
     const [title, setTitle] = useState("")
 
     function autoGrow(e) {
@@ -205,14 +298,14 @@ export function CreateCard({active=false, handleClose, list_id, list_index}) {
         <div class="board-list-card">
             <div class="board-list-card-create">
                 <div class="create-board-controls">
-                    <button class="board-button">Create</button>
+                    <button onClick={()=>{createNewCard(list_id, list_index, title); setTitle(''); handleClose(false);} } class="board-button">Create</button>
                     <button onClick={()=>handleClose(false)} class="board-button border-button-cancel">Cancel</button>
                 </div>
                 <textarea placeholder="Card Title...." value={title} onInput={(e)=>handleTitle(e)}/>
             </div>
         </div>
     :
-    <div onClick={()=>handleClose(true)} class="board-list-card">
+    <div onClick={()=>{handleClose(true);}} class="board-list-card">
         <div class="board-list-card-create">
             <span style={{fontSize:"30px", fontWeight:"600", verticalAlign:'sub', paddingLeft:'10px' }}>&#43;</span> <p>Create New Card</p>
         </div>
