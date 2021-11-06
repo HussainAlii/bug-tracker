@@ -26,6 +26,8 @@ const requestAPI = {
   isAccessAllowed:'/bugtracker/isAccessAllowed/',
   isProjectPublic:'/bugtracker/isProjectPublic/',
   leaveProject:'/bugtracker/leaveProject/',
+  createNewList:'/bugtracker/createNewList/',
+  getProjectLists:'/bugtracker/getProjectLists/',
 };
 export default requestAPI;
 
@@ -187,6 +189,25 @@ export function deleteProject(){
         localStorage.removeItem("project")
           href("/projects")
       }
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function getProjectLists(project_id){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.getProjectLists, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then((response) => {
+        if (response) {
+          let decoded = decodeJWT(response["data"])
+          if (decoded){
+            return decoded
+          }
+        }
   })
   .catch((error) => {
       console.log(error);

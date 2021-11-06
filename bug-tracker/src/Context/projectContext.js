@@ -17,18 +17,21 @@ function ProjectContextProvider({ children }) {
         setProjectTitle(data['project_title'])
         setProjectRank(data['project_rank'])
         setProjectCanModify(data['project_can_modify'])
+        // console.log(projectRank)
     }
-
     
     function getProjectInfo(){
         return {projectTitle, projectRank, projectCanModify}
     }
-    
+
+    function canUserModify(){
+        return projectRank != 'ghost' && projectRank != 'guest'
+    }
     
     function openProject(id){
         localStorageStore("project", id)
         isAccessAllowed(id)
-        history.push(`/${id}/`)
+        history.push(`/${id}`)
     }
 
     function isAccessAllowed(project_id){
@@ -64,7 +67,7 @@ function ProjectContextProvider({ children }) {
    
 
       return (
-        <ProjectContext.Provider value={{getProjectInfo, setProjectInfo, openProject, closeProject, isAccessAllowed }}>
+        <ProjectContext.Provider value={{getProjectInfo, setProjectInfo, openProject, closeProject, isAccessAllowed, canUserModify }}>
             { children }
         </ProjectContext.Provider>
     )

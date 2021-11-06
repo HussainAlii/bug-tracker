@@ -2,7 +2,7 @@ import React, {useEffect, useContext, useState} from 'react'
 import { useHistory, useParams } from 'react-router';
 import { SketchPicker } from 'react-color';
 
-import { getRandomInt, localStorageRetrieve, swap } from '../../utilities';
+import { encodeJWT, getRandomInt, localStorageRetrieve, swap } from '../../utilities';
 import './Board.css'
 
 import moreIcon from '../Icons/more.svg'
@@ -16,15 +16,27 @@ import {ProjectContext} from "../../Context/projectContext";
 import Menu, { MenuItem } from '../Menu/Menu';
 import UseLongPress from '../Hook/UseLongPress';
 import Popup from './Popup';
+import django from '../../axiosRequest';
+import requestAPI, { getProjectLists } from '../../requests';
 
 function Board({title}) {
     const context = useContext(ProjectContext)
+    
     const {id} = useParams();
 
     useEffect( () => {
         document.title = title;
         context.isAccessAllowed(id)
     },[]);
+
+    //get lists
+    useEffect( () => {
+        getProjectLists(id).then(res=>{
+            setLists(res['projects'])
+        })
+    },[]);
+
+
 
     const [selectedCard, setSelectedCard] = useState({})
     const [isPopupActive, setIsPopupActive] = useState(false)
@@ -81,8 +93,21 @@ function Board({title}) {
 
 
     function createNewList(){
-        
-        //{list_id:'3', title:'Insert Title Here', background_color:'ebecf0', font_color:'323743', cards:[] }
+        const data = {jwt:localStorageRetrieve("jwt"),project_id:id, order:lists.length}
+        const encoded = encodeJWT(data)
+
+        return django
+        .post(requestAPI.createNewList, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .then( res => {
+            if(res?.data != undefined || res?.data != null){
+                const copy = [...lists]
+                copy.push({list_id:res.data, title:'Insert Title Here', background_color:'ebecf0', font_color:'323743', cards:[] })
+                setLists(copy)
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     function handleChangeListTitle(list_index, new_title){
@@ -199,9 +224,14 @@ function Board({title}) {
             <Popup addUser={addUser} addTag={addTag} removeTag={removeTag} removeUser={removeUser} handleChangeTextArea={handleChangeTextArea} sendCardTo={sendCardTo} deleteCard={deleteCard} selectedCard = {selectedCard} handleClose={setIsPopupActive} />
             </>}
             <div class="board">
+                
                 <div class="board-nav noselect">
+                {
+                 context.canUserModify() && 
                     <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
-                </div>
+            }
+                
+                    </div>
                 <div class="board-canvas">
                     <div class="board-content noselect">
                         {

@@ -55,7 +55,7 @@ function SignUp({title}) {
 
 
     return (
-      <div class="background">
+      <div class="background" style={{overflow: "scroll"}}>
         <div className="sign-container">
 
           <div class="logo-container" style={{cursor: "default"}}>
@@ -90,6 +90,7 @@ function SignUp({title}) {
               </div>
 
               <input
+              style={{marginBottom:'6px'}}
               value={email}
               onChange={e=>{
                 setEmail(e.target.value);
@@ -97,7 +98,10 @@ function SignUp({title}) {
               type="email"
               className="Input"
               placeholder="Email"
+              id='email_input'
               />
+
+              <p style={{fontSize:'13px', width:'400px', padding:'0', margin:'0', color:'gray'}}>Due to an issue, Only Gmail Account will be accepted For Now!</p>
 
             <input
               value={password}
@@ -132,7 +136,7 @@ function SignUp({title}) {
 
             <div className="login-footer"><Link to="/signin/" ><p>Return to Login!</p></Link></div>
 
-            {showMessage[0]&&
+            {showMessage && showMessage[0]&&
             <Alert severity={showMessage[2]}>
             <AlertTitle>{showMessage[2].charAt(0).toUpperCase()+showMessage[2].slice(1)}</AlertTitle>
             <strong>{showMessage[1]}</strong>

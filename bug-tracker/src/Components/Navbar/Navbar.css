@@ -160,6 +160,14 @@ h2.logo {
 
 }
 
+.sign-button-nav:hover{
+  background-color: rgba(14, 100, 14, 0.993)
+}
+
 .register-button-nav{
   background-color: rgba(161, 161, 161, 0.9);
+}
+
+.register-button-nav:hover{
+  background-color: rgba(61, 61, 61, 0.9);
 }

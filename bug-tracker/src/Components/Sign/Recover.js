@@ -47,7 +47,7 @@ function Recover({title}) {
 
 
     return (
-      <div class="background">
+      <div class="background" style={{overflow: "scroll"}}>
         <div className="sign-container">
 
           <div class="logo-container" style={{cursor: "default"}}>

@@ -37,7 +37,7 @@ function Share({title}) {
         document.title = title;
         context.isAccessAllowed(id)
         let rank = context.getProjectInfo().projectRank
-        if (rank =='guest' || rank =='member') history.push("/")
+        if (rank =='guest' || rank =='member' || rank =='ghost') history.push("/")
 
         !localStorageRetrieve("project") && localStorageRetrieve("project") != id && history.push("/")
 

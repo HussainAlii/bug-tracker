@@ -40,7 +40,7 @@ function SignIn({title}) {
 
   
     return (
-      <div class="background">
+      <div class="background" style={{overflow: "scroll"}}>
         <div className="sign-container">
 
           <div class="logo-container" style={{cursor: "default"}}>
@@ -76,7 +76,7 @@ function SignIn({title}) {
 
             <div className="login-footer"><Link to="/forgot/" ><p>Forgot Password!</p> </Link> <Link to="/signup/" ><p>Create New Account!</p></Link></div>
             
-            {showMessage[0]&&
+            {showMessage && showMessage[0]&&
             <Alert severity={showMessage[2]}>
             <AlertTitle>{showMessage[2].charAt(0).toUpperCase()+showMessage[2].slice(1)}</AlertTitle>
             <strong>{showMessage[1]}</strong>
