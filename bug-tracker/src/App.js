@@ -23,6 +23,7 @@ import Share from './Components/Share/Share';
 import UserSetting from './Components/Sign/UserSetting';
 import Invite from './Components/Sign/Invite';
 import Test from './Components/Test/Test';
+import BoardRoute from './BoardRoute';
 
 function App() {
   let title = " - BTracker";
@@ -51,9 +52,9 @@ function App() {
             <Projects title={`My Projects${title}`} />
         </PrivateRoute>
 
-        <PrivateRoute exact path="/:id/board" >
+        <BoardRoute exact path="/:id" >
             <Board title={`Board${title}`} />
-        </PrivateRoute>
+        </BoardRoute>
 
         <PrivateRoute exact path="/:id/share" >
             <Share title={`Share${title}`} />

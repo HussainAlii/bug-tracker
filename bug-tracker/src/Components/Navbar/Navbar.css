@@ -131,3 +131,35 @@ h2.logo {
   margin-left:2px;
   cursor: pointer;
 }
+
+.sign-button-nav{
+  display: block;
+  width: auto;
+  height: 36px;
+
+  outline: none;
+
+  font-size: 21px;
+  font-weight: 750;
+
+  background-color: rgba(10, 173, 10, 0.9);
+  border-radius: 4px;
+  color: #F8FCF8;
+
+
+  margin: 20px 10px 20px 0px;
+  border: 1px solid #d4d4d4;
+
+  padding-left: 10px;
+
+  font-size: 15px;
+
+  transition: all 250ms;
+
+  cursor: pointer;
+
+}
+
+.register-button-nav{
+  background-color: rgba(161, 161, 161, 0.9);
+}

@@ -29,26 +29,7 @@ function Board({title}) {
     const [selectedCard, setSelectedCard] = useState({})
     const [isPopupActive, setIsPopupActive] = useState(false)
 
-    const [lists, setLists] = useState([
-        {list_id:'1', title:'To DO', background_color:'ebecf0', font_color:'323743', cards:[
-            {card_id:'1', title:"this is a title", description:"this is a description", start_date:Date.now(),
-             tags:[
-                {tag_id:3,background:'black', title:'tag5'}, {tag_id:2,background:'red', title:'tag2'}],
-            users:[
-                {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"}],}] },
-        {list_id:'2', title:'Progress', background_color:'ebecf0', font_color:'323743', cards:[
-            {card_id:'2', title:" title 2", description:"this is a description 2", start_date:Date.now(),
-                tags:[
-                    {tag_id:1,background:'dodgerblue', title:'tag3'},{tag_id:2,background:'red', title:'tag2'}],
-            users:[
-                {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"},],},
-            {card_id:'3', title:" title 3", description:"this is a description 3", start_date:Date.now(),
-                tags:[
-                    {tag_id:3,background:'black', title:'tag5'}],
-            users:[
-                {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"},{email:'a@gmail.com',name:'AA', fullName:"ALI A"}],}] },
-        {list_id:'3', title:'Insert Title Here', background_color:'ebecf0', font_color:'323743', cards:[] }
-                    ])
+    const [lists, setLists] = useState([])
 
     function sendListTo(position, list_index){
         let to = (position == 'l'? list_index - 1 : list_index + 1)
@@ -100,7 +81,7 @@ function Board({title}) {
 
 
     function createNewList(){
-        // createNewListReq()
+        
         //{list_id:'3', title:'Insert Title Here', background_color:'ebecf0', font_color:'323743', cards:[] }
     }
 
@@ -207,8 +188,8 @@ function Board({title}) {
     }
 
     
-    // let tags_ex = [{background:'dodgerblue', title:'tag'},]
-    // let users_ex = [{name:'HU', fullName:"Hussain Ali"},]
+    // let tags_ex = [{tag_id:1,background:'dodgerblue', title:'tag3'}]
+    // let users_ex = [{email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"}]
     // let cards=[{card_id:'1', title:"this is a title", description:"this is a description", start_date:Date.now(), tags:tags_ex, users:users_ex},]
     // let lists=[{list_id:'1', title:'To DO', background_color:'ebecf0', font_color:'323743', cards:cards }]
     
@@ -223,10 +204,17 @@ function Board({title}) {
                 </div>
                 <div class="board-canvas">
                     <div class="board-content noselect">
-        
-                    {lists.map((list, list_index)=>{
-                        return <List setIsPopupActive={setIsPopupActive} setSelectedCard={setSelectedCard} createNewCard={createNewCard} deleteList={deleteList} changeColor={changeColor} handleChangeListTitle={handleChangeListTitle} sendListTo={sendListTo} list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
-                    })}
+                        {
+                        lists && lists.length >0?<>   
+                        {lists.map((list, list_index)=>{
+                            return <List setIsPopupActive={setIsPopupActive} setSelectedCard={setSelectedCard} createNewCard={createNewCard} deleteList={deleteList} changeColor={changeColor} handleChangeListTitle={handleChangeListTitle} sendListTo={sendListTo} list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
+                        })}
+                        </>
+                        : 
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '50px', color:'gray'}}>
+                            You don't have any List Yet!
+                        </div>
+                        }
                     </div>
                 </div>
             </div>   

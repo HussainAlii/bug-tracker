@@ -40,6 +40,27 @@ function Navbar() {
   );
 }
 
+export function SignNavbar() {
+
+  return (
+    <nav>
+      
+        <div class="logo-container">
+          <Link to="/">
+            <div class="logo-container">
+                <img className="logo" src={logo} alt="BTracker logo" />
+                <h2 className="logo">Bug-Tracker</h2>
+              </div>
+            </Link>
+        </div>
+        <div style={{display: 'flex'}}>
+          <button onClick={() =>{href('/signup')}} class="sign-button-nav register-button-nav">Sign Up For Free</button>
+          <button onClick={() =>{href('/')}} class="sign-button-nav">Login</button>
+      </div>
+    </nav>
+  );
+}
+
 export function Sidebar(){
   const history = useHistory()
   const context = useContext(ProjectContext)
@@ -59,7 +80,7 @@ export function Sidebar(){
       <hr/>
       <div className='project-title'>{context.getProjectInfo().projectTitle}<img src={cancelIcon} title={"Exit Project"} onClick={context.closeProject} /> </div> 
       <hr style={{height:'2px'}} />
-          <SidebarItem icon={boardIcon} title={"Board"} to={'/'+localStorageRetrieve('project')+'/board'} />
+          <SidebarItem icon={boardIcon} title={"Board"} to={'/'+localStorageRetrieve('project')} />
           {(context.getProjectInfo().projectRank =='superAdmin' || context.getProjectInfo().projectRank =='admin') && <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />}
           {context.getProjectInfo().projectRank =='superAdmin' && <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />}
           

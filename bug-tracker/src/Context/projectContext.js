@@ -28,7 +28,7 @@ function ProjectContextProvider({ children }) {
     function openProject(id){
         localStorageStore("project", id)
         isAccessAllowed(id)
-        history.push(`/${id}/Board`)
+        history.push(`/${id}/`)
     }
 
     function isAccessAllowed(project_id){

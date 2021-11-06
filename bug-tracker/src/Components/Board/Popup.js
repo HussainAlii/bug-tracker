@@ -29,8 +29,11 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
     const [description, setDescription] = useState(currCard?.description)
     const [colorPanel, setColorPanel] = useState({color: '#e91e63', enabled: false, tag_title:''})
     
-    const [tags_list, setTags_list] = useState([{tag_id:1,background:'dodgerblue', title:'tag3'}, {tag_id:2,background:'red', title:'tag2'}, {tag_id:3,background:'black', title:'tag5'}])
-    const [users_list, setUsers_list] = useState([{email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"},{email:'a@gmail.com',name:'AA', fullName:"ALI A"}])
+    const [tags_list, setTags_list] = useState([])
+    const [users_list, setUsers_list] = useState([])
+
+    //{tag_id:1,background:'dodgerblue', title:'tag3'}
+    // {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"}
 
     function isTagUsed(tag_id){
         for (const tag of selectedCard.tags){
@@ -165,9 +168,11 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                                 return <div style={{display: 'inline-block'}} onClick={()=>{addTag(tag, currCard.list_id, currCard.list_index, currCard.position)}}> <Tag showAdd background={tag.background} tag_title={tag.title} /></div>
                             })}
                             <hr class="donotcross"/></>}
+
+                            {users_list && users_list.length>0 && <>
                             <div style={{marginTop:'32px'}} class="sub-header"><img width="20px" src={membersIcon} /> <h4>Select Member</h4></div>
                             <div style={{marginRight:'2px', cursor: 'default', display:'inline-block'}} class="avatar">
-                            {users_list && users_list.length>0 && users_list.map((user , i)=>{
+                                {users_list.map((user , i)=>{
                                 if(isUserUsed(user.email))
                                 return <> </>
                                 return (
@@ -183,8 +188,9 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                             })}
                             
                         </div>  
-                            
                         <hr class="donotcross"/>
+                        </>}
+
                         <dev  events class="menu-item long-press-button noselect" {...longPressEvent}>
                             <img style={{width:'20px'}} src={removeIcon} />
                             <p>Hold To Delete This Card.</p>
