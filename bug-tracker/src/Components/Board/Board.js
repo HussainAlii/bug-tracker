@@ -17,7 +17,7 @@ import Menu, { MenuItem } from '../Menu/Menu';
 import UseLongPress from '../Hook/UseLongPress';
 import Popup from './Popup';
 import django from '../../axiosRequest';
-import requestAPI, { getProjectLists } from '../../requests';
+import requestAPI, { changeListColorReq, deleteListReq, getProjectLists, sendListToReq } from '../../requests';
 
 function Board({title}) {
     const context = useContext(ProjectContext)
@@ -43,7 +43,7 @@ function Board({title}) {
 
     const [lists, setLists] = useState([])
 
-    function sendListTo(position, list_index){
+    function sendListTo(position, list_index, list_id){
         let to = (position == 'l'? list_index - 1 : list_index + 1)
         if (to < 0 || to >= lists.length)
             return   
@@ -51,6 +51,10 @@ function Board({title}) {
         const copy = [...lists];
         swap(copy, list_index, to)
         setLists(copy)
+
+        const to_list_id = lists[to].list_id
+
+        sendListToReq(list_id, to_list_id)
     }
 
     function sendCardTo(list_id, list_index, position, card_position){
@@ -110,7 +114,7 @@ function Board({title}) {
         });
     }
 
-    function handleChangeListTitle(list_index, new_title){
+    function handleChangeListTitle(list_id, list_index, new_title){
         if(!new_title)
             return
 
@@ -118,6 +122,16 @@ function Board({title}) {
         let curr_list = copy[list_index]  
         copy[list_index] = {...curr_list, title:new_title}
         setLists(copy)
+
+        const data = {jwt:localStorageRetrieve("jwt"),list_id:list_id, title:new_title}
+        const encoded = encodeJWT(data)
+
+        django
+        .post(requestAPI.changeListTitle, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .catch((error) => {
+            console.log(error);
+        });
+
     }
 
     function handleChangeTextArea(type, list_id, list_index, card_position, text){
@@ -187,12 +201,15 @@ function Board({title}) {
         }
         
         setLists(copy)
+
+        changeListColorReq(type, list_id, color)
     }
 
     function deleteList(list_id, list_index){
         const copy = [...lists]
         copy.splice(list_index, 1)
         setLists(copy)
+        deleteListReq(list_id)
     }
 
     function createNewCard(list_id, list_index, title, ){
@@ -200,8 +217,21 @@ function Board({title}) {
         let curr_list = copy[list_index]  
         let curr_cards = curr_list.cards
         
-        // copy[list_index] = {...curr_list, cards:curr_cards}
-        
+        const data = {jwt:localStorageRetrieve("jwt"),list_id, order:curr_cards.length, title}
+        const encoded = encodeJWT(data)
+
+        return django
+        .post(requestAPI.createNewCard, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .then( res => {
+            if(res?.data != undefined || res?.data != null){
+                const copy = [...lists]
+                curr_cards.push({card_id:res.data, title, description:"", tags:[], users:[]})
+                setLists(copy)
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     function deleteCard(list_id, list_index, card_position){
@@ -255,6 +285,7 @@ function Board({title}) {
 export default Board
 
 export function List({title, cards, background='ebecf0' , color='323743', list_id, list_index, sendListTo, handleChangeListTitle, changeColor, deleteList, createNewCard, setIsPopupActive, setSelectedCard}) {
+    const context = useContext(ProjectContext)
     const [list_title, setList_title] = useState(title)
     const [isCreateActive, setIsCreateActive] = useState(false)
     const [isMoreActive, setIsMoreActive] = useState(false)
@@ -306,8 +337,13 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                     onChangeComplete={ handleChangeComplete.setter = fontColor.enabled?setFontColor:setBackgroundColor, handleChangeComplete.typeOfSetter = fontColor.enabled?'font':'background',  handleChangeComplete}
                 />
                 <span onClick={()=>{
-                    fontColor.enabled? setFontColor({...fontColor, enabled:false}): setBackgroundColor({...backgroundColor, enabled:false})  
-                    fontColor.enabled? changeColor('font', list_index, list_id, fontColor.color) : changeColor('background', list_index, list_id, backgroundColor.color) 
+                    if(fontColor.enabled){
+                        setFontColor({...fontColor, enabled:false})
+                        changeColor('font', list_index, list_id, fontColor.color)
+                    }else{ //backgroundColor enabled
+                        setBackgroundColor({...backgroundColor, enabled:false})
+                        changeColor('background', list_index, list_id, backgroundColor.color) 
+                    }
                     
                 }} style={{fontSize:"30px", fontWeight:"600", verticalAlign:'sub', paddingLeft:'10px', cursor: 'pointer' }}>&#215;</span>
 
@@ -320,8 +356,8 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                     handleClose={handleClick}
                 >
                     <div style={{display:'flex'}} class="test">
-                        <MenuItem title={'To The Left'} icon={leftIcon}  action={()=>{sendListTo('l',list_index); handleClick()}} />
-                        <MenuItem title={'To The Right'} icon={rightIcon}  action={()=>{sendListTo('r',list_index); handleClick()}} />
+                        <MenuItem title={'To The Left'} icon={leftIcon}  action={()=>{sendListTo('l',list_index, list_id); handleClick()}} />
+                        <MenuItem title={'To The Right'} icon={rightIcon}  action={()=>{sendListTo('r',list_index, list_id); handleClick()}} />
                     </div>
                     <div style={{display:'flex'}} class="test">
                         <MenuItem title={'Background Color'} icon={fillIcon}   action={()=>{ setBackgroundColor({...backgroundColor,enabled:true}); handleClick()}} />
@@ -334,12 +370,14 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
 
                 </Menu>
                 <div class="board-list-header">
-                    <input style={{color:fontColor.color}} class="board-header-title" value={list_title} onChange={e =>{setList_title(e.target.value);}} onBlur={()=>handleChangeListTitle(list_index, list_title)} />
+                    <input style={{color:fontColor.color}} class="board-header-title" value={list_title} onChange={e =>{setList_title(e.target.value);}} onBlur={()=>handleChangeListTitle(list_id, list_index, list_title)} />
                     <img onClick={()=>{setIsMoreActive(true)}} class="more-board-header" width='30px' src={moreIcon}/>
                 </div>
                 <div class="board-list-content">
+                {
+                 context.canUserModify() && 
                     <CreateCard createNewCard={createNewCard} list_id={list_id} list_index={list_index} handleClose={setIsCreateActive} active={isCreateActive} />
-                    
+                }
                     {cards.map((card, position)=>{
                      return <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} /></div>
                     })}

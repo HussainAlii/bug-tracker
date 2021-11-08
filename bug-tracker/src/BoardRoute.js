@@ -23,7 +23,7 @@ function BoardRoute({children, ...rest }) {
                 }else{
                     return <><SignNavbar/>
                     <div className="container">
-                        <div style={{left: '1px', width:'100vh'}} className="children">{children}</div>
+                        <div style={{left: '1px', position: 'static', width: 'auto'}} className="children">{children}</div>
                         </div></>   
                 }
             }

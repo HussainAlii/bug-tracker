@@ -28,6 +28,11 @@ const requestAPI = {
   leaveProject:'/bugtracker/leaveProject/',
   createNewList:'/bugtracker/createNewList/',
   getProjectLists:'/bugtracker/getProjectLists/',
+  changeListTitle:'/bugtracker/changeListTitle/',
+  createNewCard:'/bugtracker/createNewCard/',
+  changeListColor:'/bugtracker/changeListColor/',
+  deleteList:'/bugtracker/removeList/',
+  sendListTo:'/bugtracker/sendListTo/',
 };
 export default requestAPI;
 
@@ -209,6 +214,40 @@ export function getProjectLists(project_id){
           }
         }
   })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function changeListColorReq(type, list_id, color){
+  const data = {jwt:localStorageRetrieve("jwt"),list_id, type, color}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.changeListColor, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function deleteListReq(list_id){
+  const data = {jwt:localStorageRetrieve("jwt"),list_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.deleteList, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+
+export function sendListToReq(list_id, to_list_id){
+  const data = {jwt:localStorageRetrieve("jwt"),list_id, to_list_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.sendListTo, encoded, {headers: {'Content-Type': 'text/plain'}})
   .catch((error) => {
       console.log(error);
   });
