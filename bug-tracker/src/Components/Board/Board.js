@@ -81,16 +81,32 @@ function Board({title}) {
                 break
             default:
                 let to = null;
-                if(position == 'u' || position == 'd')
+                if (position == 'u' || position == 'd'){
                     to = (position == 'u'? card_position - 1 : card_position + 1)
-                else
-                    to = (position == 'du'? 0 : curr_cards.length-1)
+                    if (to < 0 || to >= curr_cards.length) return   
 
-                if (to < 0 || to >= curr_cards.length)
-                    return   
-                    
+                }else{
+
+                    if(position == 'du'){
+                        to = 0
+                        if(card_position == 0) return
+
+                    }else{
+                        to = curr_cards.length-1
+                        if(card_position == curr_cards.length - 1) return
+                    }
+                }
+                
                 sendCardToReq(position, list_id, curr_cards[to].card_id, card_id)
-                swap(curr_cards, card_position, to)
+
+                if(position == 'u' || position == 'd'){
+                    swap(curr_cards, card_position, to)
+                }else{
+                    let temp_card = curr_cards[card_position]
+                    curr_cards.splice(card_position, 1)
+                    to == 0? curr_cards.unshift(temp_card) : curr_cards.push(temp_card)
+                }
+
                 setLists(copy)
                 setSelectedCard({...curr_list.cards[to], list_index, list_id, position:to})
         }
