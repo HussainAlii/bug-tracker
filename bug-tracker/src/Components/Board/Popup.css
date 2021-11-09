@@ -46,7 +46,7 @@
 }
 
 .popup-wrapper textarea{
-    font-size: 15px;
+    font-size: 17px;
     width: 100%;
 
     background-color: transparent;
@@ -55,8 +55,8 @@
     overflow: hidden;
     min-height: 20px;
 
-    border: none;
-    outline: 0;
+     border: none;
+    outline: 0; 
 }
 
 .popup-controls{
@@ -69,7 +69,7 @@
 }
 
 .sub-header{
-    margin-top: 50px;
+    margin-top: 22px;
     margin-bottom: 10px;
     display: flex;
     align-items: flex-start;
@@ -82,12 +82,8 @@
     display: none;
 }
 
-.cancel-tag:hover .cancel-icon{
+.cancel-tag .cancel-icon{
     display: inline;
-}
-
-.scale-tag:hover{
-    transform: scale(1.1); 
 }
 
 .control-button{
@@ -125,6 +121,7 @@
     background-color: transparent;
     color: white;
     padding-left: 10px;
+    margin-bottom: 6px;
 }
 
 .tag-input:focus{

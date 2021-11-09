@@ -29,10 +29,20 @@ const requestAPI = {
   createNewList:'/bugtracker/createNewList/',
   getProjectLists:'/bugtracker/getProjectLists/',
   changeListTitle:'/bugtracker/changeListTitle/',
+  changeTextArea:'/bugtracker/changeCardText/',
   createNewCard:'/bugtracker/createNewCard/',
   changeListColor:'/bugtracker/changeListColor/',
   deleteList:'/bugtracker/removeList/',
+  deleteCard:'/bugtracker/removeCard/',
   sendListTo:'/bugtracker/sendListTo/',
+  loadPopup:'/bugtracker/loadPopup/',
+  removeMemberFromCard:'/bugtracker/removeMemberFromCard/',
+  addMemberToCard:'/bugtracker/addMemberToCard/',
+  removeTagFromCard:'/bugtracker/removeTagFromCard/',
+  addTagToCard:'/bugtracker/addTagToCard/',
+  createNewTag:'/bugtracker/createNewTag/',
+  sendCardTo:'/bugtracker/sendCardTo/',
+  removeTag:'/bugtracker/removeTag/',
 };
 export default requestAPI;
 
@@ -230,8 +240,8 @@ export function changeListColorReq(type, list_id, color){
   });
 }
 
-export function deleteListReq(list_id){
-  const data = {jwt:localStorageRetrieve("jwt"),list_id}
+export function deleteListReq(project_id, list_id){
+  const data = {project_id, list_id}
   const encoded = encodeJWT(data)
 
   return django
@@ -241,13 +251,49 @@ export function deleteListReq(list_id){
   });
 }
 
+export function deleteCardReq(list_id, card_id){
+  const data = {jwt:localStorageRetrieve("jwt"),list_id, card_id}
+  const encoded = encodeJWT(data)
 
-export function sendListToReq(list_id, to_list_id){
-  const data = {jwt:localStorageRetrieve("jwt"),list_id, to_list_id}
+  return django
+  .post(requestAPI.deleteCard, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function sendListToReq(list_id, to_list_id, project_id, is_reversed){
+  const data = {jwt:localStorageRetrieve("jwt"),list_id, to_list_id, project_id, is_reversed}
   const encoded = encodeJWT(data)
 
   return django
   .post(requestAPI.sendListTo, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function sendCardToReq(position, list_id, to_id, card_id, project_id, is_reversed){
+  const data = {position,list_id, to_id, card_id, project_id, is_reversed}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.sendCardTo, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function loadPopup(project_id){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.loadPopup, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then((res) => {
+    let popup = decodeJWT(res['data'])['popup']
+    return popup
+  })
   .catch((error) => {
       console.log(error);
   });

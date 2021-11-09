@@ -25,7 +25,7 @@ function ProjectContextProvider({ children }) {
     }
 
     function canUserModify(){
-        return projectRank != 'ghost' && projectRank != 'guest'
+        return projectRank != 'ghost' && projectRank != 'guest' && projectCanModify;
     }
     
     function openProject(id){

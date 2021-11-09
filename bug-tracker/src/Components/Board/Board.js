@@ -11,13 +11,14 @@ import rightIcon from '../Icons/right.svg'
 import fillIcon from '../Icons/fill.svg'
 import fontColorIcon from '../Icons/fontcolor.svg'
 import removeIcon from '../Icons/trash.svg'
+import deleteIcon from '../Icons/cancel.svg'
 
 import {ProjectContext} from "../../Context/projectContext";
 import Menu, { MenuItem } from '../Menu/Menu';
 import UseLongPress from '../Hook/UseLongPress';
 import Popup from './Popup';
 import django from '../../axiosRequest';
-import requestAPI, { changeListColorReq, deleteListReq, getProjectLists, sendListToReq } from '../../requests';
+import requestAPI, { changeListColorReq, deleteListReq, getProjectLists, sendCardToReq, sendListToReq } from '../../requests';
 
 function Board({title}) {
     const context = useContext(ProjectContext)
@@ -54,13 +55,14 @@ function Board({title}) {
 
         const to_list_id = lists[to].list_id
 
-        sendListToReq(list_id, to_list_id)
+        sendListToReq(list_id, to_list_id, id, position=='l'? true : false)
     }
 
-    function sendCardTo(list_id, list_index, position, card_position){
+    function sendCardTo(list_id, list_index, position, card_position, card_id){
         const copy = [...lists]
         let curr_list = copy[list_index]  
         let curr_cards = curr_list.cards
+
         switch(position){
             case 'l': case 'r':
                 let to_list = (position == 'l'? list_index - 1 : list_index + 1)
@@ -73,9 +75,9 @@ function Board({title}) {
                 curr_cards = curr_list.cards
                 curr_cards.unshift(temp_card)
 
+                sendCardToReq(position, list_id, lists[to_list].list_id, card_id)
                 setLists(copy)
                 setSelectedCard({...temp_card, list_index:to_list, list_id:copy[to_list].list_id, position:0})
-
                 break
             default:
                 let to = null;
@@ -86,12 +88,12 @@ function Board({title}) {
 
                 if (to < 0 || to >= curr_cards.length)
                     return   
-        
+                    
+                sendCardToReq(position, list_id, curr_cards[to].card_id, card_id)
                 swap(curr_cards, card_position, to)
                 setLists(copy)
                 setSelectedCard({...curr_list.cards[to], list_index, list_id, position:to})
         }
-        // setLists(copy)
     }
 
 
@@ -134,7 +136,7 @@ function Board({title}) {
 
     }
 
-    function handleChangeTextArea(type, list_id, list_index, card_position, text){
+    function handleChangeTextArea(type, card_id, list_index, card_position, text){
         if(!text && type=='title')
             return
         const copy = [...lists]
@@ -146,42 +148,87 @@ function Board({title}) {
         else if(type == 'description')
             curr_cards[card_position] = {...curr_cards[card_position], description:text}
         setLists(copy)
+
+        const data = {jwt:localStorageRetrieve("jwt"), type, card_id, text}
+        const encoded = encodeJWT(data)
+
+        django
+        .post(requestAPI.changeTextArea, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
-    function removeTag(tag_id, tag_index, list_id, list_index, card_position){
+    function removeCardTag(tag_id, tag_index, card_id, list_index, card_position){
         const copy = [...lists]
         let curr_list = copy[list_index]  
         let curr_card = curr_list.cards[card_position]
         let tags = curr_card.tags
         tags.splice(tag_index, 1)
         setLists(copy)
+
+        const data = {jwt:localStorageRetrieve("jwt"), tag_id, card_id}
+        const encoded = encodeJWT(data)
+
+        django
+        .post(requestAPI.removeTagFromCard, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
-    function addTag(tag, list_id, list_index, card_position){
+    function addCardTag(tag, list_index, card_position, card_id){
         const copy = [...lists]
         let curr_list = copy[list_index]  
         let curr_card = curr_list.cards[card_position]
         let tags = curr_card.tags
         tags.push(tag)
         setLists(copy)
+
+        const data = {jwt:localStorageRetrieve("jwt"), tag_id:tag.tag_id, card_id}
+        const encoded = encodeJWT(data)
+
+        django
+        .post(requestAPI.addTagToCard, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
-    function removeUser(user_id, user_index, list_id, list_index, card_position){
+    function removeCardUser(user_id, user_index, card_id, list_index, card_position){
         const copy = [...lists]
         let curr_list = copy[list_index]  
         let curr_card = curr_list.cards[card_position]
         let users = curr_card.users
         users.splice(user_index, 1)
         setLists(copy)
+
+        const data = {user_id, card_id}
+        const encoded = encodeJWT(data)
+
+        django
+        .post(requestAPI.removeMemberFromCard, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
-    function addUser(user, list_id, list_index, card_position){
+    function addUser(user, card_id, list_index, card_position){
         const copy = [...lists]
         let curr_list = copy[list_index]  
         let curr_card = curr_list.cards[card_position]
         let users = curr_card.users
         users.push(user)
         setLists(copy)
+
+        const data = {user_id:user.email, card_id}
+        const encoded = encodeJWT(data)
+
+        django
+        .post(requestAPI.addMemberToCard, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     function changeColor(type, list_index, list_id, color){  
@@ -209,7 +256,7 @@ function Board({title}) {
         const copy = [...lists]
         copy.splice(list_index, 1)
         setLists(copy)
-        deleteListReq(list_id)
+        deleteListReq(id, list_id)
     }
 
     function createNewCard(list_id, list_index, title, ){
@@ -225,7 +272,7 @@ function Board({title}) {
         .then( res => {
             if(res?.data != undefined || res?.data != null){
                 const copy = [...lists]
-                curr_cards.push({card_id:res.data, title, description:"", tags:[], users:[]})
+                curr_cards.unshift({card_id:res.data, title, description:"", tags:[], users:[]})
                 setLists(copy)
             }
         })
@@ -234,24 +281,17 @@ function Board({title}) {
         });
     }
 
-    function deleteCard(list_id, list_index, card_position){
+    function deleteCard(list_index, card_position){
         const copy = [...lists]
         let curr_list = copy[list_index]  
         curr_list.cards.splice(card_position, 1)
         setLists(copy)
-
     }
 
-    
-    // let tags_ex = [{tag_id:1,background:'dodgerblue', title:'tag3'}]
-    // let users_ex = [{email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"}]
-    // let cards=[{card_id:'1', title:"this is a title", description:"this is a description", start_date:Date.now(), tags:tags_ex, users:users_ex},]
-    // let lists=[{list_id:'1', title:'To DO', background_color:'ebecf0', font_color:'323743', cards:cards }]
-    
     return (
         <>
             {isPopupActive&&<>
-            <Popup addUser={addUser} addTag={addTag} removeTag={removeTag} removeUser={removeUser} handleChangeTextArea={handleChangeTextArea} sendCardTo={sendCardTo} deleteCard={deleteCard} selectedCard = {selectedCard} handleClose={setIsPopupActive} />
+            <Popup addUser={addUser}  addCardTag={addCardTag} removeCardTag={removeCardTag} removeCardUser={removeCardUser} handleChangeTextArea={handleChangeTextArea} sendCardTo={sendCardTo} deleteCard={deleteCard} selectedCard = {selectedCard} handleClose={setIsPopupActive} />
             </>}
             <div class="board">
                 
@@ -259,7 +299,7 @@ function Board({title}) {
                 {
                  context.canUserModify() && 
                     <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
-            }
+                }
                 
                     </div>
                 <div class="board-canvas">
@@ -371,7 +411,10 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                 </Menu>
                 <div class="board-list-header">
                     <input style={{color:fontColor.color}} class="board-header-title" value={list_title} onChange={e =>{setList_title(e.target.value);}} onBlur={()=>handleChangeListTitle(list_id, list_index, list_title)} />
+                    {
+                    context.canUserModify() && 
                     <img onClick={()=>{setIsMoreActive(true)}} class="more-board-header" width='30px' src={moreIcon}/>
+                    }
                 </div>
                 <div class="board-list-content">
                 {
@@ -420,11 +463,23 @@ export function Card({title, desc, tags, users}) {
     )
 }
 
-export function Tag({background, tag_title, showCancel=false, showAdd=false}) {
+export function Tag({background, tag_title, showCancel=false}) {
     return (
-        <div width="100px" style={{backgroundColor:background, boxShadow:`0px 0px 3px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${(showCancel || showAdd) && 'cancel-tag'}`} >
-            <p>{tag_title} {(showCancel || showAdd) && <div class='cancel-icon' style={{fontSize:'16px'}}>{showCancel? <span>&#215;</span> : <span>&#43;</span> }</div> }</p>
+        <div width="100px" style={{backgroundColor:background, boxShadow:`0px 0px 3px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${showCancel && 'cancel-tag'}`} >
+            <p>{tag_title} {showCancel && <div class='cancel-icon' style={{fontSize:'16px'}}>{showCancel? <span>&#215;</span> : <span>&#43;</span> }</div> }</p>
             
+        </div>
+    )
+}
+
+export function ControlTag({addCardTag, removeTag, background, tag_title}) {
+    return (
+        <div style={{marginTop:'10px', display: 'flex'}}>
+            <div onClick={()=>{addCardTag()}} style={{backgroundColor:background, boxShadow:`0px 0px 1.5px 1px ${background}`, cursor: 'pointer'}} class={`control-tag-item`} >
+                <div  class="control-shadow" /> <p>{tag_title}</p>   
+            </div>
+
+            <img onClick={()=>{removeTag()}}  style={{cursor: 'pointer'}} src={deleteIcon} />
         </div>
     )
 }
@@ -453,7 +508,7 @@ export function CreateCard({active=false, handleClose, list_id, list_index, crea
         <div class="board-list-card">
             <div class="board-list-card-create">
                 <div class="create-board-controls">
-                    <button onClick={()=>{createNewCard(list_id, list_index, title); setTitle(''); handleClose(false);} } class="board-button">Create</button>
+                    <button disabled = {!title} onClick={()=>{createNewCard(list_id, list_index, title); setTitle(''); handleClose(false);} } class="board-button">Create</button>
                     <button onClick={()=>handleClose(false)} class="board-button border-button-cancel">Cancel</button>
                 </div>
                 <textarea placeholder="Card Title...." value={title} onInput={(e)=>handleTitle(e)}/>

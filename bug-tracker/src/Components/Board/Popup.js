@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import './Popup.css'
 
 import descIcon from '../Icons/description.svg'
@@ -15,25 +15,28 @@ import fillIcon from '../Icons/fill.svg'
 import double_arrow_down from '../Icons/double_arrow_down.svg'
 import double_arrow_up from '../Icons/double_arrow_up.svg'
 
-import { getRandomInt } from '../../utilities'
-import { Tag } from './Board'
+import { encodeJWT, getRandomInt } from '../../utilities'
+import { ControlTag, Tag } from './Board'
 import { useParams } from 'react-router'
 import UseLongPress from '../Hook/UseLongPress'
 import { CirclePicker } from 'react-color'
+import requestAPI, { deleteCardReq, loadPopup } from '../../requests'
 
-function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeTextArea, removeTag, removeUser, addTag, addUser}) {
+import {ProjectContext} from "../../Context/projectContext";
+import django from '../../axiosRequest'
+
+function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeTextArea, removeCardTag, removeCardUser, addCardTag, addUser}) {
     const {id} = useParams();
+    const context = useContext(ProjectContext)
+
     const [currCard, setCurrCard] = useState(selectedCard)
 
     const [title, setTitle] = useState(currCard?.title)
     const [description, setDescription] = useState(currCard?.description)
     const [colorPanel, setColorPanel] = useState({color: '#e91e63', enabled: false, tag_title:''})
     
-    const [tags_list, setTags_list] = useState([])
-    const [users_list, setUsers_list] = useState([])
-
-    //{tag_id:1,background:'dodgerblue', title:'tag3'}
-    // {email:'bugtracker.bot@gmail.com',name:'HU', fullName:"Hussain Ali"}
+    const [tagsList, setTagsList] = useState([])
+    const [usersList, setUsersList] = useState([])
 
     function isTagUsed(tag_id){
         for (const tag of selectedCard.tags){
@@ -51,20 +54,27 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
         return false
     }
 
+    useEffect(() => { //load popup
+        loadPopup(id).then((res) => {
+            setTagsList(res.tags_list)
+            setUsersList(res.users_list)
+        })
+    }, []);
+
     useEffect(() => {
         setCurrCard(selectedCard)
     },[selectedCard])
 
 
     function autoGrow(e) {
-        e.target.style.height = (e.target.value.length)/2.2+"px";
+        e.target.style.height = (e.target.value.length)/1+"px";
     }
 
     function handleTextArea(e, setter){
         let value = e.target.value;
 
         if(value.length == 0){
-            e.target.style.height = '60px'
+            e.target.style.height = '70px'
         }
         
         if(value[value.length-1] != '\n'){
@@ -77,7 +87,8 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
 
     const onLongPress = () => {
         handleClose(false)
-        deleteCard(currCard.list_id, currCard.list_index, currCard.position)
+        deleteCard(currCard.list_index, currCard.position)
+        deleteCardReq(currCard.list_id, currCard.card_id)
       };
 
       const onClickMore = () => {}
@@ -93,34 +104,69 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
         setColorPanel({...colorPanel, enabled:true, color:color.hex})        
       };
 
+
+      function createTag(){
+        const data = {project_id:id, tag_title:colorPanel['tag_title'], color:colorPanel['color']}
+        const encoded = encodeJWT(data)
+
+
+        return django
+        .post(requestAPI.createNewTag, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .then( res => {
+            if(res?.data != undefined || res?.data != null){
+                setTagsList([...tagsList, {'tag_id':res.data, title:colorPanel['tag_title'], background:colorPanel['color']}])
+                setColorPanel({...colorPanel, enabled: false, tag_title:''})
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+      }
+
+      function removeTag(tag_id, tag_index){
+        const data = {tag_id}
+        const encoded = encodeJWT(data)
+
+        const copy = [...tagsList]
+        copy.splice(tag_index, 1)
+        setTagsList(copy)
+
+        django
+        .post(requestAPI.removeTag, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
     return (
         <>
         <div onClick={()=>{handleClose(false)}} class="back popup-back"/>
         <div class="popup">
             <div class="popup-wrapper">
                 <div class="popup-details">
-                {currCard?.tags.length > 0 && <>
-                <div style={{marginTop:'0'}} class="sub-header"><img width={'21px'} src={tagsIcon} /> <h4>Tags In The Card</h4></div>
+        
+                    <textarea style={{marginTop:'0', fontSize:'18px', fontWeight:'bold'}} placeholder="Card Title...." value={title} onInput={(e)=>handleTextArea(e, setTitle)} onBlur={()=>{handleChangeTextArea('title', currCard.card_id, currCard.list_index, currCard.position, title)}} />
+                    
+                    <div class="sub-header"><img src={descIcon} /> <h4>Description</h4></div>
+                    <textarea placeholder="Card Description...." value={description} onInput={(e)=>handleTextArea(e, setDescription)} onBlur={()=>{handleChangeTextArea('description', currCard.card_id, currCard.list_index, currCard.position, description)}} />
+                    
+                    {currCard?.tags.length > 0 && <>
+                <div class="sub-header"><img width={'21px'} src={tagsIcon} /> <h4>Tags In The Card</h4></div>
                     <div class="board-tags">
                         {currCard?.tags.map((tag, i)=>{
-                            return <div style={{display: 'inline-block'}} onClick={()=>{removeTag(tag.tag_id, i, currCard.list_id, currCard.list_index, currCard.position )}} >
+                            return <div style={{display: 'inline-block'}} onClick={()=>{removeCardTag(tag.tag_id, i, currCard.card_id, currCard.list_index, currCard.position )}} >
                                         <Tag showCancel background={tag.background} tag_title={tag.title} />
                                 </div>
                         })}
                     </div>
                 </>}
 
-                    <textarea style={{marginTop:'30px'}} placeholder="Card Title...." value={title} onInput={(e)=>handleTextArea(e, setTitle)} onBlur={()=>{handleChangeTextArea('title', currCard.list_id, currCard.list_index, currCard.position, title)}} />
-                    
-                    <div class="sub-header"><img src={descIcon} /> <h4>Description</h4></div>
-                    <textarea placeholder="Card Description...." value={description} onInput={(e)=>handleTextArea(e, setDescription)} onBlur={()=>{handleChangeTextArea('description', currCard.list_id, currCard.list_index, currCard.position, description)}} />
-                    
                     {currCard?.users.length > 0 && <>
                     <div class="sub-header"><img src={membersIcon} /> <h4>Members In The Card</h4></div>
                     <div style={{marginRight:'2px', cursor: 'default', display:'inline-block'}} class="avatar">
                         {currCard.users.map((user , i)=>{
                             return (
-                                <div class={'cancel-tag'} onClick={()=>{removeUser(user.user_id, i, currCard.list_id, currCard.list_index, currCard.position)}} style={{margin: '10px 10px', cursor: 'pointer', display:'inline-block'}}>
+                                <div class={'cancel-tag'} onClick={()=>{removeCardUser(user.email, i, currCard.card_id, currCard.list_index, currCard.position)}} style={{margin: '10px 10px', cursor: 'pointer', display:'inline-block'}}>
                                     <div style={{display:'flex', alignItems:'flex-start'}}>
                                         <div class="img" style={{width: '28px', height:'28px', fontSize:'13px', marginRight:'1px',backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} >
                                             <div class="chars">{user.name}</div><div></div>
@@ -134,49 +180,55 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                     </>}
                     
                 </div>
+                {
+                 context.canUserModify() && 
                 <div style={{borderLeft:'3px solid rgb(249,248,246)'}} class="popup-controls">
                     <div >
                         <div style={{marginLeft:'10px'}} >
 
                             <div> <h4 style={{marginBottom:'3px'}}>From:</h4> <i>List {currCard?.list_index + 1} Position {currCard?.position + 1}</i></div>
-                            <div style={{marginTop:'25px'}} class="sub-header"><img src={controlIcon} /> <h4>Send To</h4></div>
-                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'l', currCard.position)}} title='Send To Left' class="control-button" ><img src={leftIcon} /></button>
-                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'r', currCard.position)}} title='Send To Right' class="control-button"><img src={rightIcon} /></button>
-                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'u', currCard.position)}} title='Send To Up' class="control-button"><img src={upIcon} /></button>
-                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'd', currCard.position)}} title='Send To Bottom' class="control-button"><img src={downIcon} /></button>
-                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'du', currCard.position)}} title='Send To First Index' class="control-button"><img src={double_arrow_up} /></button>
-                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'dd', currCard.position)}} title='Send To Last Index' class="control-button"><img src={double_arrow_down} /></button>
+                            <div class="sub-header"><img src={controlIcon} /> <h4>Send To</h4></div>
+                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'l', currCard.position, currCard.card_id)}} title='Send To Left' class="control-button" ><img src={leftIcon} /></button>
+                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'r', currCard.position, currCard.card_id)}} title='Send To Right' class="control-button"><img src={rightIcon} /></button>
+                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'u', currCard.position, currCard.card_id)}} title='Send To Up' class="control-button"><img src={upIcon} /></button>
+                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'd', currCard.position, currCard.card_id)}} title='Send To Bottom' class="control-button"><img src={downIcon} /></button>
+                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'du', currCard.position, currCard.card_id)}} title='Send To First Index' class="control-button"><img src={double_arrow_up} /></button>
+                            <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'dd', currCard.position, currCard.card_id)}} title='Send To Last Index' class="control-button"><img src={double_arrow_down} /></button>
 
-                            <div style={{marginTop:'25px'}} class="sub-header"><img width="20px" src={tagsIcon} /> <h4>Select Tags</h4></div>
-                            <input style={{backgroundColor:colorPanel.color}}  value={colorPanel.tag_title}  onFocus={()=>{setColorPanel({...colorPanel, enabled: true})}} onChange={(e)=>{setColorPanel({...colorPanel, tag_title:e.target.value})}}placeholder="Tag Title..." class="tag-input"/>
-                            { colorPanel.enabled && <div style={{display: 'flex', justifyContent:'center', marginTop:'15px'}}>
+                            <div class="sub-header"><img width="20px" src={tagsIcon} /> <h4>Select Tags</h4></div>
+
+                            <input style={{backgroundColor:colorPanel.color}}  value={colorPanel.tag_title}  onFocus={()=>{setColorPanel({...colorPanel, enabled: true})}} onChange={(e)=>{
+                                if(colorPanel['tag_title'].length <=27 || colorPanel['tag_title'].length > e.target.value.length )
+                                setColorPanel({...colorPanel, tag_title:e.target.value}
+                                )}} placeholder="Tag Title..." class="tag-input" />
+                            { colorPanel.enabled && <div style={{display: 'flex', justifyContent:'center'}}>
+                           
                             <CirclePicker 
                                 color={colorPanel.color}
                                 onChangeComplete={ handleChangeComplete}
                             />
                                 <div style={{display: 'flex', flexDirection: 'column'}}>
-                                    <button onClick={()=>{setColorPanel({...colorPanel, enabled: false, tag_title:''})}} style={{margin:'0', width:'100px', height:'100%'}} class='board-button'>Create Tag</button> 
+                                    <button onClick={()=>{createTag()}} style={{margin:'0', width:'100px', height:'100%'}} class='board-button'>Create New Tag</button> 
                                     <button onClick={()=>{setColorPanel({...colorPanel,  enabled: false, tag_title:''})}} style={{margin:'0', marginTop:'30px', width:'100px', height:'100%'}} class='board-button control-delete-button'>Close Tag Panel</button> 
                                 </div>
                             </div>}
 
-                            <hr class="donotcross"/>
-                            {tags_list && tags_list.length > 0 && <>
-                            {tags_list.map(tag =>{
+                            {tagsList && tagsList.length > 0 && <>
+                            {tagsList.map((tag, i) =>{
                                 if(isTagUsed(tag.tag_id))
                                     return <> </>
-                                return <div style={{display: 'inline-block'}} onClick={()=>{addTag(tag, currCard.list_id, currCard.list_index, currCard.position)}}> <Tag showAdd background={tag.background} tag_title={tag.title} /></div>
+                                return <div> <ControlTag removeTag={()=>removeTag(tag.tag_id, i)}  addCardTag={()=>addCardTag(tag, currCard.list_index, currCard.position, currCard.card_id)} background={tag.background} tag_title={tag.title} /></div>
                             })}
                             <hr class="donotcross"/></>}
 
-                            {users_list && users_list.length>0 && <>
-                            <div style={{marginTop:'32px'}} class="sub-header"><img width="20px" src={membersIcon} /> <h4>Select Member</h4></div>
+                            {usersList && usersList.length>0 && <>
+                            <div class="sub-header"><img width="20px" src={membersIcon} /> <h4>Select Member</h4></div>
                             <div style={{marginRight:'2px', cursor: 'default', display:'inline-block'}} class="avatar">
-                                {users_list.map((user , i)=>{
+                                {usersList.map((user , i)=>{
                                 if(isUserUsed(user.email))
                                 return <> </>
                                 return (
-                                    <div class={'scale-tag'} onClick={()=>{addUser(user, currCard.list_id, currCard.list_index, currCard.position)}} style={{margin: '10px 10px', cursor: 'pointer', display:'inline-block'}}>
+                                    <div class={'scale-tag'} onClick={()=>{addUser(user, currCard.card_id, currCard.list_index, currCard.position)}} style={{margin: '10px 10px', cursor: 'pointer', display:'inline-block'}}>
                                         <div style={{display:'flex', alignItems:'flex-start'}}>
                                             <div class="img" style={{width: '28px', height:'28px', fontSize:'13px', marginRight:'1px',backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} >
                                                 <div class="chars">{user.name}</div><div></div>
@@ -199,6 +251,7 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                         </div>
                     </div>
                 </div>
+                }
             </div>
         </div>
         </>
