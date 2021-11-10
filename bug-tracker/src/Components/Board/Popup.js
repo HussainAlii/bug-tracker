@@ -24,13 +24,18 @@ import requestAPI, { deleteCardReq, loadPopup } from '../../requests'
 
 import {ProjectContext} from "../../Context/projectContext";
 import django from '../../axiosRequest'
+import { Checkbox, FormControlLabel } from '@material-ui/core'
+import Assignment from '@material-ui/icons/Assignment';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
-function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeTextArea, removeCardTag, removeCardUser, addCardTag, addUser}) {
+
+function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeTextArea, removeCardTag, removeCardUser, addCardTag, addUser, markCardStatus}) {
     const {id} = useParams();
     const context = useContext(ProjectContext)
 
     const [currCard, setCurrCard] = useState(selectedCard)
 
+    const [markStatus, setMarkStatus] = useState(currCard?.status || 'open')
     const [title, setTitle] = useState(currCard?.title)
     const [description, setDescription] = useState(currCard?.description)
     const [colorPanel, setColorPanel] = useState({color: '#e91e63', enabled: false, tag_title:''})
@@ -138,15 +143,27 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
         });
     }
 
+    function markCardStatusReq(status){
+        markCardStatus(status, currCard.list_index, currCard.position )
+        setMarkStatus(status)
+        const data = {status, card_id:currCard.card_id, list_id:currCard.list_id}
+        const encoded = encodeJWT(data)
+
+        django
+        .post(requestAPI.markCardStatus, encoded, {headers: {'Content-Type': 'text/plain'}})
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
 
     return (
         <>
         <div onClick={()=>{handleClose(false)}} class="back popup-back"/>
-        <div class="popup">
+        <div class={`popup ${!context.canUserModify() && 'popup-guest'}`}>
             <div class="popup-wrapper">
                 <div class="popup-details">
-                <div style={{display: 'flex', flexDirection:'row-reverse', direction:'rtl'}}><img src={timerIcon} /> <p>{new Date(currCard.start_date).toLocaleString()}</p></div>
-                    <textarea style={{marginTop:'0', fontSize:'18px', fontWeight:'bold'}} placeholder="Card Title...." value={title} onInput={(e)=>handleTextArea(e, setTitle)} onBlur={()=>{handleChangeTextArea('title', currCard.card_id, currCard.list_index, currCard.position, title)}} />
+                    <textarea style={{marginTop:'10px', fontSize:'18px', fontWeight:'bold'}} placeholder="Card Title...." value={title} onInput={(e)=>handleTextArea(e, setTitle)} onBlur={()=>{handleChangeTextArea('title', currCard.card_id, currCard.list_index, currCard.position, title)}} />
                     
                     <div class="sub-header"><img src={descIcon} /> <h4>Description</h4></div>
                     <textarea placeholder="Card Description...." value={description} onInput={(e)=>handleTextArea(e, setDescription)} onBlur={()=>{handleChangeTextArea('description', currCard.card_id, currCard.list_index, currCard.position, description)}} />
@@ -179,6 +196,8 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                         })}
                     </div>    
                     </>}
+
+                    <div class="date-display"><img src={timerIcon} /> <p>{new Date(currCard.start_date).toLocaleString()}</p></div>
                     
                 </div>
                 {
@@ -187,7 +206,31 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                     <div >
                         <div style={{marginLeft:'10px'}} >
 
-                            <div> <h4 style={{marginBottom:'3px'}}>From:</h4> <i>List {currCard?.list_index + 1} Position {currCard?.position + 1}</i></div>
+                            <div style={{display:'flex', justifyContent:'flex-end', marginBottom:'10px'}}>
+                                <FormControlLabel
+                                control={
+                                <Checkbox
+                                    checked={markStatus == 'closed'? true : false}
+                                    onChange={e=>{
+                                        if(e.target.checked) markCardStatusReq('closed');
+                                        else markCardStatusReq('open');
+                                    }}
+                                    disableRipple
+                                    icon={<Assignment />}
+                                    checkedIcon={<AssignmentTurnedInIcon />}
+                                    style ={{
+                                        color: "#A781D2",
+                                    }}
+                                    />
+                                }
+                                label={'Mark As Closed'}
+                                className="noselect"
+
+                                labelPlacement={"start"}
+                                />
+                            </div>
+                                   
+                            <div style={{display:'flex', justifyContent:'space-around'}}><h4 style={{ display:'inline-block', marginBottom:'0px'}}>From:</h4> <i>List {currCard?.list_index + 1} Position {currCard?.position + 1}</i></div>
                             <div class="sub-header"><img src={controlIcon} /> <h4>Send To</h4></div>
                             <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'l', currCard.position, currCard.card_id)}} title='Send To Left' class="control-button" ><img src={leftIcon} /></button>
                             <button onClick={()=>{sendCardTo(currCard.list_id, currCard.list_index, 'r', currCard.position, currCard.card_id)}} title='Send To Right' class="control-button"><img src={rightIcon} /></button>

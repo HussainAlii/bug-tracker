@@ -178,6 +178,9 @@ function Board({title}) {
     }
 
     function removeCardTag(tag_id, tag_index, card_id, list_index, card_position){
+        if(!context.canUserModify())
+            return
+
         const copy = [...lists]
         let curr_list = copy[list_index]  
         let curr_card = curr_list.cards[card_position]
@@ -214,6 +217,9 @@ function Board({title}) {
     }
 
     function removeCardUser(user_id, user_index, card_id, list_index, card_position){
+        if(!context.canUserModify())
+            return
+
         const copy = [...lists]
         let curr_list = copy[list_index]  
         let curr_card = curr_list.cards[card_position]
@@ -306,10 +312,19 @@ function Board({title}) {
         setLists(copy)
     }
 
+    function markCardStatus(status, list_index, card_index){
+        const copy = [...lists]
+        let curr_list = copy[list_index]  
+        let curr_cards = curr_list.cards
+        let curr_card = curr_cards[card_index]
+        curr_card.status = status
+        setLists(copy)
+    }
+
     return (
         <>
             {isPopupActive&&<>
-            <Popup addUser={addUser}  addCardTag={addCardTag} removeCardTag={removeCardTag} removeCardUser={removeCardUser} handleChangeTextArea={handleChangeTextArea} sendCardTo={sendCardTo} deleteCard={deleteCard} selectedCard = {selectedCard} handleClose={setIsPopupActive} />
+            <Popup markCardStatus={markCardStatus} addUser={addUser}  addCardTag={addCardTag} removeCardTag={removeCardTag} removeCardUser={removeCardUser} handleChangeTextArea={handleChangeTextArea} sendCardTo={sendCardTo} deleteCard={deleteCard} selectedCard = {selectedCard} handleClose={setIsPopupActive} />
             </>}
             <div class="board">
                 
@@ -439,7 +454,7 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                     <CreateCard createNewCard={createNewCard} list_id={list_id} list_index={list_index} handleClose={setIsCreateActive} active={isCreateActive} />
                 }
                     {cards.map((card, position)=>{
-                     return <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} /></div>
+                     return <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} isClosed={card.status === 'closed'} /></div>
                     })}
 
                     
@@ -450,9 +465,9 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
     )
 }
 
-export function Card({title, desc, tags, users}) {
+export function Card({title, tags, users, isClosed}) {
     return (
-        <div class="board-list-card">
+        <div style={isClosed? {backgroundColor:'rgba(209, 209, 209, 0.7)'} : {}} class="board-list-card">
             <div class="board-list-card-details">
                 <div class="board-tags">
                 {tags.map(tag=>{

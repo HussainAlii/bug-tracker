@@ -43,6 +43,7 @@ const requestAPI = {
   createNewTag:'/bugtracker/createNewTag/',
   sendCardTo:'/bugtracker/sendCardTo/',
   removeTag:'/bugtracker/removeTag/',
+  markCardStatus:'/bugtracker/markCardStatus/',
 };
 export default requestAPI;
 
