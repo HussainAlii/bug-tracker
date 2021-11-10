@@ -7,6 +7,7 @@
 }
 
 .board-nav{
+    display: flex;
     position: static;
     height: auto;
     margin-left: 20px;
@@ -286,4 +287,38 @@
     height: 30px;
     background-color:rgba(0, 0, 0, 0.2);
     margin-right: 2px
+}
+
+.members-popup{
+    position: absolute;
+    top: 55px;
+    left:160px;
+    background-color:rgb(134, 48, 48);
+    width: 220px;
+    height: 160px;
+    border-radius: 1px;
+    border: 1px solid rgb(255, 255, 255);
+    box-shadow: 0 5px 16px 0px #02020240, 0 0 0 2px #00030714;
+    background-color:#ffffff;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+}
+
+.member-popup-header{
+    border-bottom: 1px solid rgb(209, 209, 209);  
+    padding-bottom: 5px;
+    margin-bottom: 3px;
+}
+
+.member-popup-header p{
+    margin: 0;
+    text-align: center;
+    color: rgb(100, 97, 97);
+}
+
+.member-popup-content{
+    overflow-y: scroll;
+    overflow-x: hidden;
+
 }

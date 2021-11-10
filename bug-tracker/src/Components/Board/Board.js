@@ -34,6 +34,7 @@ function Board({title}) {
     useEffect( () => {
         getProjectLists(id).then(res=>{
             setLists(res['projects'])
+            setMembersList(res['members'])
         })
     },[]);
 
@@ -41,8 +42,10 @@ function Board({title}) {
 
     const [selectedCard, setSelectedCard] = useState({})
     const [isPopupActive, setIsPopupActive] = useState(false)
+    const [isShowMembersActive, setIsShowMembersActive] = useState(false)
 
     const [lists, setLists] = useState([])
+    const [membersList, setMembersList] = useState([])
 
     function sendListTo(position, list_index, list_id){
         let to = (position == 'l'? list_index - 1 : list_index + 1)
@@ -321,16 +324,46 @@ function Board({title}) {
         setLists(copy)
     }
 
+    function showMembers(){
+        setIsShowMembersActive(!isShowMembersActive)
+    }
+
     return (
         <>
             {isPopupActive&&<>
             <Popup markCardStatus={markCardStatus} addUser={addUser}  addCardTag={addCardTag} removeCardTag={removeCardTag} removeCardUser={removeCardUser} handleChangeTextArea={handleChangeTextArea} sendCardTo={sendCardTo} deleteCard={deleteCard} selectedCard = {selectedCard} handleClose={setIsPopupActive} />
             </>}
+
             <div class="board">
                 
+                {isShowMembersActive&&<>
+                    <div onClick={()=>{setIsShowMembersActive(false)}} class="back"/>
+                    <div class="members-popup">
+                        <div class="member-popup-header">
+                            <p>Members</p>
+                        </div>
+                        <div class="member-popup-content">
+                            <div style={{display:'block'}} class="avatar">
+                                {membersList.map(user=>{
+                                    console.log(user)
+                                    return (
+                                        <div title={user.fullName}  style={{display:'flex', marginBottom:'10px', marginLeft:'3px'}}>
+                                            <div class="img" style={{display:'inline-block', width: '28px', height:'28px', fontSize:'13px', marginRight:'1px',backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} >
+                                                <div class="chars">{user.name}</div>
+                                            </div>
+                                            <p style={{margin: 0, marginTop:'3px', paddingLeft:'8px', display:'inline-block', fontSize:'13px'}}>{user.fullName} ({user.rank})</p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </>}
+
                 <div class="board-nav noselect">
                 
                 <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
+                <button class="board-button" onClick={()=>setIsShowMembersActive(true)}> Show Members</button>
                 
                 
                     </div>
