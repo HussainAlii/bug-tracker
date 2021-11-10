@@ -115,6 +115,8 @@ function Board({title}) {
 
 
     function createNewList(){
+        if(!context.canUserModify()) return
+            
         const data = {jwt:localStorageRetrieve("jwt"),project_id:id, order:lists.length}
         const encoded = encodeJWT(data)
 
@@ -133,7 +135,7 @@ function Board({title}) {
     }
 
     function handleChangeListTitle(list_id, list_index, new_title){
-        if(!new_title)
+        if(!new_title || !context.canUserModify())
             return
 
         const copy = [...lists]
@@ -153,7 +155,7 @@ function Board({title}) {
     }
 
     function handleChangeTextArea(type, card_id, list_index, card_position, text){
-        if(!text && type=='title')
+        if(!text && type=='title' || !context.canUserModify())
             return
         const copy = [...lists]
         let curr_list = copy[list_index]  
@@ -312,10 +314,9 @@ function Board({title}) {
             <div class="board">
                 
                 <div class="board-nav noselect">
-                {
-                 context.canUserModify() && 
-                    <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
-                }
+                
+                <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
+                
                 
                     </div>
                 <div class="board-canvas">
