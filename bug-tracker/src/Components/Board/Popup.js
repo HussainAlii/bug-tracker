@@ -11,7 +11,7 @@ import rightIcon from '../Icons/right.svg'
 import upIcon from '../Icons/up.svg'
 import downIcon from '../Icons/down.svg'
 import removeIcon from '../Icons/trash.svg'
-import fillIcon from '../Icons/fill.svg'
+import timerIcon from '../Icons/timer.svg'
 import double_arrow_down from '../Icons/double_arrow_down.svg'
 import double_arrow_up from '../Icons/double_arrow_up.svg'
 
@@ -138,13 +138,14 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
         });
     }
 
+
     return (
         <>
         <div onClick={()=>{handleClose(false)}} class="back popup-back"/>
         <div class="popup">
             <div class="popup-wrapper">
                 <div class="popup-details">
-        
+                <div style={{display: 'flex', flexDirection:'row-reverse', direction:'rtl'}}><img src={timerIcon} /> <p>{new Date(currCard.start_date).toLocaleString()}</p></div>
                     <textarea style={{marginTop:'0', fontSize:'18px', fontWeight:'bold'}} placeholder="Card Title...." value={title} onInput={(e)=>handleTextArea(e, setTitle)} onBlur={()=>{handleChangeTextArea('title', currCard.card_id, currCard.list_index, currCard.position, title)}} />
                     
                     <div class="sub-header"><img src={descIcon} /> <h4>Description</h4></div>
