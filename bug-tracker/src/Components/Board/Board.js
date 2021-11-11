@@ -12,6 +12,7 @@ import fillIcon from '../Icons/fill.svg'
 import fontColorIcon from '../Icons/fontcolor.svg'
 import removeIcon from '../Icons/trash.svg'
 import deleteIcon from '../Icons/cancel.svg'
+import smallCommentIcon from '../Icons/small_comment.svg'
 
 import {ProjectContext} from "../../Context/projectContext";
 import Menu, { MenuItem } from '../Menu/Menu';
@@ -486,7 +487,7 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                     <CreateCard createNewCard={createNewCard} list_id={list_id} list_index={list_index} handleClose={setIsCreateActive} active={isCreateActive} />
                 }
                     {cards.map((card, position)=>{
-                     return <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} isClosed={card.status === 'closed'} /></div>
+                     return <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} isClosed={card.status === 'closed'} numOfComments={card.num_of_comments} /></div>
                     })}
 
                     
@@ -497,7 +498,7 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
     )
 }
 
-export function Card({title, tags, users, isClosed}) {
+export function Card({title, tags, users, isClosed, numOfComments}) {
     return (
         <div style={isClosed? {backgroundColor:'rgba(209, 209, 209, 0.7)'} : {}} class="board-list-card">
             <div class="board-list-card-details">
@@ -511,8 +512,9 @@ export function Card({title, tags, users, isClosed}) {
                 </div>
                 <div class="border-footer">
                     <div style={{flexDirection:'row-reverse', marginRight:'2px'}} class="avatar">
+                    <p style={{color:'black', margin:'0'}}>{numOfComments}</p><img style={{marginLeft:'3px'}} width="20px" src={smallCommentIcon}/>
                         {users.map((user , i)=>{
-                            if(i>10) // show 11 member
+                            if(i>7) // show 11 member
                             return <></>
                             return (
                                 <div title={user.fullName} class="img" style={{width: '28px', height:'28px', fontSize:'13px', marginRight:'1px',backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} >

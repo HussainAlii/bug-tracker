@@ -58,7 +58,7 @@ function UserContextProvider({ children }) {
                 if (decoded["code"]){
                     localStorageStore("jwt", decoded["code"])
                     setUserInfo(decoded["user"])
-                    history.push('/')
+                    history.push('/projects')
                 }
                 else{
                     localStorage.removeItem('jwt');

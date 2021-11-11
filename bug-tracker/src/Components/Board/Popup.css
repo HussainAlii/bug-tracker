@@ -34,6 +34,7 @@
 .popup-wrapper{
     margin: 9px;
     padding: 30px;
+    margin-top: 40px;
 }
 
 .popup-wrapper{
@@ -143,4 +144,19 @@
     display:flex;
     flex-direction: row-reverse;
     direction: rtl;
+  }
+
+.comment{
+    display: flex;
+    margin-bottom: 10px;
+    overflow-wrap: anywhere;
+  }
+
+  @media only screen and (max-width: 1200px) {
+    .comment {
+        display: flex;
+        margin-bottom: 10px;
+        width: 243px;
+        overflow-wrap: anywhere;
+    }
   }

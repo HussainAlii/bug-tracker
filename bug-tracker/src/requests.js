@@ -45,6 +45,7 @@ const requestAPI = {
   sendCardTo:'/bugtracker/sendCardTo/',
   removeTag:'/bugtracker/removeTag/',
   markCardStatus:'/bugtracker/markCardStatus/',
+  submitComment:'/bugtracker/submitComment/',
 };
 export default requestAPI;
 
@@ -286,8 +287,8 @@ export function sendCardToReq(position, list_id, to_id, card_id, project_id, is_
   });
 }
 
-export function loadPopup(project_id){
-  const data = {jwt:localStorageRetrieve("jwt"),project_id}
+export function loadPopup(project_id, card_id){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id, card_id}
   const encoded = encodeJWT(data)
 
   return django
@@ -296,6 +297,17 @@ export function loadPopup(project_id){
     let popup = decodeJWT(res['data'])['popup']
     return popup
   })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function submitCommentReq(comment, card_id){
+  const data = {jwt:localStorageRetrieve("jwt"),comment, card_id}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.submitComment, encoded, {headers: {'Content-Type': 'text/plain'}})
   .catch((error) => {
       console.log(error);
   });

@@ -6,6 +6,7 @@ import membersIcon from '../Icons/groups.svg'
 import cancelIcon from '../Icons/cancel.svg'
 import tagsIcon from '../Icons/tag.svg'
 import controlIcon from '../Icons/control_position.svg'
+import commentIcon from '../Icons/comments.svg'
 import leftIcon from '../Icons/left.svg'
 import rightIcon from '../Icons/right.svg'
 import upIcon from '../Icons/up.svg'
@@ -20,9 +21,10 @@ import { ControlTag, Tag } from './Board'
 import { useParams } from 'react-router'
 import UseLongPress from '../Hook/UseLongPress'
 import { CirclePicker } from 'react-color'
-import requestAPI, { deleteCardReq, loadPopup } from '../../requests'
+import requestAPI, { deleteCardReq, loadPopup, submitCommentReq } from '../../requests'
 
 import {ProjectContext} from "../../Context/projectContext";
+import {UserContext} from "../../Context/userContext";
 import django from '../../axiosRequest'
 import { Checkbox, FormControlLabel } from '@material-ui/core'
 import Assignment from '@material-ui/icons/Assignment';
@@ -32,16 +34,19 @@ import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeTextArea, removeCardTag, removeCardUser, addCardTag, addUser, markCardStatus}) {
     const {id} = useParams();
     const context = useContext(ProjectContext)
+    const userContext = useContext(UserContext)
 
     const [currCard, setCurrCard] = useState(selectedCard)
 
     const [markStatus, setMarkStatus] = useState(currCard?.status || 'open')
     const [title, setTitle] = useState(currCard?.title)
     const [description, setDescription] = useState(currCard?.description)
+    const [comment, setComment] = useState('')
     const [colorPanel, setColorPanel] = useState({color: '#e91e63', enabled: false, tag_title:''})
     
     const [tagsList, setTagsList] = useState([])
     const [usersList, setUsersList] = useState([])
+    const [commentsList, setCommentsList] = useState([])
 
     function isTagUsed(tag_id){
         for (const tag of selectedCard.tags){
@@ -60,9 +65,10 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
     }
 
     useEffect(() => { //load popup
-        loadPopup(id).then((res) => {
-            setTagsList(res.tags_list)
-            setUsersList(res.users_list)
+        loadPopup(id, currCard.card_id).then((res) => {
+            setTagsList(res.tags_list || [])
+            setUsersList(res.users_list || [])
+            setCommentsList(res.comments_list || [])
         })
     }, []);
 
@@ -156,6 +162,31 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
         });
     }
 
+    function autoGrow(e) {
+        e.target.style.height = (e.target.value.length)-5+"px";
+    }
+
+    function handleComment(e){
+        let value = e.target.value;
+
+        if(value.length == 0){
+            e.target.style.height = '60px'
+        }
+        
+        if(value[value.length-1] != '\n'){
+            setComment(e.target.value)
+            autoGrow(e)
+        }
+    }
+
+    function submitComment(comment){
+        submitCommentReq(comment, currCard.card_id)
+        setComment('')
+        setCommentsList([{created_date: Date.now(),
+            fullName:userContext.getUserInfo().fname + ' ' + userContext.getUserInfo().lname,
+            name:userContext.getUserInfo().fname[0].toUpperCase() + userContext.getUserInfo().lname[0].toUpperCase(),
+            message:comment, }, ...commentsList])
+    }
 
     return (
         <>
@@ -163,6 +194,8 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
         <div class={`popup ${!context.canUserModify() && 'popup-guest'}`}>
             <div class="popup-wrapper">
                 <div class="popup-details">
+                    <div class="date-display"><img src={timerIcon} /> <p>{new Date(currCard.start_date).toLocaleString()}</p></div>
+                    
                     <textarea style={{marginTop:'10px', fontSize:'18px', fontWeight:'bold'}} placeholder="Card Title...." value={title} onInput={(e)=>handleTextArea(e, setTitle)} onBlur={()=>{handleChangeTextArea('title', currCard.card_id, currCard.list_index, currCard.position, title)}} />
                     
                     <div class="sub-header"><img src={descIcon} /> <h4>Description</h4></div>
@@ -196,9 +229,37 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                         })}
                     </div>    
                     </>}
-
-                    <div class="date-display"><img src={timerIcon} /> <p>{new Date(currCard.start_date).toLocaleString()}</p></div>
                     
+                   
+                    <div class="sub-header"><img width={'21px'} src={commentIcon} /> <h4>Comments</h4></div>
+                    {context.canUserModify() && <>
+                    <div style={{display:'flex'}}>
+                        <div className="avatar noselect" style={{margin:'0', marginRight:'8px'}} >
+                        <div class="img" style={{backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} ><div class="chars">{userContext.getUserInfo().fname[0]?.toUpperCase()}{userContext.getUserInfo().lname[0]?.toUpperCase()}</div></div>
+                        </div>
+                        <textarea placeholder="Write A Comment..." value={comment} onInput={(e)=>handleComment(e)}/>
+                    </div>
+                    <button style={!comment && {display:'none'} || {marginTop:'3px'}} className="board-button" onClick={()=>{submitComment(comment); }}> Comment </button>
+                    </>}
+
+                    <br/>
+
+                    { commentsList.length > 0 && commentsList.map((comment) =>{
+                        return <>
+                        <p style={{direction:'rtl', margin:'0', marginBottom: '4px', fontSize:'12px', display:'flex', justifyContent: 'flex-end'}}>{new Date(comment.created_date).toLocaleString()}</p>
+                    
+                    <div class="comment">
+                        <div className="avatar noselect" style={{margin:'0', marginRight:'8px'}} >
+                            <div class="img" style={{backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} ><div class="chars">{comment.name}</div></div>
+                        </div>
+                        <div style={{display:'flex', flexDirection:'column'}}>
+                            <h4 style={{paddingTop:'5px'}}>{comment.fullName}</h4>
+                            <p>{comment.message}</p>
+                        </div>
+                    </div>
+                    </>
+                    })}
+                
                 </div>
                 {
                  context.canUserModify() && 
