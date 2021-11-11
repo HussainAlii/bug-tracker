@@ -4,6 +4,7 @@ import axios from "axios";
 
 const requestAPI = {
   login: `/auth/login/`, 
+  loginAsDemo: `/auth/loginAsDemo/`, 
   register: `/auth/register/`, 
   isAuth: `/auth/isAuth/`, 
   verify: `/auth/verifyCode/`, 

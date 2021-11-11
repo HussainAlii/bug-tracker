@@ -223,7 +223,7 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                                     }}
                                     />
                                 }
-                                label={'Mark As Closed'}
+                                label={markStatus == 'closed'? 'Mark As Open' : 'Mark As Closed'}
                                 className="noselect"
 
                                 labelPlacement={"start"}

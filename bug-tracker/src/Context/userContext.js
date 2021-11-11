@@ -13,6 +13,7 @@ function UserContextProvider({ children }) {
     const [lname, setLname] = useState("")  
     const [photoUrl, setPhotoUrl] = useState("")
     const [isActive, setIsActive] = useState(true)
+    const [isDemo, setIsDemo] = useState(false)
     
     function setUserInfo(data){
         setFname(data['fname'])
@@ -36,6 +37,7 @@ function UserContextProvider({ children }) {
                         if(!decoded['0'])
                             logout()
                         setUserInfo(decoded['user'])
+                        setIsDemo(decoded['user'].type === 'demo')
                     }
                 })
                 .catch((e)=>{
@@ -61,6 +63,25 @@ function UserContextProvider({ children }) {
                 else{
                     localStorage.removeItem('jwt');
                     return decodeJWT(response["data"])
+                }
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
+
+      function loginAsDemoUser(){
+        django
+        .get(requestAPI.loginAsDemo)
+        .then((response) => {
+            if (response) {
+                let decoded = decodeJWT(response["data"])
+                if (decoded["code"]){
+                    localStorageStore("jwt", decoded["code"])
+                    setUserInfo(decoded["user"])
+                    setIsDemo(true)
+                    history.push('/')
                 }
             }
         })
@@ -165,7 +186,7 @@ function UserContextProvider({ children }) {
     }
 
       return (
-        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, verifyCode, forgot, changePassword, changePasswordByToken, isTokenActive, changeUsername}}>
+        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, isDemo, verifyCode, forgot, changePassword, changePasswordByToken, isTokenActive, changeUsername, loginAsDemoUser}}>
             { children }
         </UserContext.Provider>
     )

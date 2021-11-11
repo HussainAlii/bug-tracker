@@ -71,6 +71,7 @@ function SignIn({title}) {
             />
 
             <button onClick={handleSignIn}>Login</button>
+            <p onClick={async ()=>{setIsLoading(true); await context.loginAsDemoUser();}} className="noselect" style={{color:"blue", cursor: 'pointer', textAlign:"center"}}> OR Login as a demo User</p>
             <div style={ isLoading ? {display:"block", marginLeft:"38%"} : {display:"none"}} ><img style={{width:"100px"}} src={loadingIcon} /> </div>
             <hr/>
 

@@ -299,7 +299,7 @@ function Board({title}) {
         .then( res => {
             if(res?.data != undefined || res?.data != null){
                 const copy = [...lists]
-                curr_cards.unshift({card_id:res.data, title, description:"", tags:[], users:[]})
+                curr_cards.unshift({card_id:res.data, title, description:"", tags:[], users:[], start_date: Date.now()})
                 setLists(copy)
             }
         })
@@ -345,7 +345,6 @@ function Board({title}) {
                         <div class="member-popup-content">
                             <div style={{display:'block'}} class="avatar">
                                 {membersList.map(user=>{
-                                    console.log(user)
                                     return (
                                         <div title={user.fullName}  style={{display:'flex', marginBottom:'10px', marginLeft:'3px'}}>
                                             <div class="img" style={{display:'inline-block', width: '28px', height:'28px', fontSize:'13px', marginRight:'1px',backgroundColor: `rgb(${getRandomInt(125)},${getRandomInt(125)},${getRandomInt(125)})`}} >
@@ -363,7 +362,7 @@ function Board({title}) {
                 <div class="board-nav noselect">
                 
                 <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
-                <button class="board-button" onClick={()=>setIsShowMembersActive(true)}> Show Members</button>
+                <button class="board-button" onClick={()=>setIsShowMembersActive(true)}>Show Members ({membersList.length}) </button>
                 
                 
                     </div>

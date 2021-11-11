@@ -31,6 +31,7 @@ function UserSetting({title=""}) {
 
     useEffect(() => {
       document.title = title;
+
       if(context.getUserInfo().fname)
         setFname(context.getUserInfo().fname)
 
@@ -38,6 +39,7 @@ function UserSetting({title=""}) {
         setLname(context.getUserInfo().lname)
       // if(localStorageRetrieve("jwt")) history.push("/")
     },[context.getUserInfo().fname, context.getUserInfo().lname]);
+
 
 
     return (

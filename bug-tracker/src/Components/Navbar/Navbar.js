@@ -22,7 +22,7 @@ import { leaveProject } from "../../requests";
 import { AlertDialog } from "../Alert/Alert";
 
 function Navbar() {
-
+  const context = useContext(UserContext);
   return (
     <nav>
       
@@ -31,7 +31,7 @@ function Navbar() {
           <Link to="/">
             <div class="logo-container">
                 <img className="logo" src={logo} alt="BTracker logo" />
-                <h2 className="logo">Bug-Tracker</h2>
+                <h2 className="logo">Bug-Tracker {context.isDemo && '[Demo]'}</h2>
               </div>
             </Link>
         </div>
