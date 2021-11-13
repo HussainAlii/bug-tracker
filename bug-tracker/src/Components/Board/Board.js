@@ -481,11 +481,12 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                     <img onClick={()=>{setIsMoreActive(true)}} class="more-board-header" width='30px' src={moreIcon}/>
                     }
                 </div>
-                <div class="board-list-content">
                 {
                  context.canUserModify() && 
                     <CreateCard createNewCard={createNewCard} list_id={list_id} list_index={list_index} handleClose={setIsCreateActive} active={isCreateActive} />
                 }
+                <div class="board-list-content">
+                
                     {cards.map((card, position)=>{
                      return <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} isClosed={card.status === 'closed'} numOfComments={card.num_of_comments} /></div>
                     })}
@@ -531,7 +532,7 @@ export function Card({title, tags, users, isClosed, numOfComments}) {
 
 export function Tag({background, tag_title, showCancel=false}) {
     return (
-        <div width="100px" style={{backgroundColor:background, boxShadow:`0px 0px 3px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${showCancel && 'cancel-tag'}`} >
+        <div width="100px" style={{backgroundColor:background, boxShadow:`0px 0px 1px 1px ${background}`, cursor: 'pointer'}} class={`board-tag-item ${showCancel && 'cancel-tag'}`} >
             <p>{tag_title} {showCancel && <div class='cancel-icon' style={{fontSize:'16px'}}>{showCancel? <span>&#215;</span> : <span>&#43;</span> }</div> }</p>
             
         </div>
@@ -571,7 +572,6 @@ export function CreateCard({active=false, handleClose, list_id, list_index, crea
     }
 
     return active?
-        <div class="board-list-card">
             <div class="board-list-card-create">
                 <div class="create-board-controls">
                     <button disabled = {!title} onClick={()=>{createNewCard(list_id, list_index, title); setTitle(''); handleClose(false);} } class="board-button">Create</button>
@@ -579,13 +579,9 @@ export function CreateCard({active=false, handleClose, list_id, list_index, crea
                 </div>
                 <textarea placeholder="Card Title...." value={title} onInput={(e)=>handleTitle(e)}/>
             </div>
-        </div>
     :
-    <div onClick={()=>{handleClose(true);}} class="board-list-card">
-        <div class="board-list-card-create">
+        <div class="board-list-card-create" onClick={()=>{handleClose(true);}}>
             <span style={{fontSize:"30px", fontWeight:"600", verticalAlign:'sub', paddingLeft:'10px' }}>&#43;</span> <p>Create New Card</p>
-        </div>
-    </div>
-    
+        </div>    
     
 }

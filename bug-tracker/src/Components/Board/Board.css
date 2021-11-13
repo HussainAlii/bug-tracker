@@ -132,11 +132,12 @@
 }
 
 .board-list-content{
+    position: relative;
     flex: 1 1 auto;
     margin: 4px 4px;
     min-height: 0;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
     padding: 0 4px;
     z-index: 1;
 }
@@ -164,6 +165,20 @@
 
 .board-list-card-create{
     color: #3237439c;
+
+    border-radius: 3px;
+    cursor: pointer;
+    display: block;
+
+    margin: 8px 0px 2px 9px;
+    max-width: 295px;
+
+    position: relative;
+    background-color: #f9f8f6;
+    color: #323743;
+    border-bottom: 4px solid #323743;
+    /* border: 1px solid rgba(0,0,0,0.2); */
+    
 }
 
 .board-list-card-create p{
@@ -173,7 +188,7 @@
 
 .board-list-card-create textarea{
     font-size: 18px;
-    width: 299px;
+    width: 290px;
 
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;

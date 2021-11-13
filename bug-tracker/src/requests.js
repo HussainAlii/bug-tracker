@@ -178,8 +178,8 @@ export function removeMember(project_id, user_id){
   });
 }
 
-export function updateProject(title, description, access, allow_invitationLink){
-  const data = {jwt:localStorageRetrieve("jwt"),project_id:localStorageRetrieve('project'), access, title, description, allow_invitationLink}
+export function updateProject(title, description, access, allow_invitationLink, isClosed){
+  const data = {jwt:localStorageRetrieve("jwt"),project_id:localStorageRetrieve('project'), access, title, description, allow_invitationLink, is_closed: isClosed}
   const encoded = encodeJWT(data)
 
   return django

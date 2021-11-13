@@ -31,8 +31,16 @@
   }
 
   .project-model{
-      margin: 60px 10px 100px 10px;
-  }
+    margin: 60px 10px 100px 10px;
+}
+
+.close-project-title{
+  text-transform: capitalize;
+    border-left: 3px solid #A781D2;
+    padding-left: 10px;
+    margin-left: 10px;
+    margin-bottom: 0;
+}
 
   .project-model .card{
     display: inline-block;
@@ -308,6 +316,14 @@ input:checked + .slider {
 
 input:focus + .slider {
   box-shadow: 0 0 1px #A781D2;
+}
+
+input:checked + .danger-slider {
+  background-color: rgb(224, 2, 2);
+}
+
+input:focus + .danger-slider {
+  box-shadow: 0 0 1px red;
 }
 
 input:checked + .slider:before {

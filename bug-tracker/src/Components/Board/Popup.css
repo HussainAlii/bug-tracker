@@ -137,7 +137,8 @@
 }
 
 .donotcross {
-    border: 1px solid rgb(209, 209, 209);  
+    border: 1px solid rgb(209, 209, 209); 
+    background-color: rgb(209, 209, 209); 
   }
 
 .date-display{

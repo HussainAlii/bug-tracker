@@ -244,7 +244,7 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
 
                     <br/>
 
-                    { commentsList.length > 0 && commentsList.map((comment) =>{
+                    { commentsList.length > 0 ? commentsList.map((comment) =>{
                         return <>
                         <p style={{direction:'rtl', margin:'0', marginBottom: '4px', fontSize:'12px', display:'flex', justifyContent: 'flex-end'}}>{new Date(comment.created_date).toLocaleString()}</p>
                     
@@ -257,8 +257,8 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                             <p>{comment.message}</p>
                         </div>
                     </div>
-                    </>
-                    })}
+                    </> 
+                    }) : <b style={{marginLeft:'30px'}}>No Comments yet!</b>}
                 
                 </div>
                 {

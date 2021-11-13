@@ -22,7 +22,9 @@ function Projects({title}) {
     const context = useContext(ProjectContext)
     const [search, setSearch] = useState("")
     const [isCreateActive, setIsCreateActive] = useState(false)
+    const [closedProjects, setClosedProjects] = useState([])
     const [projects, setProjects] = useState([])
+    
 
     useEffect(() => {
         document.title = title;
@@ -34,9 +36,10 @@ function Projects({title}) {
         .post(requestAPI.getProjects, encoded, {headers: {'Content-Type': 'text/plain'}})
         .then((response) => {
             let decoded = decodeJWT(response["data"])["projects"]
-
+            
                 if (decoded){
-                    setProjects(decoded)
+                    setProjects(decoded["open_projects"] || [])
+                    setClosedProjects(decoded["closed_projects"] || [])
                 }
         })
         .catch((error) => {
@@ -94,6 +97,27 @@ return (
     
 
     </div>
+    
+    {closedProjects.length > 0 && <h1 className="close-project-title">Archived Projects</h1>}
+
+    <div class="project-model" style={{marginTop:'0'}}>
+
+        {!search && projects && 
+        closedProjects.map(project=>{
+                return <Card title={project.title} desc={project.description} access={project.access} action={()=>context.openProject(project.id)} users={project.users} />
+            })}
+
+        {search && 
+            closedProjects.map(project=>{
+            if (project.title.substring(0, search.length).toLowerCase() == search.toLowerCase())
+            {
+                return <Card title={project.title} desc={project.description} access={project.access} action={()=>context.openProject(project.id)} users={project.users}  />
+            }
+            return
+         })}
+    
+    </div>
+
 </div>
 )
 }
@@ -111,6 +135,7 @@ export function ProjectSetting({title}) {
     const [desc, setDesc] = useState("")
     const [access, setAccess] = useState("Public")
     const [invitationLink, setInvitationLink] = useState(true)
+    const [isClosed, setIsClosed] = useState(false)
     const [anchor, setAnchor] = useState(false);
     
     const [isAlertOpen, setAlert] = useState(false);
@@ -135,6 +160,7 @@ export function ProjectSetting({title}) {
                     setDesc(decoded['description'])
                     setAccess(decoded['access'])
                     setInvitationLink(project_invitationLink)
+                    setIsClosed(decoded['is_closed'])
                 }
             }
         })
@@ -148,7 +174,7 @@ export function ProjectSetting({title}) {
       };
 
       function handleConfirm(){
-        updateProject(projectTitle, desc, access, invitationLink)
+        updateProject(projectTitle, desc, access, invitationLink, isClosed)
       }
 
       function handleDeleteProject(){
@@ -198,6 +224,14 @@ export function ProjectSetting({title}) {
                     <span class="slider round"></span>
                   </label>
                   <p className={`switch-label ${invitationLink&& 'switch-label-selected'}` }>Allow invitation Link!</p>
+                  </div>
+
+                  <div class="form-item noselect" style={{cursor:"pointer"}} onClick={()=>setIsClosed(!isClosed)}>
+                  <label class="switch">
+                    <input checked={isClosed} type="checkbox"/>
+                    <span class="slider round danger-slider"></span>
+                  </label>
+                  <p className={`switch-label ${isClosed&& 'switch-label-selected'}` }>Archive This Project!</p>
                   </div>
 
                   <div className="form-item">
