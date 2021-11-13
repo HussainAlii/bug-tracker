@@ -14,8 +14,8 @@
 
 ## About The Project
 
-The Bug tracker is a Bug tracking web app that keeps track of all the tasks and bugs in the development projects, as well as provides detailed analytics of all members' activity.
-
+The Bug-Tracker is a task management web app that eases the workflow and keeps track of all the tasks and bugs available in the development projects, as well as provides detailed analytics about each project.
+  
 ### Built With:
 
   * [React](https://ar.reactjs.org)
