@@ -73,5 +73,14 @@
 
 .box-body{
     padding: 10px 10px;
+    margin-bottom: 40px;
 
+}
+
+.chart-container{
+    /* width: 80%; */
+}
+
+canvas{
+    margin-top: 30px;
 }
