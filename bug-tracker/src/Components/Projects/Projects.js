@@ -82,7 +82,7 @@ return (
 
         {!search && projects && 
         projects.map(project=>{
-                return <Card title={project.title} desc={project.description} access={project.access} action={()=>context.openProject(project.id)} users={project.users} />
+                return <Card title={project.title} desc={project.description} access={project.access} action={()=>context.openProject(project.id)} users={project.users}  is_pinned ={project.is_pinned}/>
         })}
     
         {search && 

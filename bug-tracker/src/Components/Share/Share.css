@@ -35,3 +35,12 @@
     height: 20px;
     margin-top: 10px;
 }
+
+.copy-from-clipboard{
+    box-shadow: 0 1px 1px 0px #02020240, 0 0 0 1px #00030714;
+    padding: 3.5px;
+}
+
+.copy-from-clipboard:hover{
+    transform: scale(1.1);
+}

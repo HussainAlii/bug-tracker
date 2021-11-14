@@ -62,10 +62,10 @@ function Share({title}) {
                     <div style={{marginTop:"50px"}} className="form-item">
                         <p>Invite with link:</p>
                         {inviteLink?
-                        <><img title="Copy To Clipboard" onClick={()=>{navigator.clipboard.writeText(`${window.location.hostname}/invite/${id}/${inviteLink}/`)}} src={linkIcon} style={{width:"18px", marginRight:'3px', verticalAlign:"middle", cursor: 'pointer', }} /> <span>{window.location.hostname}/invite/{id}/{inviteLink}/ </span></> :
-                        <p style={{color:'#f50057'}}>This Feature Is Turned off from Project Setting!</p>
+                        <><img class="copy-from-clipboard noselect" title="Copy To Clipboard" onClick={()=>{navigator.clipboard.writeText(`${window.location.hostname}/invite/${id}/${inviteLink}/`)}} src={linkIcon} style={{width:"18px", marginRight:'3px', verticalAlign:"middle", cursor: 'pointer', }} /> <span>{window.location.hostname}/invite/{id}/{inviteLink}/ </span></> :
+                        <p style={{color:'#f50057'}}>This Feature Is Turned off from the Project Setting!</p>
                         }
-                        <hr/>
+                        <hr className="donotcross"/>
                     </div>
 
                     <div style={{marginTop:"50px", display:"flex"}} className="form-item">

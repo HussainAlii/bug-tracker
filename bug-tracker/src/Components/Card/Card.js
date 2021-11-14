@@ -2,10 +2,11 @@ import React, {useContext} from 'react'
 import './Card.css'
 import privateIcon from "../Icons/private.svg"
 import publicIcon from "../Icons/public.svg"
+import pinnedIcon from "../Icons/pinned.svg"
 import { getRandomInt } from '../../utilities'
 import { UserContext } from '../../Context/userContext'
 
-function Card({title, desc="", users=[], action, access}) {
+function Card({title, desc="", users=[], action, access, is_pinned}) {
     const context = useContext(UserContext)
 
     return (
@@ -13,7 +14,10 @@ function Card({title, desc="", users=[], action, access}) {
         <div class="card-model noselect" onClick={action}>
             <div class="card-header">
                 <h3>{title}</h3>
-                {access? <img src={publicIcon}/> : <img src={privateIcon} />}
+                <div>
+                    {access? <img src={publicIcon}/> : <img src={privateIcon} />}
+                    {is_pinned && <img src={pinnedIcon}/>}
+                </div>
             </div>
             <div className="card-body">
             <div class="card-desc">
