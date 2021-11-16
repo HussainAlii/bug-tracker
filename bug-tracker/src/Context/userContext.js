@@ -65,7 +65,7 @@ function UserContextProvider({ children }) {
                 if (decoded["code"]){
                     localStorageStore("jwt", decoded["code"])
                     setUserInfo(decoded["user"])
-                    history.push('/projects')
+                    history.push('/')
                 }
                 else{
                     localStorage.removeItem('jwt');
@@ -122,6 +122,7 @@ function UserContextProvider({ children }) {
         localStorage.removeItem("jwt")
         localStorage.removeItem("project")
         history.push('/signin/')
+        refresh()
     }
 
     function register(email, password, fname, lname){
