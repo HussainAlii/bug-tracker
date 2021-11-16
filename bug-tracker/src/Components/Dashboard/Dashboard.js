@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import './Dashboard.css'
 import openProjectIcon from '../Icons/open_project.svg'
 import archivedProjectIcon from '../Icons/stack.svg'
@@ -8,112 +8,136 @@ import pinnedIcon from '../Icons/pinned.svg'
 import unpinnedIcon from '../Icons/unpinned.svg'
 import {Bar, Doughnut, Line, Pie} from 'react-chartjs-2'
 import { Grid } from '@material-ui/core'
+import { getDashboardData, pinProject } from '../../requests'
+import { getRandomInt } from '../../utilities'
 
 function Dashboard({title}) {
 
-    useEffect(() => {
+    const [summeryInfo, setSummeryInfo] = useState({opened: 0, archived:0, assigned:0, done:0})
+    const [projects, setProjects] = useState([])
+    
+
+    useEffect( () => {
         document.title = title;
       },[]);
 
-      const data_doughnut = {
-        labels: [
-          ],
-        datasets: [{
-          data: [1],
-          backgroundColor: [
+      useEffect(() => {
+         getDashboardData().then(res=>{
+            setProjects(res['projects'] || [])
+            setSummeryInfo(res['summeryInfo'] || {})
+        });
+      },[]);
 
-          ],
-          hoverOffset: 9
-        }]
-      };
-      
-    const data_pie = {
-        labels: [
-          'greenish',
-          'very old lists',
-          'gold',
-        ],
-        datasets: [{
-          data: [300, 50, 100],
-          backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(54, 162, 235)',
-            'rgb(255, 205, 86)'
-          ],
-          hoverOffset: 9
-        }]
-      };
 
-      const MONTHS = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
+      function handlePinProject(index, project_id){
+        const projects_copy = [...projects]
+        const project_copy = {...projects_copy[index]}
+        let new_pinned = !project_copy.project_info.is_pinned 
+        project_copy.project_info.is_pinned = new_pinned
+        projects_copy.splice(index, 1)
 
-      ];
+        if(new_pinned) projects_copy.unshift(project_copy)
+        else projects_copy.push(project_copy)
+        
+        setProjects(projects_copy)
 
-      const data_bar ={
-        labels: MONTHS,
-        datasets: [{
-          axis: 'y',
-          data: [65, 59, 80, 81, 56, 55, 40],
-          fill: false,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(255, 205, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(201, 203, 207, 0.2)'
-          ],
-          borderColor: [
-            'rgb(255, 99, 132)',
-            'rgb(255, 159, 64)',
-            'rgb(255, 205, 86)',
-            'rgb(75, 192, 192)',
-            'rgb(54, 162, 235)',
-            'rgb(153, 102, 255)',
-            'rgb(201, 203, 207)'
-          ],
-          borderWidth: 1
-        }]
-      };
-
-      const data_line ={
-        labels: MONTHS,
-        datasets: [{
-          label: 'My First Dataset',
-          data: [65, 59, 80, 81, 56, 55, 40],
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
-        }]
-      };
-
+        pinProject(project_id, new_pinned)
+        
+      }
 
     return (
         <div class="dashboard" >
             <div style={{marginBottom:'30px'}}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={3} >
-                        <SmallCard title="Opened projects" value={'0'} icon={openProjectIcon}/>
+                        <SmallCard title="Opened projects" value={summeryInfo.opened} icon={openProjectIcon}/>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3} >
-                        <SmallCard title="Archived projects" value={'0'} icon={archivedProjectIcon}/>
+                        <SmallCard title="Archived projects" value={summeryInfo.archived} icon={archivedProjectIcon}/>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3} >
-                        <SmallCard title="Assigned To Me " value={'0'} icon={taskAssignedIcon}/>
+                        <SmallCard title="Assigned To Me " value={summeryInfo.assigned} icon={taskAssignedIcon}/>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3} >
-                        <SmallCard title="Tasks Done " value={'0'} icon={tasksDoneIcon}/>
+                        <SmallCard title="Tasks Done " value={summeryInfo.done} icon={tasksDoneIcon}/>
                     </Grid>
                 </Grid>
             </div>
 
-            <Box data_line={data_line} data_doughnut={data_doughnut} data_pie={data_pie} data_bar={data_bar} />
+            {projects.map((project, index) =>{
+
+                //work_per_user_obj--------------
+                const work_per_user_obj ={
+                    labels: [],
+                    datasets: [{
+                      axis: 'y',
+                      data: [],
+                      fill: false,
+                      backgroundColor: [], //'rgba(255, 99, 132, 0.2)'
+                      borderColor: [], //'rgb(255, 99, 132)',
+                      borderWidth: 1
+                    }]
+                  };
+
+                for (const email in project.work_per_user_obj) {
+                    work_per_user_obj.labels.push(project.work_per_user_obj[email].name)
+                    work_per_user_obj.datasets[0].data.push(project.work_per_user_obj[email].val)
+                    let r = getRandomInt(254), g = getRandomInt(254), b = getRandomInt(254)
+                    work_per_user_obj.datasets[0].backgroundColor.push(`rgba(${r},${g},${b}, 0.2)`)
+                    work_per_user_obj.datasets[0].borderColor.push(`rgb(${r},${g},${b})`)
+
+                }
+                // work_per_user_obj.datasets[0].data.push(work_per_user_obj.datasets[0].data.at(0) + 1)                
+                
+                //tasks_per_list------------------
+
+                const tasks_per_list = {
+                    labels: [],
+                    datasets: [{
+                      data: [],
+                      backgroundColor: [],
+                      hoverOffset: 9
+                    }]
+                  };
+
+                  for (const t_list in project.tasks_per_list) {
+                    tasks_per_list.labels.push(project.tasks_per_list[t_list].title)
+                    tasks_per_list.datasets[0].data.push(project.tasks_per_list[t_list].val)
+                    tasks_per_list.datasets[0].backgroundColor.push(project.tasks_per_list[t_list].backgroundColor)
+                }
+
+                //tags_per_list------------------
+
+                const tags_per_list = {
+                    labels: [],
+                    datasets: [{
+                      data: [],
+                      backgroundColor: [],
+                      hoverOffset: 9
+                    }]
+                  };
+
+
+                  for (const t_tag in project.tags_per_list) {
+                    tags_per_list.labels.push(project.tags_per_list[t_tag].title)
+                    tags_per_list.datasets[0].data.push(project.tags_per_list[t_tag].val)
+                    tags_per_list.datasets[0].backgroundColor.push(project.tags_per_list[t_tag].backgroundColor)
+                }
+
+                //performance_over_time_obj -----------------
+                let performance_over_time_obj = {
+                    labels: project.performance_over_time_obj.label || [],
+                    datasets: [{
+                      data: project.performance_over_time_obj.data || [],
+                      fill: false,
+                      borderColor: '#A781D2',
+                      tension: 0.1
+                    }]
+                  };
+                return (
+                <Box project_index={index} handlePinProject={handlePinProject} data_line={performance_over_time_obj} data_doughnut={tags_per_list} data_pie={tasks_per_list} data_bar={work_per_user_obj} project_info={project.project_info} />
+                )
+            })}
 
         </div>
     )
@@ -133,27 +157,27 @@ export function SmallCard({icon, title, value}){
     );
 }
 
-export function Box({data_doughnut, data_pie, data_bar, data_line}){
+export function Box({data_doughnut, data_pie, data_bar, data_line, project_info, handlePinProject, project_index}){
 
     return (
     <div class="box">
         <div class="box-header">
-            <p>test</p>
-            <img class="" src={unpinnedIcon} />
+            <p>{project_info.title}</p>
+            <img onClick={()=>handlePinProject(project_index, project_info.id)} src={project_info.is_pinned? pinnedIcon : unpinnedIcon} />
         </div>
         <div class="box-body">
             <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={3} >
+                    <SmallCard title="Opened Tasks" value={project_info.opened || 0} icon={taskAssignedIcon}/>
+                </Grid>
                 <Grid item xs={12} sm={6}  md={3} >
-                    <SmallCard title="Closed Tasks" value={'0'} icon={tasksDoneIcon}/>
+                    <SmallCard title="Closed Tasks" value={project_info.closed || 0} icon={tasksDoneIcon}/>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} >
-                    <SmallCard title="Opened Tasks" value={'0'} icon={taskAssignedIcon}/>
+                    <SmallCard title="Assigned To me" value={project_info.assigned || 0} icon={taskAssignedIcon}/>
                 </Grid>
                 <Grid item xs={12} sm={6} md={3} >
-                    <SmallCard title="Tasks you accomplished" value={'0'} icon={tasksDoneIcon}/>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3} >
-                    <SmallCard title="Assigned To me" value={'0'} icon={taskAssignedIcon}/>
+                    <SmallCard title="Tasks you accomplished" value={project_info.done || 0} icon={tasksDoneIcon}/>
                 </Grid>
 
                 <Grid item xs={12} sm={6} >

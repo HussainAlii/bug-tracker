@@ -46,6 +46,8 @@ const requestAPI = {
   removeTag:'/bugtracker/removeTag/',
   markCardStatus:'/bugtracker/markCardStatus/',
   submitComment:'/bugtracker/submitComment/',
+  getDashboardData:'/bugtracker/getDashboardData/',
+  pinProject:'/bugtracker/pinProject/',
 };
 export default requestAPI;
 
@@ -308,6 +310,36 @@ export function submitCommentReq(comment, card_id){
 
   return django
   .post(requestAPI.submitComment, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function getDashboardData(){
+  const data = {jwt:localStorageRetrieve("jwt")}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.getDashboardData, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .then((response) => {
+        if (response) {
+          let decoded = decodeJWT(response["data"])
+          if (decoded){
+            return decoded
+          }
+        }
+  })
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function pinProject(project_id, value){
+  const data = {project_id, value}
+  const encoded = encodeJWT(data)
+
+  django
+  .post(requestAPI.pinProject, encoded, {headers: {'Content-Type': 'text/plain'}})
   .catch((error) => {
       console.log(error);
   });
