@@ -64,7 +64,7 @@ function Dashboard({title}) {
                 </Grid>
             </div>
 
-            {projects.map((project, index) =>{
+            {projects.length > 0? projects.map((project, index) =>{
 
                 //work_per_user_obj--------------
                 const work_per_user_obj ={
@@ -137,7 +137,13 @@ function Dashboard({title}) {
                 return (
                 <Box project_index={index} handlePinProject={handlePinProject} data_line={performance_over_time_obj} data_doughnut={tags_per_list} data_pie={tasks_per_list} data_bar={work_per_user_obj} project_info={project.project_info} />
                 )
-            })}
+            }) : 
+            
+            <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '50px', color:'gray'}}>
+                            You don't Have Any Available Project!
+                        </div>
+            }
+
 
         </div>
     )
