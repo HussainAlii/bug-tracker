@@ -13,7 +13,14 @@ function UserContextProvider({ children }) {
     const [lname, setLname] = useState("")  
     const [photoUrl, setPhotoUrl] = useState("")
     const [isActive, setIsActive] = useState(true)
+
     const [isDemo, setIsDemo] = useState(false)
+    const [isCollapsed, setIsCollapsed] = useState(localStorageRetrieve('isCollapsed'))
+
+    function collapse(){
+        if(isCollapsed) {localStorageStore('isCollapsed', false); setIsCollapsed(false)}
+        else {localStorageStore('isCollapsed', true); setIsCollapsed(true)}
+    }
     
     function setUserInfo(data){
         setFname(data['fname'])
@@ -186,7 +193,7 @@ function UserContextProvider({ children }) {
     }
 
       return (
-        <UserContext.Provider value={{login, register, logout, getUserInfo, setUserInfo, isActive, isDemo, verifyCode, forgot, changePassword, changePasswordByToken, isTokenActive, changeUsername, loginAsDemoUser}}>
+        <UserContext.Provider value={{collapse, isCollapsed, login, register, logout, getUserInfo, setUserInfo, isActive, isDemo, verifyCode, forgot, changePassword, changePasswordByToken, isTokenActive, changeUsername, loginAsDemoUser}}>
             { children }
         </UserContext.Provider>
     )

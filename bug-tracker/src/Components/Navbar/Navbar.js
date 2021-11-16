@@ -27,7 +27,7 @@ function Navbar() {
     <nav>
       
         <div class="logo-container">
-            <img id="burger-icon" src={burgerIcon} />
+            <img id="burger-icon" onClick={()=>{context.collapse()}} src={burgerIcon} />
           <Link to="/">
             <div class="logo-container">
                 <img className="logo" src={logo} alt="BTracker logo" />
@@ -64,6 +64,7 @@ export function SignNavbar() {
 export function Sidebar(){
   const history = useHistory()
   const context = useContext(ProjectContext)
+  const userContext = useContext(UserContext)
   const [isAlertOpen, setAlert] = useState(false);
   const handleCloseAlert = () => {
     setAlert(false);
@@ -72,14 +73,16 @@ export function Sidebar(){
     <>
     {isAlertOpen&&<AlertDialog action={leaveProject} open={isAlertOpen} handleClose={handleCloseAlert} message={"Are you sure you want to leave \'"+ context.getProjectInfo().projectTitle + "\' project?\n"} title={"Warning!"}/>}
 
-    <div className="sidebar">
+    <div className={`sidebar ` + `${userContext.isCollapsed && 'sidebar-collapsed'}`}>
       <SidebarItem icon={dashboardIcon} title={"Dashboard"}/>
       <SidebarItem icon={projectIcon} title={"My Projects"} to={'/projects'}/>
       {
         localStorageRetrieve('project') && context.getProjectInfo().projectRank !='guest' ? <>
-      <hr/>
-      <div className='project-title'>{context.getProjectInfo().projectTitle}<img src={cancelIcon} title={"Exit Project"} onClick={context.closeProject} /> </div> 
-      <hr style={{height:'2px'}} />
+
+      <hr class={`${userContext.isCollapsed && 'collapsed-hide'}`}/>
+      {!userContext.isCollapsed && <div className='project-title'>{context.getProjectInfo().projectTitle}<img src={cancelIcon} title={"Exit Project"} onClick={context.closeProject} /> </div> }
+      
+      <hr class={`${userContext.isCollapsed && 'collapsed-hide'}`} style={{height:'2px'}} />
           <SidebarItem icon={boardIcon} title={"Board"} to={'/'+localStorageRetrieve('project')} />
           {(context.getProjectInfo().projectRank =='superAdmin' || context.getProjectInfo().projectRank =='admin') && <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />}
           {context.getProjectInfo().projectRank =='superAdmin' && <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />}
@@ -88,7 +91,7 @@ export function Sidebar(){
          <>
           <hr style={{height:'5px'}} />
           <div onClick={()=>setAlert(true)} className="sidebar-item">
-            <img src={leaveIcon} style={{verticalAlign:'middle', marginTop:'4px'}} />  <span style={{color:"#f50057", fontWeight:"600"}}>Leave Project</span>
+            <img src={leaveIcon} style={{verticalAlign:'middle', marginTop:'4px'}} />  <span class={`${userContext.isCollapsed && 'collapsed-hide'}`} style={{color:"#f50057", fontWeight:"600"}}>Leave Project</span>
           </div>
         </>}
         

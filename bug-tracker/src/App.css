@@ -41,7 +41,23 @@ nav{
   flex-direction: column;
   border-right: 4px solid rgb(249,248,246);
   padding-top: 90px;
+  transition: all 0.5s;
 }
+
+.sidebar-collapsed{
+  width: 50px;
+}
+
+.sidebar-collapsed p{
+    display: none;
+}
+
+.collapsed-hide{
+  display: none;
+}
+
+
+
 
 .children{
   position: absolute;
@@ -50,6 +66,13 @@ nav{
   height: calc(100% - 55px);
   width: calc(100% - 191px);
   overflow-y: auto;
+  transition: all 0.5s;
+
+}
+
+.sidebar-collapsed-children{
+  left: 51px;
+  width: calc(100% - 51px);
 }
 
 .noselect {

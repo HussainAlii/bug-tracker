@@ -16,7 +16,7 @@ function BoardRoute({children, ...rest }) {
                     if(context.isActive)
                         return <><Navbar/>
                         <div className="container">
-                            <Sidebar/><div className="children">{children}</div>
+                            <Sidebar/><div className={`children ` + `${context.isCollapsed && 'sidebar-collapsed-children'}`}>{children}</div>
                             </div></>                                                           
                     else 
                         return <><Navbar/><Verify/></>    
