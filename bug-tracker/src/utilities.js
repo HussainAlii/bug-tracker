@@ -1,3 +1,5 @@
+import { Secret } from './axiosRequest';
+
 var jwt = require('jsonwebtoken');
 
 export function isValidEmail(email){
@@ -40,13 +42,13 @@ export function timeout(fun,time){
   export function decodeJWT(token){
     var decoded = false
     try{
-      var decoded = jwt.verify(token, process.env.REACT_APP_KEY );
+      var decoded = jwt.verify(token, process.env.REACT_APP_KEY || Secret);
     }catch(error){console.log(error)}
     return decoded
   }
   
   export function encodeJWT(data){
-    var token = jwt.sign(data, process.env.REACT_APP_KEY );
+    var token = jwt.sign(data, process.env.REACT_APP_KEY || Secret);
     return token;
   }
 
