@@ -33,7 +33,10 @@ export function CreateCard({cancel}) {
                 placeholder="Project Name"
                 />
                 <div class="card-desc">
-                <textarea value={desc} onChange={e=>{setDesc(e.target.value);}}
+                <textarea value={desc} onChange={e=>{
+                    if(desc.length <=280 || desc.length > e.target.value.length)
+                    setDesc(e.target.value);
+                }}
                 wrap="on" cols="23" placeholder={"Project Description."} ></textarea>
 
 
