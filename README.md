@@ -33,7 +33,8 @@ The Bug-Tracker is a task management web app that eases the workflow and keeps t
   
 ## Overall Outcomes/Achievements
   
-  * Verify user by sending a verification Code.
+  * Verify users' by sending a verification code.
+  
   
   ![image](https://user-images.githubusercontent.com/58237246/138947866-cbcac3c3-4faa-4aac-a82b-cdba7bb3671b.png)
 
