@@ -1,7 +1,5 @@
 <!-- PROJECT LOGO -->
 
-- [Note] The project is under the development process!
-
 <br />
 <p align="center">
   <a href="">
@@ -9,7 +7,7 @@
   </a>
   
   <br />
-<!--     <a href="https://CFlixapp.xyz">View Demo</a> -->
+    <a href="https://bug-tracker-81cda.web.app/">View Demo</a>
 
 
 ## About The Project
@@ -35,6 +33,9 @@ The Bug-Tracker is a task management web app that eases the workflow and keeps t
   
   * Verify users' by sending a verification code.
   
-  
+  ![image](https://user-images.githubusercontent.com/58237246/142253851-4e7a0272-56e9-4439-9165-fed8706e24f9.png)
+
   ![image](https://user-images.githubusercontent.com/58237246/138947866-cbcac3c3-4faa-4aac-a82b-cdba7bb3671b.png)
+  
+  
 
