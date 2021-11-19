@@ -77,6 +77,9 @@ function SignIn({title}) {
 
             <div className="login-footer"><Link to="/forgot/" ><p>Forgot Password!</p> </Link> <Link to="/signup/" ><p>Create New Account!</p></Link></div>
             
+            <div className="login-footer"><a href="https://bug-tracker-81cda.web.app/jXBkGVae" replace><p>Go To My Bug-Tracker Page.</p> </a></div>
+            
+
             {showMessage && showMessage[0]&&
             <Alert severity={showMessage[2]}>
             <AlertTitle>{showMessage[2].charAt(0).toUpperCase()+showMessage[2].slice(1)}</AlertTitle>
