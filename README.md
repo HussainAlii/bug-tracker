@@ -63,7 +63,21 @@ The Bug-Tracker is a task management web app that eases the workflow and keeps t
   <p align="center">
   <img width="670px" src="https://user-images.githubusercontent.com/58237246/142689232-3ab1441b-c98c-4ac9-8fb1-5d04b49c0a01.png" />
   </p>
-
   
+  * Users can create multiple lists and cards with their own choice of colors.
   
+  ![image (1)](https://user-images.githubusercontent.com/58237246/142699670-2506c18e-e7c3-4954-b8fb-5bd53a0c6e14.png)
 
+  * Users can control and view detaild Information when they click on a card.
+  
+  ![image (2)](https://user-images.githubusercontent.com/58237246/142700840-24b100e2-5ff7-4fac-92ea-23139acb022f.png)
+
+  * Project Super Admin can change the Project Setting.
+  
+  <p align="center">
+  <img width="670px" src="https://user-images.githubusercontent.com/58237246/142701055-c0683b24-a914-4fb1-822e-e256e8c4ac1d.png" />
+  </p>
+  
+  * Users can see detailed overview of thier own project.
+  
+  ![image](https://user-images.githubusercontent.com/58237246/142701679-2e897640-bd53-4656-ae37-58e2767e7d7e.png)
