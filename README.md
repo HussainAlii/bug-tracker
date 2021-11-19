@@ -30,8 +30,16 @@ The Bug-Tracker is a task management web app that eases the workflow and keeps t
   <img src="imags/ERD.png" alt="Logo">
   
 ## Overall Outcomes/Achievements
+
+  * Users can sign up to the system and update their profile.
   
-  * Verify users by sending a verification code.
+  <div>
+    <img width="420px" src="https://user-images.githubusercontent.com/58237246/142702163-1dba23c5-9d73-40be-85d0-9e02cc55f2f5.png" />
+    <img width="393px" src="https://user-images.githubusercontent.com/58237246/142702215-72f516ba-d0db-4e34-8366-c5b1049eb637.png" />
+  </div>
+  <br/>
+  
+  * Verify Users by sending a verification code.
   
   <p align="center">
   <img src="https://user-images.githubusercontent.com/58237246/142253851-4e7a0272-56e9-4439-9165-fed8706e24f9.png" />
