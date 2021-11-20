@@ -300,7 +300,7 @@ function Board({title}) {
         .then( res => {
             if(res?.data != undefined || res?.data != null){
                 const copy = [...lists]
-                curr_cards.unshift({card_id:res.data, title, description:"", tags:[], users:[], start_date: Date.now()})
+                curr_cards.unshift({card_id:res.data, title, description:"", tags:[], users:[], start_date: Date.now(), num_of_comments: 0})
                 setLists(copy)
             }
         })
