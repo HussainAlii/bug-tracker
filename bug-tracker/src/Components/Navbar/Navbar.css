@@ -47,7 +47,6 @@ a {
   margin-left: 5px;
   width: 28px;
   height: 30px;
-  margin-top: 22px;
   transition: all 800ms;
 }
 
@@ -72,6 +71,7 @@ h2.logo {
 .logo-container{
   cursor: pointer;
   display: flex;
+  align-items: center;
   margin-right: 30px;
 }
 

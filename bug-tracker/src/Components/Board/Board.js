@@ -36,6 +36,7 @@ function Board({title}) {
         getProjectLists(id).then(res=>{
             setLists(res['projects'])
             setMembersList(res['members'])
+            setProjectInfo(res['project_info'])
         })
     },[]);
 
@@ -47,6 +48,7 @@ function Board({title}) {
 
     const [lists, setLists] = useState([])
     const [membersList, setMembersList] = useState([])
+    const [projectInfo, setProjectInfo] = useState({title:'', description:''})
 
     function sendListTo(position, list_index, list_id){
         let to = (position == 'l'? list_index - 1 : list_index + 1)
@@ -361,18 +363,17 @@ function Board({title}) {
                 </>}
 
                 <div class="board-nav noselect">
+                    <button class="board-button board-title" title={projectInfo.description}>{projectInfo.title}</button>
+                    <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
+                    <button class="board-button" onClick={()=>setIsShowMembersActive(true)}>Show Members ({membersList.length}) </button>
                 
-                <button class="board-button" onClick={createNewList}> <span style={{fontSize:"20px", fontWeight:"600"}}>&#43;</span> Create New List</button>
-                <button class="board-button" onClick={()=>setIsShowMembersActive(true)}>Show Members ({membersList.length}) </button>
-                
-                
-                    </div>
+                </div>
                 <div class="board-canvas">
                     <div class="board-content noselect">
                         {
                         lists && lists.length >0?<>   
                         {lists.map((list, list_index)=>{
-                            return <List setIsPopupActive={setIsPopupActive} setSelectedCard={setSelectedCard} createNewCard={createNewCard} deleteList={deleteList} changeColor={changeColor} handleChangeListTitle={handleChangeListTitle} sendListTo={sendListTo} list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
+                            return <List key={list.list_id} setIsPopupActive={setIsPopupActive} setSelectedCard={setSelectedCard} createNewCard={createNewCard} deleteList={deleteList} changeColor={changeColor} handleChangeListTitle={handleChangeListTitle} sendListTo={sendListTo} list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
                         })}
                         </>
                         : 

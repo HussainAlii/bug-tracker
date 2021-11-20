@@ -87,7 +87,7 @@ export function Sidebar(){
           {(context.getProjectInfo().projectRank =='superAdmin' || context.getProjectInfo().projectRank =='admin') && <SidebarItem icon={shareIcon} title={"Share Project"} to={'/'+localStorageRetrieve('project')+'/share'} />}
           {context.getProjectInfo().projectRank =='superAdmin' && <SidebarItem icon={settingIcon} title={"Project Setting"} to={'/'+localStorageRetrieve('project')+'/setting'} />}
           
-         {context.getProjectInfo().projectRank !='superAdmin' &&
+         {(context.getProjectInfo().projectRank ==='member' || context.getProjectInfo().projectRank ==='admin') &&
          <>
           <hr style={{height:'5px'}} />
           <div onClick={()=>setAlert(true)} className="sidebar-item">
