@@ -239,7 +239,7 @@ function Popup({selectedCard, handleClose, deleteCard, sendCardTo, handleChangeT
                         </div>
                         <textarea placeholder="Write A Comment..." value={comment} onInput={(e)=>handleComment(e)}/>
                     </div>
-                    <button style={!comment && {display:'none'} || {marginTop:'3px'}} className="board-button" onClick={()=>{submitComment(comment); }}> Comment </button>
+                    <button style={!comment && {display:'none'} || {marginTop:'10px', marginLeft:'0px'}} className="board-button" onClick={()=>{submitComment(comment); }}> Comment </button>
                     </>}
 
                     <br/>
