@@ -119,10 +119,19 @@ function UserContextProvider({ children }) {
 
     function logout(){
         // this.authenticated = false;
-        localStorage.removeItem("jwt")
-        localStorage.removeItem("project")
-        history.push('/signin/')
-        refresh()
+        django
+        .post(requestAPI.logout, localStorageRetrieve("jwt"), {headers: {'Content-Type': 'text/plain'}})
+        .then((response) => {
+            if (response) {
+                localStorage.removeItem("jwt")
+                localStorage.removeItem("project")
+                history.push('/signin/')
+                refresh()
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     function register(email, password, fname, lname){
