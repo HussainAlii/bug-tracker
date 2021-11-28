@@ -75,6 +75,10 @@ The Bug-Tracker is a task management web app that eases the workflow and keeps t
   * Users can create multiple lists and cards with their own choice of colors.
   
   ![image (1)](https://user-images.githubusercontent.com/58237246/142699670-2506c18e-e7c3-4954-b8fb-5bd53a0c6e14.png)
+  
+  * User can grap and drop card in any created list.
+  
+  ![drag_and_drop](https://user-images.githubusercontent.com/58237246/143789354-334dbdd3-4666-4132-b2cd-dcdde665da24.gif)
 
   * Users can control and view detaild Information when they click on a card.
   
