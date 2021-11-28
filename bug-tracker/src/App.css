@@ -30,12 +30,12 @@ nav{
 
 .container{
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
 }
 
 
 .sidebar{
-  height: 100%;
+  height: calc(100vh - 141px);
   width: 190px;
   display: flex;
   flex-direction: column;

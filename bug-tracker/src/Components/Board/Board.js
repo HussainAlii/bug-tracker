@@ -19,7 +19,9 @@ import Menu, { MenuItem } from '../Menu/Menu';
 import UseLongPress from '../Hook/UseLongPress';
 import Popup from './Popup';
 import django from '../../axiosRequest';
-import requestAPI, { changeListColorReq, deleteListReq, getProjectLists, sendCardToReq, sendListToReq } from '../../requests';
+import requestAPI, { changeListColorReq, deleteListReq, dragCardToReq, getProjectLists, sendCardToReq, sendListToReq } from '../../requests';
+
+import {Draggable, Droppable, DragDropContext} from 'react-beautiful-dnd'
 
 function Board({title}) {
     const context = useContext(ProjectContext)
@@ -117,8 +119,35 @@ function Board({title}) {
                 setSelectedCard({...curr_list.cards[to], list_index, list_id, position:to})
         }
     }
+    
+    function onCardDragEnd(cardId, sourceListId, sourceIndex, destListId, destIndex){
+        if(sourceListId == destListId){ //same list
+            if(sourceIndex == destIndex) return
+            dragCardToReq(cardId, sourceListId, sourceIndex, destListId, destIndex);
+            
+            let source_list = getListById(sourceListId)
+            let source_cards = source_list.cards
+            const [removed_card] = source_cards.splice(sourceIndex, 1)
+            source_cards.splice(destIndex, 0, removed_card)
+        }else{ //different List
+            dragCardToReq(cardId, sourceListId, sourceIndex, destListId, destIndex);
 
+            let source_list = getListById(sourceListId)
+            let source_cards = source_list.cards
+            const [removed_card] = source_cards.splice(sourceIndex, 1)
+            let dest_list = getListById(destListId)
+            let dest_cards = dest_list.cards
+            dest_cards.splice(destIndex, 0, removed_card)
+        }
+    }
 
+    function getListById(id){
+        for(let i in lists){
+            const list = lists[i]
+            if(id == list.list_id)
+                return list
+        }
+    }
 
     function createNewList(){
         if(!context.canUserModify()) return
@@ -372,9 +401,11 @@ function Board({title}) {
                     <div class="board-content noselect">
                         {
                         lists && lists.length >0?<>   
-                        {lists.map((list, list_index)=>{
-                            return <List key={list.list_id} setIsPopupActive={setIsPopupActive} setSelectedCard={setSelectedCard} createNewCard={createNewCard} deleteList={deleteList} changeColor={changeColor} handleChangeListTitle={handleChangeListTitle} sendListTo={sendListTo} list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
-                        })}
+                        <DragDropContext direction="horizontal" onDragEnd={(res)=>{res.destination && onCardDragEnd(res.draggableId, res.source.droppableId, res.source.index, res.destination.droppableId, res.destination.index);}}>
+                            {lists.map((list, list_index)=>{
+                                return <List key={list.list_id} setIsPopupActive={setIsPopupActive} setSelectedCard={setSelectedCard} createNewCard={createNewCard} deleteList={deleteList} changeColor={changeColor} handleChangeListTitle={handleChangeListTitle} sendListTo={sendListTo} list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
+                            })}
+                        </DragDropContext>
                         </>
                         : 
                         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '50px', color:'gray'}}>
@@ -487,22 +518,38 @@ export function List({title, cards, background='ebecf0' , color='323743', list_i
                     <CreateCard createNewCard={createNewCard} list_id={list_id} list_index={list_index} handleClose={setIsCreateActive} active={isCreateActive} />
                 }
                 <div class="board-list-content">
-                
-                    {cards.map((card, position)=>{
-                     return <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card title={card.title} tags={card.tags} users={card.users} isClosed={card.status === 'closed'} numOfComments={card.num_of_comments} /></div>
-                    })}
-
-                    
-
+                    <Droppable droppableId={String(list_id)} key={String(list_id)}>
+                        {(provided, snapshot)=>{
+                            return (
+                                <div style={{minHeight:'0.1px',  background: snapshot.isDraggingOver && 'rgba(255,255,255,.4)'}} {...provided.droppableProps} ref={provided.innerRef}>
+                                {cards.map((card, position)=>{
+                                    return (
+                                        <Draggable key={card.card_id} draggableId={String(card.card_id)} index={position}>
+                                            {(provided, snapshot)=>{
+                                                return (
+                                                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} style={{...provided.draggableProps.style}}>
+                                                    <div onClick={()=>{setSelectedCard({...card, list_index, list_id, position}); setIsPopupActive(true)}}><Card isDragging={snapshot.isDragging} title={card.title} tags={card.tags} users={card.users} isClosed={card.status === 'closed'} numOfComments={card.num_of_comments} /></div>
+                                                </div>)
+                                            }}
+                                        
+                                        </Draggable>
+                                    )
+                                })}
+                                {provided.placeholder}
+                            </div>
+                            )
+                        }}
+                        
+                    </Droppable>
                 </div>
             </div>
         </div>
     )
 }
 
-export function Card({title, tags, users, isClosed, numOfComments}) {
+export function Card({title, tags, users, isClosed, numOfComments, isDragging}) {
     return (
-        <div style={isClosed? {backgroundColor:'rgba(209, 209, 209, 0.7)'} : {}} class="board-list-card">
+        <div style={isDragging ? {backgroundColor:'rgba(0,0,0, 0.1)'}: isClosed? {backgroundColor:'rgba(209, 209, 209, 0.7)'} : {}} class="board-list-card">
             <div class="board-list-card-details">
                 <div class="board-tags">
                 {tags.map(tag=>{

@@ -58,12 +58,11 @@ img.logo{
   width: 48px;
   object-fit: contain;
   margin-left: 10px;
-  margin-top: 5px;
-  margin-bottom: 4px;
   margin-right: 4px;
 }
 
 h2.logo {
+  margin: 0;
   color: #A781D2;
   font-family: 'Festive', cursive;
 }

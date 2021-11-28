@@ -37,6 +37,7 @@ const requestAPI = {
   deleteList:'/bugtracker/removeList/',
   deleteCard:'/bugtracker/removeCard/',
   sendListTo:'/bugtracker/sendListTo/',
+  dragCardToReq:'/bugtracker/dragCardToReq/',
   loadPopup:'/bugtracker/loadPopup/',
   removeMemberFromCard:'/bugtracker/removeMemberFromCard/',
   addMemberToCard:'/bugtracker/addMemberToCard/',
@@ -285,6 +286,17 @@ export function sendCardToReq(position, list_id, to_id, card_id, project_id, is_
 
   return django
   .post(requestAPI.sendCardTo, encoded, {headers: {'Content-Type': 'text/plain'}})
+  .catch((error) => {
+      console.log(error);
+  });
+}
+
+export function dragCardToReq(cardId, sourceListId, sourceIndex, destListId, destIndex){
+  const data = {cardId, sourceListId, sourceIndex, destListId, destIndex}
+  const encoded = encodeJWT(data)
+
+  return django
+  .post(requestAPI.dragCardToReq, encoded, {headers: {'Content-Type': 'text/plain'}})
   .catch((error) => {
       console.log(error);
   });
