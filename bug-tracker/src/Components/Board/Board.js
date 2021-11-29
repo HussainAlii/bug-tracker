@@ -401,7 +401,7 @@ function Board({title}) {
                     <div class="board-content noselect">
                         {
                         lists && lists.length >0?<>   
-                        <DragDropContext direction="horizontal" onDragEnd={(res)=>{res.destination && onCardDragEnd(res.draggableId, res.source.droppableId, res.source.index, res.destination.droppableId, res.destination.index);}}>
+                        <DragDropContext direction="horizontal" onDragEnd={(res)=>{res.destination && context.canUserModify() && onCardDragEnd(res.draggableId, res.source.droppableId, res.source.index, res.destination.droppableId, res.destination.index);}}>
                             {lists.map((list, list_index)=>{
                                 return <List key={list.list_id} setIsPopupActive={setIsPopupActive} setSelectedCard={setSelectedCard} createNewCard={createNewCard} deleteList={deleteList} changeColor={changeColor} handleChangeListTitle={handleChangeListTitle} sendListTo={sendListTo} list_id={list.list_id} list_index={list_index} title={list.title} cards={list.cards} background={list.background_color} color={list.font_color} />
                             })}
