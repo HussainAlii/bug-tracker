@@ -15,14 +15,14 @@ function BoardRoute({children, ...rest }) {
                 if(localStorageRetrieve("jwt")){
                     if(context.isActive)
                         return <><Navbar/>
-                        <div className="container">
+                        <div className="container" >
                             <Sidebar/><div className={`children ` + `${context.isCollapsed && 'sidebar-collapsed-children'}`}>{children}</div>
                             </div></>                                                           
                     else 
                         return <><Navbar/><Verify/></>    
                 }else{
                     return <><SignNavbar/>
-                    <div className="container">
+                    <div className="container" style={{height:'100vh'}}>
                         <div style={{left: '1px', position: 'static', width: 'auto'}} className="children">{children}</div>
                         </div></>   
                 }
