@@ -44,6 +44,12 @@ function Share({title}) {
         getProjectMember(id).then(res =>{setMembers(res['members']); setInviteLink(res["invite_id"])})
     },[]);
 
+    useEffect( async () => {
+        let rank = context.getProjectInfo().projectRank
+        if (rank =='guest' || rank =='member' || rank =='ghost') history.push("/")
+
+    },[context.getProjectInfo()])
+
     return (
         <div style={{paddingBottom:"11px", marginLeft:'40px', marginTop:'55px', overflow: 'scroll'}}>
             <div class="alert-message">
